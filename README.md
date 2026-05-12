@@ -1,6 +1,6 @@
 # AI Browser Security Test Suite
 
-A practical test harness and red-team methodology for browser-safe AI systems, based on the *Browser-Safe AI Systems* research series.
+A practical test harness and red-team methodology for browser-safe AI systems, treating hostile browser content as adversarial input and AI as an untrusted classifier inside a controlled security pipeline. Based on the 32-part *Browser-Safe AI Systems* research series.
 
 ## Core Thesis
 
@@ -8,9 +8,9 @@ Browser-safe AI systems are becoming part of the modern security control plane b
 
 **This suite treats browser-safe AI as a controlled security pipeline, not as a magic model.**
 
-Hostile browser content should be treated as adversarial input. AI verdicts should be constrained. Policy should remain outside the model. Every important decision should produce evidence that analysts, red teams, developers, and stakeholders can review.
+Hostile browser content must be treated as adversarial input. AI verdicts must be constrained. Policy must remain outside the model. Every important decision must produce evidence that analysts, red teams, developers, and stakeholders can review.
 
-## Attack Classes Implemented
+## Attack Classes Covered
 
 | Attack Class | Reference |
 |--------------|-----------|
@@ -24,7 +24,7 @@ Hostile browser content should be treated as adversarial input. AI verdicts shou
 | AI verdict manipulation and false negative risk | Part 16 |
 | Feedback-loop poisoning and exception abuse | Part 22 |
 
-## What's Included
+## Repository Structure
 
 ```
 ai-browser-security-test-suite/
@@ -52,21 +52,9 @@ pip install -r requirements.txt
 python harness/python_test_harness.py --target [AI_BROWSER_ENDPOINT] --payload payloads/prompt_injection/indirect_injection.json
 ```
 
-## Evidence Collection
-
-Every test execution produces:
-
-- Raw input sent to the AI system
-- AI verdict (if accessible)
-- Screenshot/DOM comparison where applicable
-- Timestamped logs for SOC review
-- Pass/fail determination based on series criteria
-
-Per Part 27: *Turning AI decisions into actionable evidence.*
-
 ## Related Research
 
-This tooling accompanies the **Browser-Safe AI Systems** series (32 parts + appendices):
+This tooling accompanies the **Browser-Safe AI Systems** series (32 parts + appendices) available at [https://unattributed.blog/](https://unattributed.blog/)
 
 - Part 01: Executive Summary
 - Part 23: Secure Architecture Principles
@@ -74,17 +62,20 @@ This tooling accompanies the **Browser-Safe AI Systems** series (32 parts + appe
 - Part 25: Building a Practical Python Test Harness
 - Part 26: Evidence Collection
 - Part 27: SOC Usefulness
-- Part 32: Conclusion – Treat AI as an Untrusted Classifier
+- Part 32: Conclusion — Treat AI as an Untrusted Classifier
 
-Full series: [https://unattributed.blog/]([https://unattributed.blog/](https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html))
+## License
 
-## Governance
+**GNU Affero General Public License v3.0 (AGPL-3.0)**
 
-Before testing, complete the Rules of Engagement template (Appendix C) and review the Vendor Due-Diligence Questionnaire (Appendix B).
+This software is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+**Important:** If you modify this software and use it over a network, AGPL-3.0 requires that you make the complete source code of your modified version available to all users who interact with it remotely.
+
+For the full license text, see [LICENSE](LICENSE) or visit [https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html)
 
 ## Disclaimer
 
 These tools are intended for authorized security testing and research purposes only. Users are responsible for complying with all applicable laws and obtaining proper authorization before testing any system. The author assumes no liability for misuse.
-
-## License
-
