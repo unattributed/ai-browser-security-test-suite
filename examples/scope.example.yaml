@@ -1,0 +1,32 @@
+---
+client_name: local ollama webui validation
+engagement_name: local browser ai target validation
+authorization_reference: local-owned-target
+passive_only_default: true
+notes: >
+  This public example is intentionally local-first. The supported public target
+  is unattributed/ollama-webui running on loopback. Replace this file only for
+  explicit client-authorized engagements.
+credential_refs:
+  - name: local-test-user
+    username_env:
+    password_env:
+    token_env:
+    notes: Local target does not require credentials by default.
+targets:
+  - name: ollama-webui-local
+    fqdn: 127.0.0.1
+    allowed_ips: [127.0.0.1]
+    allowed_paths: [/, /health, /api/tags, /api/models, /api/generate]
+    scheme: http
+    ports: [11435]
+    credential_ref:
+    tags: [ollama-webui, local-target, browser-ai, supported-default]
+prohibited_actions:
+  - credential theft
+  - token theft
+  - cookie theft
+  - browser c2
+  - mfa bypass
+  - destructive testing
+  - third-party testing outside explicit written scope
