@@ -1,0 +1,22 @@
+---
+client_name: example organization
+engagement_name: browser ai ecosystem validation
+authorization_reference: example-roe-reference
+passive_only_default: true
+notes: Example only. Replace with client-provided FQDNs, IP addresses, paths, ports, and test credential env vars.
+credential_refs:
+  - name: provisioned-test-user
+    username_env: BAI_TEST_USERNAME
+    password_env: BAI_TEST_PASSWORD
+    token_env:
+    notes: Provisioned non-production test account. Do not store real credentials here.
+targets:
+  - name: protected-browser-entry
+    fqdn: example.org
+    allowed_ips: [93.184.216.34]
+    allowed_paths: [/]
+    scheme: https
+    ports: [443]
+    credential_ref: provisioned-test-user
+    tags: [browser-ai, authorized-black-box, example]
+prohibited_actions: [credential theft, token theft, cookie theft, browser c2, mfa bypass, destructive testing, third-party testing outside scope]
