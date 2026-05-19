@@ -1,22 +1,32 @@
 ---
-client_name: example organization
-engagement_name: browser ai ecosystem validation
-authorization_reference: example-roe-reference
+client_name: local ollama webui validation
+engagement_name: local browser ai target validation
+authorization_reference: local-owned-target
 passive_only_default: true
-notes: Example only. Replace with client-provided FQDNs, IP addresses, paths, ports, and test credential env vars.
+notes: >
+  This public example is intentionally local-first. The supported public target
+  is unattributed/ollama-webui running on loopback. Replace this file only for
+  explicit client-authorized engagements.
 credential_refs:
-  - name: provisioned-test-user
-    username_env: BAI_TEST_USERNAME
-    password_env: BAI_TEST_PASSWORD
+  - name: local-test-user
+    username_env:
+    password_env:
     token_env:
-    notes: Provisioned non-production test account. Do not store real credentials here.
+    notes: Local target does not require credentials by default.
 targets:
-  - name: protected-browser-entry
-    fqdn: example.org
-    allowed_ips: [93.184.216.34]
-    allowed_paths: [/]
-    scheme: https
-    ports: [443]
-    credential_ref: provisioned-test-user
-    tags: [browser-ai, authorized-black-box, example]
-prohibited_actions: [credential theft, token theft, cookie theft, browser c2, mfa bypass, destructive testing, third-party testing outside scope]
+  - name: ollama-webui-local
+    fqdn: 127.0.0.1
+    allowed_ips: [127.0.0.1]
+    allowed_paths: [/, /health, /api/tags, /api/models, /api/generate]
+    scheme: http
+    ports: [11435]
+    credential_ref:
+    tags: [ollama-webui, local-target, browser-ai, supported-default]
+prohibited_actions:
+  - credential theft
+  - token theft
+  - cookie theft
+  - browser c2
+  - mfa bypass
+  - destructive testing
+  - third-party testing outside explicit written scope

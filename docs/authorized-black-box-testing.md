@@ -1,40 +1,73 @@
-# Authorized Black-Box Testing Model
+# Authorized Testing Model
 
-## Purpose
+## Public default
 
-The tools support blue-team validation and authorized black-box penetration testing for browser-based AI ecosystems.
+The public test suite is focused on the local `unattributed/ollama-webui` target.
 
-Client-provided scope may include FQDNs, IP addresses, allowed paths, ports, provisioned test accounts, test credential environment variables, authorization references, and rules of engagement.
+This is intentional. The suite demonstrates browser-AI weakness classes against a reproducible local application instead of encouraging testing against third-party systems.
 
-## Safety boundary
+## Supported local target
 
-The suite must not be used for credential theft, token theft, cookie theft, browser C2, MFA bypass, destructive testing, unauthorized third-party scanning, brand impersonation, or collection of real user data.
-
-## Scope file
-
-Create a template:
-
-```bash
-python3 -m ai_browser_security_suite init-scope --out examples/client-scope.local.yaml
+```text
+https://github.com/unattributed/ollama-webui
+http://127.0.0.1:11435/
 ```
 
-The scope file stores environment variable names, not credential values.
+## Client-authorized testing
 
-```bash
-export BAI_TEST_USERNAME='test.user@example.org'
-export BAI_TEST_PASSWORD='client-provided-test-password'
+Client-provided FQDNs, IP addresses, ports, paths, and test credentials are supported only for explicit authorized engagements.
+
+Requirements:
+
+```text
+written authorization
+defined scope
+approved source IPs if applicable
+approved target FQDNs and IPs
+approved URL paths
+non-production test accounts
+documented prohibited actions
+evidence handling agreement
 ```
 
-## Passive recon
+Active checks require:
 
-```bash
-python3 -m ai_browser_security_suite recon --scope examples/scope.example.yaml --out reports/example-recon --passive-only
+```text
+--i-have-authorization
 ```
 
-## Active scoped checks
+## What must not be tested
 
-```bash
-python3 -m ai_browser_security_suite recon --scope examples/client-scope.local.yaml --out reports/client-recon --i-have-authorization
+```text
+out-of-scope systems
+real user credentials
+real cookies
+real tokens
+real MFA secrets
+third-party SaaS tenants without written approval
+public internet targets not controlled by the client
 ```
 
-The MVP active mode remains conservative. It does not fuzz, exploit, brute force, bypass MFA, mutate data, or submit forms.
+## Evidence expectations
+
+Evidence should include:
+
+```text
+timestamp
+target
+test id
+supported article parts
+browser screenshot
+DOM snapshot
+network HAR
+console log
+structured JSONL record
+Markdown report
+recommended action
+```
+
+## Git commit comment
+
+```text
+focus suite on ollama webui local target
+```

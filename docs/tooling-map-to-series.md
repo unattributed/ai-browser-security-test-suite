@@ -1,19 +1,51 @@
 # Tooling Map to the Browser-Safe AI Systems Series
 
-## Purpose
+## Supported target
 
-This document maps each tool to the Browser-Safe AI Systems article parts it supports.
+All public scripts are centered on the local `unattributed/ollama-webui` target or locally generated lab pages.
 
-| Tool | File | Supported article parts | What it demonstrates |
-|---|---|---|---|
-| Scope model | `src/ai_browser_security_suite/config.py` | Part 24, Part 26, Part 27 | Rules of engagement, authorized targets, FQDNs, IPs, paths, ports, and provisioned credential references |
-| Local lab builder | `src/ai_browser_security_suite/local_lab.py` | Part 09, Part 10, Part 11, Part 12, Part 13, Part 14, Part 15, Part 25 | Safe pages for hidden DOM, invisible text, QR handoff, delayed content, Unicode spoofing, and synthetic DLP |
-| Browser capture | `src/ai_browser_security_suite/browser_capture.py` | Part 10, Part 11, Part 12, Part 15, Part 25, Part 26, Part 27 | Screenshot, DOM, console, final URL, HTTP status, and HAR capture |
-| Black-box recon | `src/ai_browser_security_suite/recon/blackbox.py` | Part 06, Part 23, Part 24, Part 26, Part 27 | DNS, TLS, redirects, browser-relevant headers, and scoped target validation |
-| Evidence writer | `src/ai_browser_security_suite/evidence.py` | Part 26, Part 27 | JSONL evidence and artifact hashes |
-| Report writer | `src/ai_browser_security_suite/report.py` | Part 26, Part 27, Part 32 | Analyst-readable Markdown reports |
-| CLI | `src/ai_browser_security_suite/cli.py` | Part 24, Part 25, Part 26, Part 27 | Repeatable command-line workflow |
+```text
+https://github.com/unattributed/ollama-webui
+http://127.0.0.1:11435/
+```
 
-## Professional boundary
+## Attack-class mapping
 
-The suite is for blue-team validation, product-security due diligence, and authorized black-box penetration testing. It does not implement credential theft, token theft, cookie theft, browser C2, MFA bypass, destructive tests, or unsanctioned third-party testing.
+| Series part | Attack class | Local lab | Ollama Web UI probe |
+|---:|---|---|---|
+| Part 09 | Indirect prompt injection through web pages | yes | yes |
+| Part 10 | Hostile DOM, hidden text, and metadata manipulation | yes | yes |
+| Part 11 | Screenshot-based prompt injection and visual deception | yes | yes |
+| Part 12 | DOM versus rendered page mismatch | yes | yes |
+| Part 13 | QR phishing, brand impersonation, and multistage lures | yes | yes |
+| Part 14 | Unicode, homograph, and visual spoofing attacks | yes | yes |
+| Part 15 | Delayed content, region-gated pages, and evasive phishing | yes | yes |
+| Part 16 | AI verdict manipulation and false negative risk | no | yes |
+| Part 22 | Feedback-loop poisoning and exception abuse | no | yes |
+
+## Supporting article mapping
+
+| Series part | Tooling support |
+|---:|---|
+| Part 23 | local-first target policy and deterministic evidence model |
+| Part 24 | authorized testing model and scope-file boundary |
+| Part 25 | Python CLI, Playwright capture, and local target validation |
+| Part 26 | JSONL evidence, screenshots, DOM, HAR, console logs, and Markdown reports |
+| Part 27 | analyst-reviewable reports and recommended actions |
+| Part 32 | AI output treated as advisory evidence, not final policy |
+
+## Main commands
+
+```bash
+python -m ai_browser_security_suite case-list --cases payloads/safe_browser_ai_cases.yaml
+python -m ai_browser_security_suite lab-build --cases payloads/safe_browser_ai_cases.yaml --out local_lab
+python -m ai_browser_security_suite capture --url http://127.0.0.1:8088/bai-001-hidden-dom.html --out reports/example-capture
+python -m ai_browser_security_suite ollama-validate --base-url http://127.0.0.1:11435/ --i-have-authorization
+scripts/run_supported_local_target_suite.sh
+```
+
+## Git commit comment
+
+```text
+focus suite on ollama webui local target
+```
