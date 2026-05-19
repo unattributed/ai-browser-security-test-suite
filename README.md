@@ -8,7 +8,25 @@ The public test suite is now centered on one supported local target:
 https://github.com/unattributed/ollama-webui
 ```
 
-`ollama-webui` is used as the suite's deliberately weak, locally runnable browser-based LLM application for testing, prototyping, and demonstrating browser-AI security weaknesses safely. The goal is to give blue teams, security engineers, product security teams, penetration testers, and organizations a reproducible target that does not require testing against third-party systems.
+`ollama-webui` is used as the suite's deliberately weak, locally runnable browser-based LLM app for testing, prototyping, and demonstrating browser-AI security weaknesses safely. The goal is to give blue teams, security engineers, product security teams, penetration testers, and organizations a reproducible target that does not require testing against third-party systems.
+
+## Research basis
+
+This repository is the executable validation layer for the Browser-Safe AI Systems research series:
+
+```text
+https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
+```
+
+The series argues that browser-based AI systems must treat webpage content, rendered text, hidden DOM, metadata, screenshots, QR handoffs, delayed content, user feedback, and exception requests as adversarial inputs.
+
+This repository turns those claims into repeatable tests against a controlled local target. The public workflow intentionally uses `unattributed/ollama-webui` as a deliberately weak local browser-based LLM app so the test suite can demonstrate risk patterns without encouraging testing against third-party systems.
+
+The intended review model is:
+
+```text
+research claim -> safe synthetic probe -> browser evidence -> model response -> structured report -> analyst review
+```
 
 ## Core thesis
 
@@ -93,6 +111,8 @@ Playwright browser evidence capture
 structured JSONL evidence
 Markdown reporting
 article-series mapping
+coverage auditing against the research series
+artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
 authorized scope-file structure for exceptional client engagements
 ```
 
@@ -102,6 +122,7 @@ The suite validates:
 local generated test pages
 the local ollama-webui target
 browser-based AI behavior against synthetic unsafe markers
+artifact-backed browser evidence for selected attack classes
 evidence quality for analysts and product-security review
 ```
 
@@ -111,17 +132,17 @@ evidence quality for analysts and product-security review
 |---|---:|---|
 | Indirect prompt injection through web pages | Part 09 | safe local case, Ollama Web UI prompt probe |
 | Hostile DOM, hidden text, and metadata manipulation | Part 10 | safe local case, Ollama Web UI prompt probe |
-| Screenshot-based prompt injection and visual deception | Part 11 | safe local case, Ollama Web UI prompt probe |
-| DOM versus rendered page mismatch | Part 12 | safe local case, Ollama Web UI prompt probe |
-| QR phishing, brand impersonation, and multistage lures | Part 13 | safe local case, Ollama Web UI prompt probe |
+| Screenshot-based prompt injection and visual deception | Part 11 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
+| DOM versus rendered page mismatch | Part 12 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
+| QR phishing, brand impersonation, and multistage lures | Part 13 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
 | Unicode, homograph, and visual spoofing attacks | Part 14 | safe local case, Ollama Web UI prompt probe |
-| Delayed content, region-gated pages, and evasive phishing | Part 15 | safe local case, Ollama Web UI prompt probe |
+| Delayed content, region-gated pages, and evasive phishing | Part 15 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
 | AI verdict manipulation and false negative risk | Part 16 | Ollama Web UI prompt probe |
 | Feedback-loop poisoning and exception abuse | Part 22 | Ollama Web UI prompt probe |
 
 Supporting series areas:
 
-| Series reference | Project role |
+| Series reference | Project support |
 |---:|---|
 | Part 23 | secure architecture principles |
 | Part 24 | authorized red-team and due-diligence methodology |
@@ -342,11 +363,15 @@ python -m ai_browser_security_suite recon   --scope examples/client-scope.local.
 Current documentation:
 
 ```text
+docs/artifact-backed-browser-cases.md
 docs/authorized-black-box-testing.md
-docs/quickstart.md
-docs/tooling-map-to-series.md
+docs/coverage-audit.md
+docs/coverage/browser-safe-ai-series-coverage.md
 docs/ollama-webui-local-target.md
+docs/ollama-webui-service-preflight.md
+docs/quickstart.md
 docs/supported-target-policy.md
+docs/tooling-map-to-series.md
 ```
 
 ## Repository structure
@@ -378,6 +403,24 @@ The placeholder file remains tracked:
 
 ```text
 reports/.gitkeep
+```
+
+## Technical depth demonstrated
+
+This repository demonstrates:
+
+```text
+local vulnerable target design
+safe synthetic marker strategy
+Playwright browser automation
+DOM and rendered-page evidence capture
+HAR and console-log collection
+Ollama-backed browser-AI validation
+coverage auditing against the research series
+artifact-backed tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
+JSONL evidence suitable for later SIEM or SOC enrichment
+Markdown reports suitable for human review
+explicit safety boundaries to reduce misuse
 ```
 
 ## Professional use cases
