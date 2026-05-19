@@ -61,4 +61,3 @@ This audit verifies MVP coverage for the required attack-class parts in the Brow
 
 It does not claim full maturity coverage for every implementation detail in the complete article series.
 Future hardening should convert selected prompt-simulated cases into stronger browser-artifact tests using generated QR images, delayed DOM mutations, screenshot comparison, DOM/render comparison, and normalized SOC fields.
-
