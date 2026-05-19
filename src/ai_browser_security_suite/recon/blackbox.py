@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/recon/blackbox.py
-# Change description: safe authorized black-box recon for client-provided targets.
-# Git commit comment: add blue team black box mvp foundation
 from __future__ import annotations
 import socket
 import ssl

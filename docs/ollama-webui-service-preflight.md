@@ -11,7 +11,7 @@ The test suite does not start `ollama-webui` automatically. This is intentional 
 In a separate terminal:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -35,7 +35,7 @@ curl -fsS http://127.0.0.1:11434/api/version
 In the AI Browser Security Test Suite repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 scripts/run_supported_local_target_suite.sh
 ```
 
@@ -44,9 +44,3 @@ scripts/run_supported_local_target_suite.sh
 If `ollama-webui` is not running, the script exits before browser validation and prints startup instructions.
 
 This avoids confusing test output and makes the dependency explicit.
-
-## Git commit comment
-
-```text
-require ollama webui preflight before validation
-```

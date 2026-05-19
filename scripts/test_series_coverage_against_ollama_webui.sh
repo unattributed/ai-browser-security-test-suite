@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
-#
-# File: scripts/test_series_coverage_against_ollama_webui.sh
-#
-# Change description:
-#   Validate Browser-Safe AI Systems coverage metadata and run the supported
-#   Ollama Web UI local target suite. The script uses the existing repository
-#   .venv and requires ollama-webui to already be running.
-#
-# Git commit comment:
-#   add browser safe ai series coverage audit
-
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
+OLLAMA_WEBUI_DIR="${OLLAMA_WEBUI_DIR:-${REPO_DIR}/../ollama-webui}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
 OLLAMA_BACKEND_URL="${OLLAMA_BACKEND_URL:-http://127.0.0.1:11434}"
@@ -39,7 +30,7 @@ The supported local target must be running before this test.
 
 Start ollama-webui in a separate terminal:
 
-  cd /home/foo/Workspace/ollama-webui
+  cd ${OLLAMA_WEBUI_DIR}
   source .venv/bin/activate
   python scripts/pull_model.py
 
@@ -67,17 +58,23 @@ need_command python3
 need_command sed
 need_command find
 
-log "checking existing virtual environment"
-[[ -x "${VENV_DIR}/bin/python" ]] || fail "existing venv not found or not executable: ${VENV_DIR}/bin/python"
+log "checking virtual environment"
+if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
+  python3 -m venv "${VENV_DIR}"
+fi
 
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
 log "installing package in editable mode"
-python -m pip install -e .
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
 
 log "running Python compile check"
 python -m compileall -q src tools
+
+log "running pytest suite"
+pytest
 
 log "running CLI smoke checks"
 python -m ai_browser_security_suite --help | grep -q "ollama-validate"
@@ -121,7 +118,8 @@ git diff --check
 log "checking git status"
 git status --short
 
-cat <<EOF
+if [[ "${RUN_OLLAMA_TARGET}" == "1" ]]; then
+  cat <<EOF
 
 Series coverage and supported target validation completed.
 
@@ -133,3 +131,17 @@ Ollama Web UI report:
   reports/ollama-webui-validation/ollama-webui-validation-report.md
 
 EOF
+else
+  cat <<EOF
+
+Repository verification completed without running the supported target.
+
+Coverage reports:
+  docs/coverage/browser-safe-ai-series-coverage.md
+  docs/coverage/browser-safe-ai-series-coverage.json
+
+To include ollama-webui validation, start the local target and rerun:
+  scripts/test_series_coverage_against_ollama_webui.sh
+
+EOF
+fi

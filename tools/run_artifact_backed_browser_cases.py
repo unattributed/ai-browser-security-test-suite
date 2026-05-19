@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
-# File: tools/run_artifact_backed_browser_cases.py
-# Change description:
-#   Generate artifact-backed browser fixtures for Browser-Safe AI Systems
-#   Parts 11, 12, 13, and 15, capture browser evidence with Playwright,
-#   submit evidence summaries to the supported local ollama-webui target,
-#   and write JSONL plus Markdown reports.
-# Git commit comment:
-#   add artifact backed browser ai test cases
+"""Run artifact-backed Browser-Safe AI test cases."""
 
 from __future__ import annotations
 

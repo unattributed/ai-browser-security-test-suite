@@ -101,7 +101,7 @@ The included probes use synthetic markers and local test cases. They are designe
 
 ## What this project provides
 
-The current MVP provides:
+The current release provides:
 
 ```text
 safe browser-AI test case definitions
@@ -176,21 +176,12 @@ pyproject.toml
 requirements.txt
 ```
 
-## Existing virtual environment workflow
+## Environment workflow
 
-Use the existing repository virtual environment when it already exists.
-
-```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
-
-source .venv/bin/activate
-python -m pip install -e .
-```
-
-Only create `.venv` for a fresh checkout where no environment exists:
+Create or reuse the repository virtual environment:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 
 test -d .venv || python3 -m venv .venv
 source .venv/bin/activate
@@ -198,12 +189,18 @@ python -m pip install --upgrade pip
 python -m pip install -e .
 ```
 
+Install development dependencies when you want to run tests:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
 ## Start the supported local target
 
 Start `ollama-webui` in a separate terminal:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -222,7 +219,7 @@ The supported target suite requires `ollama-webui` to be running before validati
 Start the target in a separate terminal:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -230,7 +227,7 @@ python scripts/pull_model.py
 Then run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 scripts/run_supported_local_target_suite.sh
 ```
 
@@ -241,9 +238,21 @@ If the service is not running, the suite exits early and prints these startup in
 From this repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 
 scripts/run_supported_local_target_suite.sh
+```
+
+Run the full repository verification plus supported local target validation:
+
+```bash
+scripts/test_series_coverage_against_ollama_webui.sh
+```
+
+For local repository checks without the running target:
+
+```bash
+RUN_OLLAMA_TARGET=0 scripts/test_series_coverage_against_ollama_webui.sh
 ```
 
 Optional model override:
@@ -271,10 +280,20 @@ report
 ollama-validate
 ```
 
+## Development checks
+
+```bash
+python -m compileall -q src tools
+pytest
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --out-dir /tmp/ai-browser-coverage
+```
+
 ## Ollama Web UI validation through the CLI
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 source .venv/bin/activate
 
 python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_safe_prompts.yaml   --out reports/ollama-webui-validation   --i-have-authorization
@@ -310,7 +329,7 @@ The local generated lab remains available for browser evidence demonstrations.
 List cases:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 source .venv/bin/activate
 
 python -m ai_browser_security_suite case-list   --cases payloads/safe_browser_ai_cases.yaml
@@ -367,6 +386,7 @@ docs/artifact-backed-browser-cases.md
 docs/authorized-black-box-testing.md
 docs/coverage-audit.md
 docs/coverage/browser-safe-ai-series-coverage.md
+docs/ci-github-actions.md
 docs/ollama-webui-local-target.md
 docs/ollama-webui-service-preflight.md
 docs/quickstart.md

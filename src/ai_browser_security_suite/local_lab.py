@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/local_lab.py
-# Change description: build safe local browser-AI test pages.
-# Git commit comment: add blue team black box mvp foundation
 from __future__ import annotations
 from dataclasses import dataclass
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer

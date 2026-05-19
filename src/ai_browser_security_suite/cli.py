@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/cli.py
-# Change description: CLI for local lab, ollama-webui target validation, authorized recon, capture, and reports.
-# Git commit comment: focus suite on ollama webui local target
 from __future__ import annotations
 
 import argparse
@@ -13,6 +10,7 @@ from rich.table import Table
 from ai_browser_security_suite.browser_capture import capture_url
 from ai_browser_security_suite.config import ScopeError, load_scope, write_scope_template
 from ai_browser_security_suite.local_lab import build_lab, load_cases, serve_lab
+from ai_browser_security_suite.paths import resolve_existing_path
 from ai_browser_security_suite.recon.blackbox import run_blackbox_recon
 from ai_browser_security_suite.report import write_markdown_report
 from ai_browser_security_suite.targets.ollama_webui import run_validation_async
@@ -33,7 +31,7 @@ def cmd_case_list(args):
     table.add_column("Supported parts")
     table.add_column("Title")
 
-    for case in load_cases(args.cases):
+    for case in load_cases(resolve_existing_path(args.cases)):
         table.add_row(case.case_id, case.category, ", ".join(case.supported_parts), case.title)
 
     console.print(table)
@@ -41,7 +39,7 @@ def cmd_case_list(args):
 
 
 def cmd_lab_build(args):
-    written = build_lab(args.cases, args.out)
+    written = build_lab(resolve_existing_path(args.cases), args.out)
     console.print(f"built {len(written)} pages in {args.out}")
     return 0
 
@@ -99,7 +97,7 @@ def cmd_ollama_validate(args):
         run_validation_async(
             base_url=args.base_url,
             model=args.model,
-            cases_path=Path(args.cases),
+            cases_path=resolve_existing_path(args.cases),
             out_dir=Path(args.out),
             response_timeout_ms=args.response_timeout_ms,
         )

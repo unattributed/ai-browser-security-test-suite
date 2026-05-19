@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
-#
-# File: scripts/run_local_mvp.sh
-#
-# Change description:
-#   Run local lab validation and, when available, the supported ollama-webui
-#   target validation using the existing .venv.
-#
-# Git commit comment:
-#   focus suite on ollama webui local target
-
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 LAB_PORT="${LAB_PORT:-8088}"
 LAB_PID=""
@@ -27,13 +18,13 @@ trap cleanup EXIT
 cd "${REPO_DIR}"
 
 if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
-  echo "error: existing venv not found: ${VENV_DIR}" >&2
-  exit 1
+  python3 -m venv "${VENV_DIR}"
 fi
 
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
+python -m pip install --upgrade pip
 python -m pip install -e .
 python -m ai_browser_security_suite --help
 python -m ai_browser_security_suite case-list --cases payloads/safe_browser_ai_cases.yaml

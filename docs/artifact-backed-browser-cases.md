@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The MVP prompt probes prove that the Browser-Safe AI Systems attack classes are represented. This next layer adds browser artifacts for the cases where prompt simulation alone is not strong enough for serious review.
+The prompt probes show that the Browser-Safe AI Systems attack classes are represented. This next layer adds browser artifacts for the cases where prompt simulation alone is not strong enough for serious review.
 
 Artifact-backed cases currently cover:
 
@@ -46,7 +46,7 @@ http://127.0.0.1:11435/
 Start it first:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -54,7 +54,7 @@ python scripts/pull_model.py
 ## Run
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 
 scripts/test_artifact_backed_cases_against_ollama_webui.sh
 ```
@@ -120,9 +120,3 @@ third-party scanning
 ## Limitation
 
 The QR case uses a local QR-style browser artifact with decoded destination evidence stored in the fixture DOM. It is intended to test browser-AI handoff reasoning and evidence capture, not to provide a production QR decoder.
-
-## Git commit comment
-
-```text
-add artifact backed browser ai test cases
-```

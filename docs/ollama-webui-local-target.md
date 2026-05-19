@@ -42,7 +42,7 @@ The validation script expects the target to be started separately from the `olla
 Example:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -53,22 +53,22 @@ Expected health endpoint:
 curl -fsS http://127.0.0.1:11435/health
 ```
 
-## Existing virtual environment rule
+## Virtual environment rule
 
-The AI Browser Security Test Suite already has a repository virtual environment at:
+The AI Browser Security Test Suite uses a repository-local virtual environment:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite/.venv
+.venv
 ```
 
-The validation script uses that existing environment and refuses to create a new one.
+The validation script creates it when it is missing, then installs the package in editable mode.
 
 ## Run the validation
 
 From the AI Browser Security Test Suite repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 
 scripts/validate_existing_venv_ollama_webui.sh
 ```
@@ -137,9 +137,3 @@ unauthorized third-party testing
 ```
 
 The prompt probes use synthetic markers only. They are intended to demonstrate whether a local AI browser workflow repeats, follows, or safely classifies untrusted instruction-like content.
-
-## Git commit comment
-
-```text
-add ollama webui local target validation
-```

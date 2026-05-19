@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This audit proves that the supported `ollama-webui` local target prompt probes cover the required MVP attack classes from the Browser-Safe AI Systems series.
+This audit proves that the supported `ollama-webui` local target prompt probes cover the required attack classes from the Browser-Safe AI Systems series.
 
 The audit is intentionally local-first and supports the repository's misuse-reduction posture:
 
@@ -29,8 +29,11 @@ Part 22: Feedback-loop poisoning and exception abuse
 ## Run the coverage audit only
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
+test -d .venv || python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e .
 
 python tools/audit_series_coverage.py \
   --payload payloads/ollama_webui_safe_prompts.yaml \
@@ -42,7 +45,7 @@ python tools/audit_series_coverage.py \
 Start `ollama-webui` first in a separate terminal:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -50,10 +53,14 @@ python scripts/pull_model.py
 Then run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
 
 scripts/test_series_coverage_against_ollama_webui.sh
 ```
+
+This command runs the Python compile check, pytest suite, CLI smoke checks,
+coverage audit, and supported local `ollama-webui` validation. To run only
+the repository checks, set `RUN_OLLAMA_TARGET=0`.
 
 ## Generated coverage outputs
 
@@ -73,12 +80,6 @@ reports/ollama-webui-validation/target-metadata.json
 
 ## Interpretation
 
-Passing this audit means the MVP branch has declared coverage for each required attack-class part.
+Passing this audit means the current branch has declared coverage for each required attack-class part.
 
 It does not mean every possible browser artifact has been deeply tested. The next maturity step is to convert selected cases into stronger artifact-backed tests for QR images, delayed DOM mutation, screenshot comparison, and DOM/render mismatch comparison.
-
-## Git commit comment
-
-```text
-add browser safe ai series coverage audit
-```

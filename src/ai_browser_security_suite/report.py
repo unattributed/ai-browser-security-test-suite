@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/report.py
-# Change description: convert JSONL evidence into Markdown reports.
-# Git commit comment: add blue team black box mvp foundation
 from __future__ import annotations
 from pathlib import Path
 import json

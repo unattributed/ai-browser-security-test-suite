@@ -43,9 +43,3 @@ python -m ai_browser_security_suite capture --url http://127.0.0.1:8088/bai-001-
 python -m ai_browser_security_suite ollama-validate --base-url http://127.0.0.1:11435/ --i-have-authorization
 scripts/run_supported_local_target_suite.sh
 ```
-
-## Git commit comment
-
-```text
-focus suite on ollama webui local target
-```

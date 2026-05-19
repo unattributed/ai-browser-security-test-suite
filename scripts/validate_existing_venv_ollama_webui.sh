@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
-#
-# File: scripts/validate_existing_venv_ollama_webui.sh
-#
-# Change description:
-#   Validate the public local ollama-webui target using the repository's
-#   existing .venv. This script refuses to create a new virtual environment.
-#
-# Git commit comment:
-#   add ollama webui local target validation
-
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-}"
@@ -33,21 +24,25 @@ need_command() {
   command -v "$command_name" >/dev/null 2>&1 || fail "missing required command: ${command_name}"
 }
 
-log "checking repository and existing virtual environment"
+log "checking repository and virtual environment"
 cd "${REPO_DIR}"
 
 [[ -d .git ]] || fail "not a git repository: ${REPO_DIR}"
-[[ -d "${VENV_DIR}" ]] || fail "existing virtual environment not found: ${VENV_DIR}"
-[[ -x "${VENV_DIR}/bin/python" ]] || fail "venv python not executable: ${VENV_DIR}/bin/python"
 
 log "checking required system commands"
 need_command curl
 need_command git
+need_command python3
 
-log "using existing virtual environment"
+if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
+  python3 -m venv "${VENV_DIR}"
+fi
+
+log "using virtual environment"
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
+python -m pip install --upgrade pip
 python -m pip install -e .
 
 log "checking python dependencies"

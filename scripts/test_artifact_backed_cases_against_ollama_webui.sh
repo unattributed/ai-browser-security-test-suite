@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
-#
-# File: scripts/test_artifact_backed_cases_against_ollama_webui.sh
-#
-# Change description:
-#   Run artifact-backed Browser-Safe AI test cases for Parts 11, 12, 13,
-#   and 15 against the supported local ollama-webui target.
-#
-# Git commit comment:
-#   add artifact backed browser ai test cases
-
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
+OLLAMA_WEBUI_DIR="${OLLAMA_WEBUI_DIR:-${REPO_DIR}/../ollama-webui}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
 OLLAMA_BACKEND_URL="${OLLAMA_BACKEND_URL:-http://127.0.0.1:11434}"
@@ -40,7 +32,7 @@ The supported local target must be running before this test.
 
 Start ollama-webui in a separate terminal:
 
-  cd /home/foo/Workspace/ollama-webui
+  cd ${OLLAMA_WEBUI_DIR}
   source .venv/bin/activate
   python scripts/pull_model.py
 
@@ -68,8 +60,10 @@ need_command python3
 need_command find
 need_command sed
 
-log "checking existing virtual environment"
-[[ -x "${VENV_DIR}/bin/python" ]] || fail "existing venv not found or not executable: ${VENV_DIR}/bin/python"
+log "checking virtual environment"
+if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
+  python3 -m venv "${VENV_DIR}"
+fi
 
 log "checking supported local target preflight"
 if ! curl -fsS "${OLLAMA_WEBUI_URL%/}/health" >/tmp/ai-browser-artifact-ollama-webui-health.json 2>/tmp/ai-browser-artifact-ollama-webui-health.err; then
@@ -84,10 +78,11 @@ if ! curl -fsS "${OLLAMA_BACKEND_URL%/}/api/version" >/tmp/ai-browser-artifact-o
   exit 2
 fi
 
-log "using existing virtual environment"
+log "using virtual environment"
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
+python -m pip install --upgrade pip
 python -m pip install -e .
 python -m compileall -q src tools
 

@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/browser_capture.py
-# Change description: capture browser evidence using Playwright.
-# Git commit comment: add blue team black box mvp foundation
 from __future__ import annotations
 import asyncio
 from pathlib import Path

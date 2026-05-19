@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/config.py
-# Change description: define local-first scope models for authorized browser-AI validation.
-# Git commit comment: focus suite on ollama webui local target
 from __future__ import annotations
 
 from dataclasses import dataclass, field

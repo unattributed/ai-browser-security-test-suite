@@ -1,16 +1,3 @@
-## Required service startup
-
-The `ollama-webui` service must already be running before `scripts/run_supported_local_target_suite.sh` is executed.
-
-Start it in a separate terminal:
-
-```bash
-cd /home/foo/Workspace/ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
-```
-
-
 # Quickstart
 
 ## Supported local target
@@ -28,7 +15,7 @@ Run `ollama-webui` locally, then run this suite against it.
 In a separate terminal:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd ../ollama-webui
 source .venv/bin/activate
 python scripts/pull_model.py
 ```
@@ -40,11 +27,13 @@ curl -fsS http://127.0.0.1:11435/health
 curl -fsS http://127.0.0.1:11434/api/version
 ```
 
-## 2. Activate the existing test-suite environment
+## 2. Create or activate the test-suite environment
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd ai-browser-security-test-suite
+test -d .venv || python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip
 python -m pip install -e .
 ```
 
@@ -58,6 +47,18 @@ Optional model override:
 
 ```bash
 OLLAMA_MODEL=deepseek-r1 scripts/run_supported_local_target_suite.sh
+```
+
+Run repository checks and the supported local target validation together:
+
+```bash
+scripts/test_series_coverage_against_ollama_webui.sh
+```
+
+Run only the repository checks when the target is not running:
+
+```bash
+RUN_OLLAMA_TARGET=0 scripts/test_series_coverage_against_ollama_webui.sh
 ```
 
 ## 4. Run through the CLI directly
@@ -83,10 +84,4 @@ The local generated lab remains available:
 python -m ai_browser_security_suite lab-build   --cases payloads/safe_browser_ai_cases.yaml   --out local_lab
 
 python -m ai_browser_security_suite lab-serve   --directory local_lab   --host 127.0.0.1   --port 8088
-```
-
-## Git commit comment
-
-```text
-focus suite on ollama webui local target
 ```

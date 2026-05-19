@@ -70,9 +70,3 @@ destructive tests
 exploit automation
 third-party testing without written authorization
 ```
-
-## Git commit comment
-
-```text
-focus suite on ollama webui local target
-```

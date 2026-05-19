@@ -1,18 +1,9 @@
 #!/usr/bin/env bash
-#
-# File: scripts/run_supported_local_target_suite.sh
-#
-# Change description:
-#   Run the supported local target suite against unattributed/ollama-webui.
-#   The script now fails fast with clear startup instructions when the
-#   ollama-webui service is not already running.
-#
-# Git commit comment:
-#   require ollama webui preflight before validation
-
 set -Eeuo pipefail
 
-REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="${REPO_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
+OLLAMA_WEBUI_DIR="${OLLAMA_WEBUI_DIR:-${REPO_DIR}/../ollama-webui}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
 OLLAMA_BACKEND_URL="${OLLAMA_BACKEND_URL:-http://127.0.0.1:11434}"
@@ -41,7 +32,7 @@ The supported local target is not running.
 
 Start ollama-webui in a separate terminal first:
 
-  cd /home/foo/Workspace/ollama-webui
+  cd ${OLLAMA_WEBUI_DIR}
   source .venv/bin/activate
   python scripts/pull_model.py
 
@@ -64,17 +55,20 @@ Current expected Ollama backend:
 EOF
 }
 
-log "checking repository and existing virtual environment"
+log "checking repository and virtual environment"
 cd "${REPO_DIR}"
 
 [[ -d .git ]] || fail "not a git repository: ${REPO_DIR}"
-[[ -d "${VENV_DIR}" ]] || fail "existing virtual environment not found: ${VENV_DIR}"
-[[ -x "${VENV_DIR}/bin/python" ]] || fail "venv python not executable: ${VENV_DIR}/bin/python"
 
 log "checking commands"
 need_command curl
 need_command git
 need_command find
+need_command python3
+
+if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
+  python3 -m venv "${VENV_DIR}"
+fi
 
 log "checking supported local target preflight"
 if ! curl -fsS "${OLLAMA_WEBUI_URL%/}/health" >/tmp/ai-browser-ollama-webui-health.json 2>/tmp/ai-browser-ollama-webui-health.err; then
@@ -96,10 +90,11 @@ fi
 cat /tmp/ai-browser-ollama-backend-version.json
 echo
 
-log "using existing virtual environment"
+log "using virtual environment"
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
+python -m pip install --upgrade pip
 python -m pip install -e .
 
 log "checking playwright chromium"

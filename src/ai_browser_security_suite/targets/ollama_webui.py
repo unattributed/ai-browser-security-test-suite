@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/targets/ollama_webui.py
-# Change description: validate the public local Ollama Web UI target with safe browser-AI prompt probes.
-# Git commit comment: add ollama webui local target validation
 from __future__ import annotations
 
 import argparse

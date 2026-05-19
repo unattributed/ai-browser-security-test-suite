@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
-"""
-File: tools/audit_series_coverage.py
-
-Change description:
-  Audit Browser-Safe AI Systems article coverage across the supported
-  Ollama Web UI local target prompt probes and write reviewable JSON and
-  Markdown coverage evidence.
-
-Git commit comment:
-  add browser safe ai series coverage audit
-"""
+"""Audit Browser-Safe AI Systems coverage metadata."""
 from __future__ import annotations
 
 import argparse
@@ -278,7 +268,7 @@ def write_report(
             "",
             "## Interpretation",
             "",
-            "This audit verifies MVP coverage for the required attack-class parts in the Browser-Safe AI Systems series.",
+            "This audit verifies declared coverage for the required attack-class parts in the Browser-Safe AI Systems series.",
             "",
             "It does not claim full maturity coverage for every implementation detail in the complete article series.",
             "Future hardening should convert selected prompt-simulated cases into stronger browser-artifact tests using generated QR images, delayed DOM mutations, screenshot comparison, DOM/render comparison, and normalized SOC fields.",

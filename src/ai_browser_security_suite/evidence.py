@@ -1,6 +1,3 @@
-# File: src/ai_browser_security_suite/evidence.py
-# Change description: write structured evidence records and artifact hashes.
-# Git commit comment: add blue team black box mvp foundation
 from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone

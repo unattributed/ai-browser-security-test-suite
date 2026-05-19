@@ -65,9 +65,3 @@ structured JSONL record
 Markdown report
 recommended action
 ```
-
-## Git commit comment
-
-```text
-focus suite on ollama webui local target
-```
