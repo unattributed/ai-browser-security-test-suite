@@ -169,6 +169,12 @@ def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]
     return coverage, failures, case_summaries
 
 
+
+def write_markdown_lines(path: Path, lines: list[str]) -> None:
+    while lines and not lines[-1].strip():
+        lines.pop()
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
 def write_report(
     out_dir: Path,
     payload_path: Path,
@@ -280,7 +286,7 @@ def write_report(
         ]
     )
 
-    md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_markdown_lines(md_path, lines)
 
     return json_path, md_path
 
