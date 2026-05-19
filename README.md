@@ -194,6 +194,27 @@ curl -fsS http://127.0.0.1:11435/health
 curl -fsS http://127.0.0.1:11434/api/version
 ```
 
+## Ollama Web UI service preflight
+
+The supported target suite requires `ollama-webui` to be running before validation starts.
+
+Start the target in a separate terminal:
+
+```bash
+cd /home/foo/Workspace/ollama-webui
+source .venv/bin/activate
+python scripts/pull_model.py
+```
+
+Then run:
+
+```bash
+cd /home/foo/Workspace/ai-browser-security-test-suite
+scripts/run_supported_local_target_suite.sh
+```
+
+If the service is not running, the suite exits early and prints these startup instructions.
+
 ## Run the supported target suite
 
 From this repository:

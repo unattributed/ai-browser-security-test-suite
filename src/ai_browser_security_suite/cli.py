@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+from pathlib import Path
 
 from rich.console import Console
 from rich.table import Table
@@ -98,8 +99,8 @@ def cmd_ollama_validate(args):
         run_validation_async(
             base_url=args.base_url,
             model=args.model,
-            cases_path=args.cases,
-            out_dir=args.out,
+            cases_path=Path(args.cases),
+            out_dir=Path(args.out),
             response_timeout_ms=args.response_timeout_ms,
         )
     )

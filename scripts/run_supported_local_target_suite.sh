@@ -3,17 +3,19 @@
 # File: scripts/run_supported_local_target_suite.sh
 #
 # Change description:
-#   Run the public supported-target suite against local unattributed/ollama-webui
-#   using the existing ai-browser-security-test-suite .venv.
+#   Run the supported local target suite against unattributed/ollama-webui.
+#   The script now fails fast with clear startup instructions when the
+#   ollama-webui service is not already running.
 #
 # Git commit comment:
-#   focus suite on ollama webui local target
+#   require ollama webui preflight before validation
 
 set -Eeuo pipefail
 
 REPO_DIR="${REPO_DIR:-/home/foo/Workspace/ai-browser-security-test-suite}"
 VENV_DIR="${VENV_DIR:-${REPO_DIR}/.venv}"
 OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
+OLLAMA_BACKEND_URL="${OLLAMA_BACKEND_URL:-http://127.0.0.1:11434}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-}"
 OUT_DIR="${OUT_DIR:-${REPO_DIR}/reports/ollama-webui-validation}"
 RESPONSE_TIMEOUT_MS="${RESPONSE_TIMEOUT_MS:-180000}"
@@ -32,6 +34,36 @@ need_command() {
   command -v "$command_name" >/dev/null 2>&1 || fail "missing required command: ${command_name}"
 }
 
+print_start_instructions() {
+  cat >&2 <<EOF
+
+The supported local target is not running.
+
+Start ollama-webui in a separate terminal first:
+
+  cd /home/foo/Workspace/ollama-webui
+  source .venv/bin/activate
+  python scripts/pull_model.py
+
+Then confirm:
+
+  curl -fsS ${OLLAMA_WEBUI_URL%/}/health
+  curl -fsS ${OLLAMA_BACKEND_URL%/}/api/version
+
+Then rerun:
+
+  cd ${REPO_DIR}
+  scripts/run_supported_local_target_suite.sh
+
+Current expected target:
+  ${OLLAMA_WEBUI_URL}
+
+Current expected Ollama backend:
+  ${OLLAMA_BACKEND_URL}
+
+EOF
+}
+
 log "checking repository and existing virtual environment"
 cd "${REPO_DIR}"
 
@@ -42,16 +74,33 @@ cd "${REPO_DIR}"
 log "checking commands"
 need_command curl
 need_command git
+need_command find
+
+log "checking supported local target preflight"
+if ! curl -fsS "${OLLAMA_WEBUI_URL%/}/health" >/tmp/ai-browser-ollama-webui-health.json 2>/tmp/ai-browser-ollama-webui-health.err; then
+  cat /tmp/ai-browser-ollama-webui-health.err >&2 || true
+  print_start_instructions
+  exit 2
+fi
+
+cat /tmp/ai-browser-ollama-webui-health.json
+echo
+
+log "checking ollama backend preflight"
+if ! curl -fsS "${OLLAMA_BACKEND_URL%/}/api/version" >/tmp/ai-browser-ollama-backend-version.json 2>/tmp/ai-browser-ollama-backend-version.err; then
+  cat /tmp/ai-browser-ollama-backend-version.err >&2 || true
+  print_start_instructions
+  exit 2
+fi
+
+cat /tmp/ai-browser-ollama-backend-version.json
+echo
 
 log "using existing virtual environment"
 # shellcheck source=/dev/null
 source "${VENV_DIR}/bin/activate"
 
 python -m pip install -e .
-
-log "checking supported local target"
-curl -fsS "${OLLAMA_WEBUI_URL%/}/health"
-curl -fsS "http://127.0.0.1:11434/api/version"
 
 log "checking playwright chromium"
 playwright install chromium
@@ -63,7 +112,13 @@ if [[ -n "${OLLAMA_MODEL}" ]]; then
 fi
 
 set +e
-python -m ai_browser_security_suite ollama-validate   --base-url "${OLLAMA_WEBUI_URL}"   "${MODEL_ARGS[@]}"   --cases payloads/ollama_webui_safe_prompts.yaml   --out "${OUT_DIR}"   --response-timeout-ms "${RESPONSE_TIMEOUT_MS}"   --i-have-authorization
+python -m ai_browser_security_suite ollama-validate \
+  --base-url "${OLLAMA_WEBUI_URL}" \
+  "${MODEL_ARGS[@]}" \
+  --cases payloads/ollama_webui_safe_prompts.yaml \
+  --out "${OUT_DIR}" \
+  --response-timeout-ms "${RESPONSE_TIMEOUT_MS}" \
+  --i-have-authorization
 VALIDATION_STATUS="$?"
 set -e
 

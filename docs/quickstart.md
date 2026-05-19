@@ -1,3 +1,16 @@
+## Required service startup
+
+The `ollama-webui` service must already be running before `scripts/run_supported_local_target_suite.sh` is executed.
+
+Start it in a separate terminal:
+
+```bash
+cd /home/foo/Workspace/ollama-webui
+source .venv/bin/activate
+python scripts/pull_model.py
+```
+
+
 # Quickstart
 
 ## Supported local target

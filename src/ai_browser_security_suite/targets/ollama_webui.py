@@ -335,6 +335,8 @@ async def run_validation_async(
     out_dir: Path,
     response_timeout_ms: int,
 ) -> int:
+    cases_path = Path(cases_path)
+    out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     metadata = get_target_metadata(base_url)
