@@ -78,6 +78,7 @@ pytest
 
 log "running CLI smoke checks"
 python -m ai_browser_security_suite --help | grep -q "ollama-validate"
+python -m ai_browser_security_suite --help | grep -q "ollama-upload-validate"
 python -m ai_browser_security_suite case-list --cases payloads/safe_browser_ai_cases.yaml >/dev/null
 
 log "running Browser-Safe AI Systems coverage audit"

@@ -113,6 +113,7 @@ Markdown reporting
 article-series mapping
 coverage auditing against the research series
 artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
+deterministic uploaded-file analysis tests for the local Ollama Web UI target
 authorized scope-file structure for exceptional client engagements
 ```
 
@@ -123,6 +124,7 @@ local generated test pages
 the local ollama-webui target
 browser-based AI behavior against synthetic unsafe markers
 artifact-backed browser evidence for selected attack classes
+uploaded-file prompt construction, untrusted-content boundaries, redaction risk, and size-limit handling
 evidence quality for analysts and product-security review
 ```
 
@@ -278,6 +280,7 @@ recon
 capture
 report
 ollama-validate
+ollama-upload-validate
 ```
 
 ## Development checks
@@ -321,6 +324,34 @@ reports/ollama-webui-validation/cases/<case-id>/case-result.json
 ```
 
 Generated evidence is ignored by Git.
+
+## Ollama Web UI upload analysis validation
+
+The upload validation path exercises the target's uploaded file analysis feature
+directly. It uploads controlled local files into the real UI, intercepts
+`/api/generate`, and saves the exact model-bound prompt for review.
+
+```bash
+python -m ai_browser_security_suite ollama-upload-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_file_upload_cases.yaml   --out reports/ollama-webui-upload-validation   --i-have-authorization
+```
+
+Convenience wrapper:
+
+```bash
+scripts/test_upload_analysis_against_ollama_webui.sh
+```
+
+Generated upload evidence:
+
+```text
+reports/ollama-webui-upload-validation/evidence.jsonl
+reports/ollama-webui-upload-validation/ollama-webui-upload-validation-results.json
+reports/ollama-webui-upload-validation/ollama-webui-upload-validation-report.md
+reports/ollama-webui-upload-validation/target-metadata.json
+reports/ollama-webui-upload-validation/cases/<case-id>/captured-model-prompt.txt
+reports/ollama-webui-upload-validation/cases/<case-id>/generate-requests.json
+reports/ollama-webui-upload-validation/cases/<case-id>/upload-files/<uploaded-file>
+```
 
 ## Local browser-AI lab
 
@@ -389,6 +420,7 @@ docs/coverage/browser-safe-ai-series-coverage.md
 docs/ci-github-actions.md
 docs/ollama-webui-local-target.md
 docs/ollama-webui-service-preflight.md
+docs/ollama-webui-upload-analysis-testing-review.md
 docs/quickstart.md
 docs/supported-target-policy.md
 docs/tooling-map-to-series.md
@@ -438,6 +470,7 @@ HAR and console-log collection
 Ollama-backed browser-AI validation
 coverage auditing against the research series
 artifact-backed tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
+uploaded-file analysis tests that capture exact model-bound prompts
 JSONL evidence suitable for later SIEM or SOC enrichment
 Markdown reports suitable for human review
 explicit safety boundaries to reduce misuse
