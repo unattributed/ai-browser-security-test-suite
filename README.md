@@ -106,6 +106,7 @@ The current release provides:
 ```text
 safe browser-AI test case definitions
 local HTML lab generation
+playable local browser-safe AI examples mapped to the series
 Ollama Web UI local target validation
 Playwright browser evidence capture
 structured JSONL evidence
@@ -114,6 +115,7 @@ article-series mapping
 coverage auditing against the research series
 artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
 deterministic uploaded-file analysis tests for the local Ollama Web UI target
+playground files for safe local ollama-webui upload practice
 authorized scope-file structure for exceptional client engagements
 ```
 
@@ -355,7 +357,8 @@ reports/ollama-webui-upload-validation/cases/<case-id>/upload-files/<uploaded-fi
 
 ## Local browser-AI lab
 
-The local generated lab remains available for browser evidence demonstrations.
+The local generated lab provides playable browser-safe AI examples for evidence
+demonstrations, training, and authorized penetration-test practice.
 
 List cases:
 
@@ -381,7 +384,28 @@ python -m ai_browser_security_suite lab-serve   --directory local_lab   --host 1
 Capture evidence:
 
 ```bash
-python -m ai_browser_security_suite capture   --url http://127.0.0.1:8088/bai-001-hidden-dom.html   --out reports/example-capture
+python -m ai_browser_security_suite capture   --url http://127.0.0.1:8088/bai-002-hidden-dom.html   --out reports/example-capture
+```
+
+The lab includes controlled examples for visible prompt injection, hidden DOM,
+CSS-hidden text, SVG metadata, accessibility mismatch, DOM/render mismatch,
+visual overlays, QR handoff, delayed mutation, Unicode spoofing, synthetic DLP,
+seeded login, inert file-sharing lure, metadata contradiction, fail-open
+pressure, exception abuse, oversized DOM stress, calendar promptware, fake IdP
+login, document-share lures, QR MFA reset, fake browser updates, OAuth consent
+lures, helpdesk support-bundle collection, and invoice payment-change deception.
+
+Guide:
+
+```text
+docs/playable-browser-safe-ai-examples.md
+docs/real-world-browser-ai-attack-scenarios.md
+```
+
+Uploadable playground files for local `ollama-webui` practice:
+
+```text
+examples/ollama-webui-playground/
 ```
 
 ## Authorized client scope files
@@ -421,7 +445,9 @@ docs/ci-github-actions.md
 docs/ollama-webui-local-target.md
 docs/ollama-webui-service-preflight.md
 docs/ollama-webui-upload-analysis-testing-review.md
+docs/playable-browser-safe-ai-examples.md
 docs/quickstart.md
+docs/real-world-browser-ai-attack-scenarios.md
 docs/supported-target-policy.md
 docs/tooling-map-to-series.md
 ```
@@ -432,6 +458,7 @@ docs/tooling-map-to-series.md
 ai-browser-security-test-suite/
 ├── docs/
 ├── examples/
+│   └── ollama-webui-playground/
 ├── payloads/
 ├── reports/
 ├── scripts/

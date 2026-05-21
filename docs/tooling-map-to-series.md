@@ -20,8 +20,12 @@ http://127.0.0.1:11435/
 | Part 13 | QR phishing, brand impersonation, and multistage lures | yes | yes |
 | Part 14 | Unicode, homograph, and visual spoofing attacks | yes | yes |
 | Part 15 | Delayed content, region-gated pages, and evasive phishing | yes | yes |
-| Part 16 | AI verdict manipulation and false negative risk | no | yes |
-| Part 22 | Feedback-loop poisoning and exception abuse | no | yes |
+| Part 16 | AI verdict manipulation and false negative risk | yes | yes |
+| Part 18 | Data handling risks | yes | upload validation |
+| Part 19 | Privacy, retention, redaction, and tenant isolation | yes | upload validation |
+| Part 20 | Model output handling | yes | yes |
+| Part 21 | Fail-open versus fail-closed security decisions | yes | yes |
+| Part 22 | Feedback-loop poisoning and exception abuse | yes | yes |
 
 ## Supporting article mapping
 
@@ -34,12 +38,34 @@ http://127.0.0.1:11435/
 | Part 27 | analyst-reviewable reports and recommended actions |
 | Part 32 | AI output treated as advisory evidence, not final policy |
 
+## Playable examples
+
+The local lab contains browser pages for hands-on testing:
+
+```bash
+python -m ai_browser_security_suite lab-build --cases payloads/safe_browser_ai_cases.yaml --out local_lab
+python -m ai_browser_security_suite lab-serve --directory local_lab --host 127.0.0.1 --port 8088
+```
+
+Uploadable files for the local `ollama-webui` file-analysis feature live in:
+
+```text
+examples/ollama-webui-playground/
+```
+
+Real-world-inspired local scenarios are documented in:
+
+```text
+docs/real-world-browser-ai-attack-scenarios.md
+```
+
 ## Main commands
 
 ```bash
 python -m ai_browser_security_suite case-list --cases payloads/safe_browser_ai_cases.yaml
 python -m ai_browser_security_suite lab-build --cases payloads/safe_browser_ai_cases.yaml --out local_lab
-python -m ai_browser_security_suite capture --url http://127.0.0.1:8088/bai-001-hidden-dom.html --out reports/example-capture
+python -m ai_browser_security_suite capture --url http://127.0.0.1:8088/bai-002-hidden-dom.html --out reports/example-capture
 python -m ai_browser_security_suite ollama-validate --base-url http://127.0.0.1:11435/ --i-have-authorization
+python -m ai_browser_security_suite ollama-upload-validate --base-url http://127.0.0.1:11435/ --i-have-authorization
 scripts/run_supported_local_target_suite.sh
 ```
