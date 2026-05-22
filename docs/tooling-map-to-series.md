@@ -111,3 +111,19 @@ report.md
 ```
 
 The manifest provides artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. The evidence schema contracts provide machine-checkable structure for `evidence.jsonl` and `artifact-manifest.json`. This supports Part 26 evidence collection and Part 27 analyst review. It does not yet claim OCR, QR decoding, iframe tree, ARIA tree, DOM/render diff, or visual diff coverage.
+
+
+## CI gate mapping
+
+The `Security CI / python-checks` workflow supports the series-wide integrity model by enforcing compile checks, unit tests, schema validation, target-contract snapshot validation, default coverage audit, and target-contract coverage audit on pull requests and pushes to `main`.
+
+This maps most directly to:
+
+- Part 24, red-team testing methodology for repeatable validation.
+- Part 25, practical test harness discipline.
+- Part 26, evidence collection and verification.
+- Part 28, governance questions for vendors and customers.
+- Part 31, browser security validation as an evidence-backed process.
+- Part 32, treating AI as an untrusted classifier inside a controlled security pipeline.
+
+The CI gate is not itself a browser-AI attack simulation. It is the regression boundary that keeps future browser-AI tests honest and traceable.
