@@ -73,6 +73,7 @@ docs/coverage/browser-safe-ai-series-coverage.json
 
 ```text
 reports/ollama-webui-validation/evidence.jsonl
+reports/ollama-webui-validation/artifact-manifest.json
 reports/ollama-webui-validation/ollama-webui-validation-results.json
 reports/ollama-webui-validation/ollama-webui-validation-report.md
 reports/ollama-webui-validation/target-metadata.json
@@ -82,4 +83,6 @@ reports/ollama-webui-validation/target-metadata.json
 
 Passing this audit means the current branch has declared coverage for each required attack-class part.
 
-It does not mean every possible browser artifact has been deeply tested. The next maturity step is to convert selected cases into stronger artifact-backed tests for QR images, delayed DOM mutation, screenshot comparison, and DOM/render mismatch comparison.
+The evidence pipeline now writes `artifact-manifest.json` for shared evidence-writer outputs. The manifest records artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. This proves artifact traceability for the current shared evidence layer.
+
+It does not mean every possible browser artifact has been deeply tested. OCR parsing, QR decoding, iframe tree extraction, ARIA tree extraction, DOM/render comparison, and visual diffing remain planned maturity steps.

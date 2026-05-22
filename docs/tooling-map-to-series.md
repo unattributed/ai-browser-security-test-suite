@@ -35,7 +35,7 @@ http://127.0.0.1:11435/
 | Part 23 | local-first target policy and deterministic evidence model |
 | Part 24 | authorized testing model and scope-file boundary |
 | Part 25 | Python CLI, Playwright capture, and local target validation |
-| Part 26 | JSONL evidence, screenshots, DOM, HAR, console logs, and Markdown reports |
+| Part 26 | JSONL evidence, artifact manifests with SHA256 hashes, screenshots, DOM, HAR, console logs, and Markdown reports |
 | Part 27 | analyst-reviewable reports and recommended actions |
 | Part 28 | coverage matrix and governance-oriented evidence |
 | Part 29 | local validation workflow for security teams |
@@ -75,3 +75,15 @@ python -m ai_browser_security_suite ollama-upload-validate --base-url http://127
 python -m ai_browser_security_suite ollama-project-agent-validate --base-url http://127.0.0.1:11435/ --i-have-authorization
 scripts/run_supported_local_target_suite.sh
 ```
+
+## Evidence manifest support
+
+Shared evidence-writer outputs include:
+
+```text
+evidence.jsonl
+artifact-manifest.json
+report.md
+```
+
+The manifest provides artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. This supports Part 26 evidence collection and Part 27 analyst review. It does not yet claim OCR, QR decoding, iframe tree, ARIA tree, DOM/render diff, or visual diff coverage.
