@@ -4,10 +4,23 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SRC_PATH = REPO_ROOT / "src"
+if str(SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(SRC_PATH))
+
 import yaml
+
+from ai_browser_security_suite.target_contract import (
+    TargetContract,
+    TargetContractError,
+    load_target_contract,
+    target_contract_summary,
+)
 
 
 SERIES_INDEX_PARTS = {
@@ -101,12 +114,12 @@ TOOLKIT_SUPPORT = {
     "Part 23": "supported target policy, deterministic control guidance, and local-only target",
     "Part 24": "authorization gates, scope file model, and local target scripts",
     "Part 25": "Python CLI, Playwright capture, upload validation, and Project Agent validation",
-    "Part 26": "JSONL evidence, screenshots, DOM, HAR, network logs, and Markdown reports",
+    "Part 26": "JSONL evidence, artifact manifests, schema contracts, screenshots, DOM, HAR, network logs, and Markdown reports",
     "Part 27": "analyst-reviewable reports with expected observations and recommended actions",
-    "Part 28": "coverage matrix and governance-oriented Project Agent validation evidence",
+    "Part 28": "coverage matrix, target contract ingestion, and governance-oriented Project Agent validation evidence",
     "Part 29": "security-team quickstart, scope policy, and repeatable validation scripts",
     "Part 30": "developer-facing Project Agent and output-boundary test cases",
-    "Part 31": "coverage audit proving browser security validation across the current index",
+    "Part 31": "coverage audit proving browser security validation across the current index and target contract",
     "Part 32": "AI output treated as advisory evidence, not final policy authority",
 }
 
@@ -130,6 +143,8 @@ REQUIRED_CASE_FIELDS = [
     "expected_observation",
 ]
 
+DEFAULT_TARGET_CONTRACT = "docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json"
+
 
 def load_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -141,6 +156,12 @@ def fail_if_missing_top_level(payload: dict[str, Any]) -> list[str]:
         if field not in payload:
             failures.append(f"payload missing top-level field: {field}")
     return failures
+
+
+def _as_string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value]
 
 
 def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]], list[str], list[dict[str, Any]]]:
@@ -168,6 +189,7 @@ def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]
         expected = str(case.get("expected_observation", ""))
         supported_parts = [str(part) for part in case.get("supported_parts", [])]
         unsafe_indicators = [str(item) for item in case.get("unsafe_indicators", [])]
+        target_scenarios = _as_string_list(case.get("target_scenarios", []))
 
         for field in REQUIRED_CASE_FIELDS:
             if field not in case:
@@ -207,6 +229,9 @@ def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]
         if not any(part in REQUIRED_ATTACK_PARTS for part in supported_parts):
             failures.append(f"{case_id}: must map to at least one required attack-class part")
 
+        if "target_scenarios" in case and not target_scenarios:
+            failures.append(f"{case_id}: target_scenarios must be a non-empty list when present")
+
         for part in supported_parts:
             coverage.setdefault(part, []).append(
                 {
@@ -224,6 +249,7 @@ def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]
                 "category": category,
                 "supported_parts": supported_parts,
                 "marker": marker,
+                "target_scenarios": target_scenarios,
                 "unsafe_indicator_count": len(unsafe_indicators),
                 "has_expected_observation": bool(expected.strip()),
             }
@@ -240,11 +266,75 @@ def audit_cases(payload: dict[str, Any]) -> tuple[dict[str, list[dict[str, str]]
     return coverage, failures, case_summaries
 
 
+def load_target_payloads(paths: list[Path]) -> list[tuple[Path, dict[str, Any]]]:
+    payloads: list[tuple[Path, dict[str, Any]]] = []
+    for path in paths:
+        if not path.exists():
+            raise SystemExit(f"missing target payload file: {path}")
+        payloads.append((path, load_yaml(path)))
+    return payloads
+
+
+def audit_target_contract_coverage(
+    contract: TargetContract,
+    target_payloads: list[tuple[Path, dict[str, Any]]],
+) -> tuple[dict[str, Any], list[str]]:
+    """Validate that active target scenarios are represented by toolkit payloads."""
+
+    failures: list[str] = []
+    scenario_coverage: dict[str, list[dict[str, str]]] = {
+        scenario.scenario_id: [] for scenario in contract.scenarios
+    }
+
+    for payload_path, payload in target_payloads:
+        cases = payload.get("cases", [])
+        if not isinstance(cases, list) or not cases:
+            failures.append(f"{payload_path}: target payload must contain a non-empty cases list")
+            continue
+
+        for index, case in enumerate(cases, start=1):
+            if not isinstance(case, dict):
+                failures.append(f"{payload_path}: case {index}: case entry must be a mapping")
+                continue
+
+            case_id = str(case.get("id", f"case-{index}"))
+            target_scenarios = case.get("target_scenarios")
+            if not isinstance(target_scenarios, list) or not target_scenarios:
+                failures.append(f"{payload_path}: {case_id}: missing non-empty target_scenarios mapping")
+                continue
+
+            for raw_scenario_id in target_scenarios:
+                scenario_id = str(raw_scenario_id)
+                if scenario_id not in contract.scenario_ids:
+                    failures.append(f"{payload_path}: {case_id}: unknown target scenario id: {scenario_id}")
+                    continue
+
+                scenario_coverage[scenario_id].append(
+                    {
+                        "payload_file": str(payload_path),
+                        "case_id": case_id,
+                        "title": str(case.get("title", "")),
+                        "category": str(case.get("category", "")),
+                    }
+                )
+
+    for scenario in contract.active_scenarios:
+        if not scenario_coverage.get(scenario.scenario_id):
+            failures.append(f"active target scenario not represented by toolkit payloads: {scenario.scenario_id}")
+
+    report = {
+        "contract": target_contract_summary(contract),
+        "scenario_coverage": scenario_coverage,
+        "target_payload_files": [str(path) for path, _payload in target_payloads],
+    }
+    return report, failures
+
 
 def write_markdown_lines(path: Path, lines: list[str]) -> None:
     while lines and not lines[-1].strip():
         lines.pop()
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
 
 def write_report(
     out_dir: Path,
@@ -253,6 +343,7 @@ def write_report(
     coverage: dict[str, list[dict[str, str]]],
     failures: list[str],
     case_summaries: list[dict[str, Any]],
+    target_contract_report: dict[str, Any] | None = None,
 ) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -270,6 +361,7 @@ def write_report(
         "toolkit_support": TOOLKIT_SUPPORT,
         "coverage": coverage,
         "case_summaries": case_summaries,
+        "target_contract_coverage": target_contract_report,
         "failures": failures,
     }
 
@@ -325,20 +417,48 @@ def write_report(
             "",
             "## Case inventory",
             "",
-            "| Case | Category | Supported parts | Marker |",
-            "|---|---|---|---|",
+            "| Case | Category | Supported parts | Target scenarios | Marker |",
+            "|---|---|---|---|---|",
         ]
     )
 
     for case in case_summaries:
+        target_scenarios = ", ".join(f"`{scenario}`" for scenario in case.get("target_scenarios", [])) or "none"
         lines.append(
-            "| `{case_id}` | `{category}` | {parts} | `{marker}` |".format(
+            "| `{case_id}` | `{category}` | {parts} | {target_scenarios} | `{marker}` |".format(
                 case_id=case["case_id"],
                 category=case["category"],
                 parts=", ".join(case["supported_parts"]),
+                target_scenarios=target_scenarios,
                 marker=case["marker"],
             )
         )
+
+    if target_contract_report:
+        contract_summary = target_contract_report["contract"]
+        lines.extend(
+            [
+                "",
+                "## Target contract coverage",
+                "",
+                f"- Contract schema: `{contract_summary['schema_version']}`",
+                f"- Target: `{contract_summary['target_name']}`",
+                f"- Repository: `{contract_summary['target_repository']}`",
+                f"- Local base URL: `{contract_summary['local_base_url']}`",
+                f"- Active scenario count: `{contract_summary['active_scenario_count']}`",
+                "",
+                "| Target scenario | Toolkit payload cases |",
+                "|---|---|",
+            ]
+        )
+        for scenario_id, mapped_cases in sorted(target_contract_report["scenario_coverage"].items()):
+            if mapped_cases:
+                cases_text = ", ".join(
+                    f"`{item['case_id']}` from `{item['payload_file']}`" for item in mapped_cases
+                )
+            else:
+                cases_text = "**missing**"
+            lines.append(f"| `{scenario_id}` | {cases_text} |")
 
     lines.extend(["", "## Failures", ""])
 
@@ -355,6 +475,7 @@ def write_report(
             "This audit verifies declared coverage for the required attack-class parts in the Browser-Safe AI Systems series and maps the current Part 01-32 index to toolkit support.",
             "",
             "Direct cases are executable probes. Toolkit support entries identify documentation, local lab, upload, Project Agent, evidence, governance, or reporting coverage for series parts that are architectural, methodological, or recommendation-focused rather than a single attack probe.",
+            "When a target contract is supplied, the audit also verifies that each active target scenario is represented by at least one toolkit payload case and that payload cases use known scenario ids.",
             "Future hardening should keep converting prompt-simulated cases into stronger browser-artifact tests using generated QR images, delayed DOM mutations, screenshot comparison, DOM/render comparison, local project context, and normalized SOC fields.",
             "",
         ]
@@ -370,7 +491,24 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--payload",
         default="payloads/ollama_webui_safe_prompts.yaml",
-        help="Path to Ollama Web UI safe prompt payload YAML.",
+        help="Path to primary Ollama Web UI safe prompt payload YAML.",
+    )
+    parser.add_argument(
+        "--target-contract",
+        default=None,
+        help=(
+            "Optional Browser-Safe AI target scenario contract JSON. "
+            f"Use {DEFAULT_TARGET_CONTRACT} for the local ollama-webui contract snapshot."
+        ),
+    )
+    parser.add_argument(
+        "--target-payload",
+        action="append",
+        default=[],
+        help=(
+            "Additional payload YAML to include in target contract scenario coverage. "
+            "May be supplied multiple times."
+        ),
     )
     parser.add_argument(
         "--out-dir",
@@ -393,7 +531,36 @@ def main() -> int:
     coverage, case_failures, case_summaries = audit_cases(payload)
     failures.extend(case_failures)
 
-    json_path, md_path = write_report(out_dir, payload_path, payload, coverage, failures, case_summaries)
+    target_contract_report: dict[str, Any] | None = None
+    if args.target_contract:
+        try:
+            target_contract = load_target_contract(args.target_contract)
+        except TargetContractError as exc:
+            failures.append(str(exc))
+        else:
+            target_payload_paths = [payload_path] + [Path(path) for path in args.target_payload]
+            try:
+                target_payloads = load_target_payloads(target_payload_paths)
+            except SystemExit as exc:
+                failures.append(str(exc))
+                target_payloads = []
+
+            if target_payloads:
+                target_contract_report, contract_failures = audit_target_contract_coverage(
+                    target_contract,
+                    target_payloads,
+                )
+                failures.extend(contract_failures)
+
+    json_path, md_path = write_report(
+        out_dir,
+        payload_path,
+        payload,
+        coverage,
+        failures,
+        case_summaries,
+        target_contract_report,
+    )
 
     print(f"wrote {json_path}")
     print(f"wrote {md_path}")

@@ -311,6 +311,30 @@ python tools/audit_series_coverage.py \
   --out-dir /tmp/ai-browser-coverage
 ```
 
+
+## Target contract ingestion
+
+The toolkit can ingest the Browser-Safe AI target scenario contract published by the local `ollama-webui` vulnerable app.
+
+The current local snapshot is:
+
+```text
+docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json
+```
+
+Run the coverage audit with the target contract gate enabled:
+
+```bash
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --target-payload payloads/ollama_webui_file_upload_cases.yaml \
+  --target-payload payloads/ollama_webui_project_agent_cases.yaml \
+  --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
+  --out-dir /tmp/ai-browser-target-contract-coverage
+```
+
+When the target contract gate is enabled, the audit fails if an active target scenario is not represented by toolkit payload mappings or if a payload references an unknown scenario id. This keeps toolkit coverage claims aligned with the intentionally vulnerable local target.
+
 ## Evidence artifact manifest
 
 Every evidence directory written through the shared evidence writer now includes:

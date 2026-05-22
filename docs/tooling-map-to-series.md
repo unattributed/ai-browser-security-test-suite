@@ -64,6 +64,30 @@ Real-world-inspired local scenarios are documented in:
 docs/real-world-browser-ai-attack-scenarios.md
 ```
 
+
+## Target contract ingestion
+
+The toolkit now stores and validates the current `ollama-webui` Browser-Safe AI target scenario contract:
+
+```text
+docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json
+```
+
+The contract gate maps active vulnerable-app scenarios to toolkit payload families:
+
+| Target scenario | Toolkit payload mapping |
+|---|---|
+| `chat.basic_prompt` | `payloads/ollama_webui_safe_prompts.yaml` |
+| `file_upload.text_context` | `payloads/ollama_webui_file_upload_cases.yaml` |
+| `project_agent.guardrail_context` | `payloads/ollama_webui_project_agent_cases.yaml` |
+| `project_agent.search` | `payloads/ollama_webui_project_agent_cases.yaml` |
+| `project_agent.read_file` | `payloads/ollama_webui_project_agent_cases.yaml` |
+| `project_agent.run_tool` | `payloads/ollama_webui_project_agent_cases.yaml` |
+| `model.catalog_filter` | `payloads/ollama_webui_project_agent_cases.yaml` |
+
+The gate is traceability-focused. It prevents coverage overclaims before deeper parser slices for OCR, QR, iframe trees, ARIA trees, DOM/render mismatch, and visual diffs are implemented.
+
+
 ## Main commands
 
 ```bash
