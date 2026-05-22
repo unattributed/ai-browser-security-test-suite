@@ -9,6 +9,7 @@ def test_cli_exposes_supported_commands():
 
     assert "ollama-validate" in parser.format_help()
     assert "ollama-upload-validate" in parser.format_help()
+    assert "ollama-project-agent-validate" in parser.format_help()
     assert parser.parse_args(["case-list"]).cases == "payloads/safe_browser_ai_cases.yaml"
 
 

@@ -16,5 +16,9 @@ def test_coverage_audit_passes_default_payload(tmp_path):
     json_path, md_path = write_report(tmp_path, payload_path, payload, coverage, failures, summaries)
 
     assert not failures
-    assert json.loads(json_path.read_text(encoding="utf-8"))["status"] == "passed"
+    report = json.loads(json_path.read_text(encoding="utf-8"))
+    assert report["status"] == "passed"
+    assert "Part 01" in report["series_index_parts"]
+    assert "Part 32" in report["series_index_parts"]
+    assert "Part 31" in report["toolkit_support"]
     assert "Coverage Audit" in md_path.read_text(encoding="utf-8")

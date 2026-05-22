@@ -79,6 +79,7 @@ pytest
 log "running CLI smoke checks"
 python -m ai_browser_security_suite --help | grep -q "ollama-validate"
 python -m ai_browser_security_suite --help | grep -q "ollama-upload-validate"
+python -m ai_browser_security_suite --help | grep -q "ollama-project-agent-validate"
 python -m ai_browser_security_suite case-list --cases payloads/safe_browser_ai_cases.yaml >/dev/null
 
 log "running Browser-Safe AI Systems coverage audit"
@@ -111,6 +112,10 @@ if [[ "${RUN_OLLAMA_TARGET}" == "1" ]]; then
   test -f reports/ollama-webui-validation/ollama-webui-validation-results.json
   test -f reports/ollama-webui-validation/ollama-webui-validation-report.md
   test -f reports/ollama-webui-validation/target-metadata.json
+  test -f reports/ollama-webui-project-agent-validation/evidence.jsonl
+  test -f reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-results.json
+  test -f reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-report.md
+  test -f reports/ollama-webui-project-agent-validation/target-metadata.json
 fi
 
 log "checking git diff"
@@ -130,6 +135,7 @@ Coverage reports:
 
 Ollama Web UI report:
   reports/ollama-webui-validation/ollama-webui-validation-report.md
+  reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-report.md
 
 EOF
 else

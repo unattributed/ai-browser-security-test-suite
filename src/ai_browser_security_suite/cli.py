@@ -13,6 +13,7 @@ from ai_browser_security_suite.local_lab import build_lab, load_cases, serve_lab
 from ai_browser_security_suite.paths import resolve_existing_path
 from ai_browser_security_suite.recon.blackbox import run_blackbox_recon
 from ai_browser_security_suite.report import write_markdown_report
+from ai_browser_security_suite.targets.ollama_project_agent import run_project_agent_validation_async
 from ai_browser_security_suite.targets.ollama_uploads import run_upload_validation_async
 from ai_browser_security_suite.targets.ollama_webui import run_validation_async
 
@@ -123,6 +124,23 @@ def cmd_ollama_upload_validate(args):
     )
 
 
+def cmd_ollama_project_agent_validate(args):
+    if not args.i_have_authorization:
+        console.print(
+            "[red]authorization required:[/red] use --i-have-authorization only when testing "
+            "your local ollama-webui instance or an explicitly authorized target."
+        )
+        return 2
+
+    return asyncio.run(
+        run_project_agent_validation_async(
+            base_url=args.base_url,
+            cases_path=resolve_existing_path(args.cases),
+            out_dir=Path(args.out),
+        )
+    )
+
+
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="ai-browser-suite",
@@ -187,6 +205,13 @@ def build_parser():
     command.add_argument("--response-timeout-ms", type=int, default=60000)
     command.add_argument("--i-have-authorization", action="store_true")
     command.set_defaults(func=cmd_ollama_upload_validate)
+
+    command = sub.add_parser("ollama-project-agent-validate")
+    command.add_argument("--base-url", default="http://127.0.0.1:11435/")
+    command.add_argument("--cases", default="payloads/ollama_webui_project_agent_cases.yaml")
+    command.add_argument("--out", default="reports/ollama-webui-project-agent-validation")
+    command.add_argument("--i-have-authorization", action="store_true")
+    command.set_defaults(func=cmd_ollama_project_agent_validate)
 
     return parser
 

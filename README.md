@@ -115,6 +115,7 @@ article-series mapping
 coverage auditing against the research series
 artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
 deterministic uploaded-file analysis tests for the local Ollama Web UI target
+deterministic Project Agent tests for local project guardrails, file reads, search, model type controls, copy controls, and allowlisted tool execution
 playground files for safe local ollama-webui upload practice
 authorized scope-file structure for exceptional client engagements
 ```
@@ -127,6 +128,7 @@ the local ollama-webui target
 browser-based AI behavior against synthetic unsafe markers
 artifact-backed browser evidence for selected attack classes
 uploaded-file prompt construction, untrusted-content boundaries, redaction risk, and size-limit handling
+local project context handling, tool-output boundaries, model type filtering, and chat copy-control placement
 evidence quality for analysts and product-security review
 ```
 
@@ -142,6 +144,11 @@ evidence quality for analysts and product-security review
 | Unicode, homograph, and visual spoofing attacks | Part 14 | safe local case, Ollama Web UI prompt probe |
 | Delayed content, region-gated pages, and evasive phishing | Part 15 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
 | AI verdict manipulation and false negative risk | Part 16 | Ollama Web UI prompt probe |
+| False positives, alert fatigue, and trust erosion | Part 17 | safe local case, Ollama Web UI prompt probe |
+| Data handling risks: screenshots, DOM, URLs, and user context | Part 18 | safe local case, upload validation, Project Agent validation |
+| Privacy, retention, redaction, and tenant isolation | Part 19 | safe local case, upload validation, Project Agent validation |
+| Model output handling and constrained verdicts | Part 20 | safe local case, Ollama Web UI prompt probe, Project Agent validation |
+| Fail-open versus fail-closed decisions | Part 21 | safe local case, Ollama Web UI prompt probe, Project Agent validation |
 | Feedback-loop poisoning and exception abuse | Part 22 | Ollama Web UI prompt probe |
 
 Supporting series areas:
@@ -153,6 +160,10 @@ Supporting series areas:
 | Part 25 | Python test harness |
 | Part 26 | evidence collection |
 | Part 27 | SOC usefulness |
+| Part 28 | vendor/customer governance questions |
+| Part 29 | security-team recommendations |
+| Part 30 | vendor/developer recommendations |
+| Part 31 | browser security validation changes |
 | Part 32 | AI as an untrusted classifier |
 
 ## Requirements
@@ -283,6 +294,7 @@ capture
 report
 ollama-validate
 ollama-upload-validate
+ollama-project-agent-validate
 ```
 
 ## Development checks
@@ -353,6 +365,31 @@ reports/ollama-webui-upload-validation/target-metadata.json
 reports/ollama-webui-upload-validation/cases/<case-id>/captured-model-prompt.txt
 reports/ollama-webui-upload-validation/cases/<case-id>/generate-requests.json
 reports/ollama-webui-upload-validation/cases/<case-id>/upload-files/<uploaded-file>
+```
+
+## Ollama Web UI Project Agent validation
+
+The Project Agent validation path exercises the updated target's local project
+context surface directly. It creates a synthetic project under the local report
+directory, calls the Project Agent APIs, verifies the model type selector,
+confirms `Cloud` is not exposed as a pullable model type, checks chat copy
+controls, intercepts `/api/generate`, and saves the exact model-bound prompt.
+
+```bash
+python -m ai_browser_security_suite ollama-project-agent-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_project_agent_cases.yaml   --out reports/ollama-webui-project-agent-validation   --i-have-authorization
+```
+
+Generated Project Agent evidence:
+
+```text
+reports/ollama-webui-project-agent-validation/evidence.jsonl
+reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-results.json
+reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-report.md
+reports/ollama-webui-project-agent-validation/target-metadata.json
+reports/ollama-webui-project-agent-validation/cases/<case-id>/captured-model-prompt.txt
+reports/ollama-webui-project-agent-validation/cases/<case-id>/project-agent-api-responses.json
+reports/ollama-webui-project-agent-validation/cases/<case-id>/model-controls.json
+reports/ollama-webui-project-agent-validation/cases/<case-id>/synthetic-project/
 ```
 
 ## Local browser-AI lab
@@ -445,6 +482,7 @@ docs/ci-github-actions.md
 docs/ollama-webui-local-target.md
 docs/ollama-webui-service-preflight.md
 docs/ollama-webui-upload-analysis-testing-review.md
+docs/ollama-webui-project-agent-testing-review.md
 docs/playable-browser-safe-ai-examples.md
 docs/quickstart.md
 docs/real-world-browser-ai-attack-scenarios.md
@@ -498,6 +536,7 @@ Ollama-backed browser-AI validation
 coverage auditing against the research series
 artifact-backed tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
 uploaded-file analysis tests that capture exact model-bound prompts
+Project Agent tests that capture local project context and allowlisted tool output boundaries
 JSONL evidence suitable for later SIEM or SOC enrichment
 Markdown reports suitable for human review
 explicit safety boundaries to reduce misuse

@@ -23,6 +23,12 @@ https://github.com/unattributed/ollama-webui
 
 The target provides a lightweight local web UI for chatting with models served by Ollama. Its helper serves the static frontend, proxies browser requests to the local Ollama API, streams model pull progress, and streams generation responses back to the browser.
 
+The updated target also exposes a model type filter, chat copy controls, file
+analysis, and a Project Agent panel for local project summaries, guardrail
+retrieval, file search/read, and allowlisted development tool execution. These
+features are intentionally treated as weak browser-AI surfaces for validation,
+not as production security controls.
+
 ## Expected local target
 
 Default target:
@@ -99,7 +105,26 @@ The prompt probes map to the following Browser-Safe AI Systems article parts:
 | `ollama-bai-014-unicode-homograph` | Unicode, homograph, and visual spoofing attacks | Part 14 |
 | `ollama-bai-015-delayed-evasive-content` | Delayed content, region-gated pages, and evasive phishing | Part 15 |
 | `ollama-bai-016-ai-verdict-manipulation` | AI verdict manipulation and false negative risk | Part 16 |
+| `ollama-bai-017-false-positive-trust-erosion` | False positives, alert fatigue, and trust erosion | Part 17 |
+| `ollama-bai-018-data-handling-local-project-context` | Data handling for local project context and tool output | Parts 18, 19, 20, 21 |
+| `ollama-bai-020-output-contract-enforcement` | Model output handling and schema pressure | Part 20 |
+| `ollama-bai-021-fail-open-pressure` | Fail-open versus fail-closed decision pressure | Part 21 |
 | `ollama-bai-022-feedback-exception-abuse` | Feedback-loop poisoning and exception abuse | Part 22 |
+
+The Project Agent validation adds direct browser/API coverage for the updated
+local project workflow:
+
+```bash
+python -m ai_browser_security_suite ollama-project-agent-validate \
+  --base-url http://127.0.0.1:11435/ \
+  --cases payloads/ollama_webui_project_agent_cases.yaml \
+  --out reports/ollama-webui-project-agent-validation \
+  --i-have-authorization
+```
+
+That command checks local project summary/context/search/read/tool paths,
+model type filtering, removal of cloud-only model types from the UI, and chat
+copy-control behavior.
 
 ## Evidence generated
 

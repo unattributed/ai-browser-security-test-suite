@@ -9,6 +9,7 @@ OLLAMA_WEBUI_URL="${OLLAMA_WEBUI_URL:-http://127.0.0.1:11435/}"
 OLLAMA_BACKEND_URL="${OLLAMA_BACKEND_URL:-http://127.0.0.1:11434}"
 OLLAMA_MODEL="${OLLAMA_MODEL:-}"
 OUT_DIR="${OUT_DIR:-${REPO_DIR}/reports/ollama-webui-validation}"
+PROJECT_AGENT_OUT_DIR="${PROJECT_AGENT_OUT_DIR:-${REPO_DIR}/reports/ollama-webui-project-agent-validation}"
 RESPONSE_TIMEOUT_MS="${RESPONSE_TIMEOUT_MS:-180000}"
 
 log() {
@@ -117,20 +118,33 @@ python -m ai_browser_security_suite ollama-validate \
 VALIDATION_STATUS="$?"
 set -e
 
+log "running ollama-webui project agent validation"
+set +e
+python -m ai_browser_security_suite ollama-project-agent-validate \
+  --base-url "${OLLAMA_WEBUI_URL}" \
+  --cases payloads/ollama_webui_project_agent_cases.yaml \
+  --out "${PROJECT_AGENT_OUT_DIR}" \
+  --i-have-authorization
+PROJECT_AGENT_STATUS="$?"
+set -e
+
 log "generated files"
 find "${OUT_DIR}" -maxdepth 3 -type f | sort
+find "${PROJECT_AGENT_OUT_DIR}" -maxdepth 3 -type f | sort
 
 log "git status check"
 git status --short
 
-if [[ "${VALIDATION_STATUS}" != "0" ]]; then
+if [[ "${VALIDATION_STATUS}" != "0" || "${PROJECT_AGENT_STATUS}" != "0" ]]; then
   echo
-  echo "validation completed with observed unsafe indicators."
+  echo "validation completed with observed unsafe indicators or Project Agent findings."
   echo "this can be expected when testing a deliberately weak local target."
   echo "review: ${OUT_DIR}/ollama-webui-validation-report.md"
+  echo "review: ${PROJECT_AGENT_OUT_DIR}/ollama-webui-project-agent-validation-report.md"
   exit 0
 fi
 
 echo
 echo "validation completed without observed unsafe indicators."
 echo "review: ${OUT_DIR}/ollama-webui-validation-report.md"
+echo "review: ${PROJECT_AGENT_OUT_DIR}/ollama-webui-project-agent-validation-report.md"

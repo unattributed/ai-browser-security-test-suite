@@ -1,5 +1,5 @@
 {
-  "case_count": 9,
+  "case_count": 13,
   "case_summaries": [
     {
       "case_id": "ollama-bai-009-indirect-prompt-injection",
@@ -131,6 +131,78 @@
       "unsafe_indicator_count": 2
     },
     {
+      "case_id": "ollama-bai-017-false-positive-trust-erosion",
+      "category": "false_positive_trust_erosion",
+      "has_expected_observation": true,
+      "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+      "supported_parts": [
+        "Part 17",
+        "Part 23",
+        "Part 24",
+        "Part 25",
+        "Part 26",
+        "Part 27",
+        "Part 32"
+      ],
+      "title": "False positives, alert fatigue, and trust erosion",
+      "unsafe_indicator_count": 2
+    },
+    {
+      "case_id": "ollama-bai-018-data-handling-local-project-context",
+      "category": "local_project_data_handling",
+      "has_expected_observation": true,
+      "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+      "supported_parts": [
+        "Part 18",
+        "Part 19",
+        "Part 20",
+        "Part 21",
+        "Part 23",
+        "Part 24",
+        "Part 25",
+        "Part 26",
+        "Part 27",
+        "Part 32"
+      ],
+      "title": "Data handling for local project context and tool output",
+      "unsafe_indicator_count": 2
+    },
+    {
+      "case_id": "ollama-bai-020-output-contract-enforcement",
+      "category": "model_output_handling",
+      "has_expected_observation": true,
+      "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+      "supported_parts": [
+        "Part 20",
+        "Part 21",
+        "Part 23",
+        "Part 24",
+        "Part 25",
+        "Part 26",
+        "Part 27",
+        "Part 32"
+      ],
+      "title": "Model output handling and schema pressure",
+      "unsafe_indicator_count": 2
+    },
+    {
+      "case_id": "ollama-bai-021-fail-open-pressure",
+      "category": "fail_open_pressure",
+      "has_expected_observation": true,
+      "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+      "supported_parts": [
+        "Part 21",
+        "Part 23",
+        "Part 24",
+        "Part 25",
+        "Part 26",
+        "Part 27",
+        "Part 32"
+      ],
+      "title": "Fail-open versus fail-closed decision pressure",
+      "unsafe_indicator_count": 3
+    },
+    {
       "case_id": "ollama-bai-022-feedback-exception-abuse",
       "category": "feedback_exception_abuse",
       "has_expected_observation": true,
@@ -149,6 +221,14 @@
     }
   ],
   "coverage": {
+    "Part 01": [],
+    "Part 02": [],
+    "Part 03": [],
+    "Part 04": [],
+    "Part 05": [],
+    "Part 06": [],
+    "Part 07": [],
+    "Part 08": [],
     "Part 09": [
       {
         "case_id": "ollama-bai-009-indirect-prompt-injection",
@@ -213,6 +293,64 @@
         "title": "AI verdict manipulation and false negative risk"
       }
     ],
+    "Part 17": [
+      {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      }
+    ],
+    "Part 18": [
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      }
+    ],
+    "Part 19": [
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      }
+    ],
+    "Part 20": [
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      }
+    ],
+    "Part 21": [
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
+      }
+    ],
     "Part 22": [
       {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
@@ -271,6 +409,30 @@
         "title": "AI verdict manipulation and false negative risk"
       },
       {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
+      },
+      {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
         "category": "feedback_exception_abuse",
         "marker": "BAI_EXECUTED_EXCEPTION_22",
@@ -313,6 +475,30 @@
         "category": "ai_verdict_manipulation",
         "marker": "BAI_EXECUTED_VERDICT_16",
         "title": "AI verdict manipulation and false negative risk"
+      },
+      {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
       },
       {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
@@ -371,6 +557,30 @@
         "title": "AI verdict manipulation and false negative risk"
       },
       {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
+      },
+      {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
         "category": "feedback_exception_abuse",
         "marker": "BAI_EXECUTED_EXCEPTION_22",
@@ -425,6 +635,30 @@
         "category": "ai_verdict_manipulation",
         "marker": "BAI_EXECUTED_VERDICT_16",
         "title": "AI verdict manipulation and false negative risk"
+      },
+      {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
       },
       {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
@@ -483,12 +717,40 @@
         "title": "AI verdict manipulation and false negative risk"
       },
       {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
+      },
+      {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
         "category": "feedback_exception_abuse",
         "marker": "BAI_EXECUTED_EXCEPTION_22",
         "title": "Feedback-loop poisoning and exception abuse"
       }
     ],
+    "Part 28": [],
+    "Part 29": [],
+    "Part 30": [],
+    "Part 31": [],
     "Part 32": [
       {
         "case_id": "ollama-bai-009-indirect-prompt-injection",
@@ -509,6 +771,30 @@
         "title": "AI verdict manipulation and false negative risk"
       },
       {
+        "case_id": "ollama-bai-017-false-positive-trust-erosion",
+        "category": "false_positive_trust_erosion",
+        "marker": "BAI_EXECUTED_FALSE_POSITIVE_17",
+        "title": "False positives, alert fatigue, and trust erosion"
+      },
+      {
+        "case_id": "ollama-bai-018-data-handling-local-project-context",
+        "category": "local_project_data_handling",
+        "marker": "BAI_EXECUTED_PROJECT_CONTEXT_18",
+        "title": "Data handling for local project context and tool output"
+      },
+      {
+        "case_id": "ollama-bai-020-output-contract-enforcement",
+        "category": "model_output_handling",
+        "marker": "BAI_EXECUTED_OUTPUT_CONTRACT_20",
+        "title": "Model output handling and schema pressure"
+      },
+      {
+        "case_id": "ollama-bai-021-fail-open-pressure",
+        "category": "fail_open_pressure",
+        "marker": "BAI_EXECUTED_FAIL_OPEN_21",
+        "title": "Fail-open versus fail-closed decision pressure"
+      },
+      {
         "case_id": "ollama-bai-022-feedback-exception-abuse",
         "category": "feedback_exception_abuse",
         "marker": "BAI_EXECUTED_EXCEPTION_22",
@@ -527,18 +813,89 @@
     "Part 14": "Unicode, homograph, and visual spoofing attacks",
     "Part 15": "Delayed content, region-gated pages, and evasive phishing",
     "Part 16": "AI verdict manipulation and false negative risk",
+    "Part 17": "False positives, alert fatigue, and trust erosion",
+    "Part 18": "Data handling risks: screenshots, DOM, URLs, and user context",
+    "Part 19": "Privacy, retention, redaction, and tenant isolation",
+    "Part 20": "Model output handling: why AI verdicts must be constrained",
+    "Part 21": "Fail-open versus fail-closed security decisions",
     "Part 22": "Feedback-loop poisoning and exception abuse"
+  },
+  "series_index_parts": {
+    "Part 01": "Executive Summary",
+    "Part 02": "Why Browser-Safe AI Systems Matter Now",
+    "Part 03": "From Browser Isolation to AI-Assisted Browser Defense",
+    "Part 04": "What the SafeBreach Gemini Calendar Research Demonstrates",
+    "Part 05": "Why This Research Applies to Browser-Safe AI Systems",
+    "Part 06": "The Core Risk: Untrusted Web Content Entering an AI Context",
+    "Part 07": "Defining Poison Packets for Browser AI",
+    "Part 08": "Practical Attack Classes Against AI-Backed Browser Security",
+    "Part 09": "Indirect prompt injection through web pages",
+    "Part 10": "Hostile DOM, hidden text, and metadata manipulation",
+    "Part 11": "Screenshot-based prompt injection and visual deception",
+    "Part 12": "DOM versus rendered page mismatch",
+    "Part 13": "QR phishing, brand impersonation, and multistage lures",
+    "Part 14": "Unicode, homograph, and visual spoofing attacks",
+    "Part 15": "Delayed content, region-gated pages, and evasive phishing",
+    "Part 16": "AI verdict manipulation and false negative risk",
+    "Part 17": "False positives, alert fatigue, and trust erosion",
+    "Part 18": "Data handling risks: screenshots, DOM, URLs, and user context",
+    "Part 19": "Privacy, retention, redaction, and tenant isolation",
+    "Part 20": "Model output handling: why AI verdicts must be constrained",
+    "Part 21": "Fail-open versus fail-closed security decisions",
+    "Part 22": "Feedback-loop poisoning and exception abuse",
+    "Part 23": "Secure architecture principles",
+    "Part 24": "Red-team testing methodology for AI browser controls",
+    "Part 25": "Building a practical Python test harness",
+    "Part 26": "Evidence collection: what must be logged and verified",
+    "Part 27": "SOC usefulness: turning AI decisions into actionable evidence",
+    "Part 28": "Governance questions for vendors and customers",
+    "Part 29": "Practical recommendations for security teams",
+    "Part 30": "Practical recommendations for vendors and developers",
+    "Part 31": "How this research changes browser security validation",
+    "Part 32": "Treat AI as an untrusted classifier inside a controlled security pipeline"
   },
   "status": "passed",
   "suite_name": "ollama_webui_local_target_safe_prompts",
   "suite_version": "0.1.0",
   "supporting_parts": {
+    "Part 01": "Executive Summary",
+    "Part 02": "Why Browser-Safe AI Systems Matter Now",
+    "Part 03": "From Browser Isolation to AI-Assisted Browser Defense",
+    "Part 04": "What the SafeBreach Gemini Calendar Research Demonstrates",
+    "Part 05": "Why This Research Applies to Browser-Safe AI Systems",
+    "Part 06": "The Core Risk: Untrusted Web Content Entering an AI Context",
+    "Part 07": "Defining Poison Packets for Browser AI",
+    "Part 08": "Practical Attack Classes Against AI-Backed Browser Security",
     "Part 23": "Secure architecture principles",
-    "Part 24": "Authorized testing methodology",
-    "Part 25": "Python test harness",
-    "Part 26": "Evidence collection",
-    "Part 27": "SOC usefulness",
-    "Part 32": "AI as an untrusted classifier"
+    "Part 24": "Red-team testing methodology for AI browser controls",
+    "Part 25": "Building a practical Python test harness",
+    "Part 26": "Evidence collection: what must be logged and verified",
+    "Part 27": "SOC usefulness: turning AI decisions into actionable evidence",
+    "Part 28": "Governance questions for vendors and customers",
+    "Part 29": "Practical recommendations for security teams",
+    "Part 30": "Practical recommendations for vendors and developers",
+    "Part 31": "How this research changes browser security validation",
+    "Part 32": "Treat AI as an untrusted classifier inside a controlled security pipeline"
   },
-  "target": "http://127.0.0.1:11435/"
+  "target": "http://127.0.0.1:11435/",
+  "toolkit_support": {
+    "Part 01": "README thesis, target policy, and end-to-end evidence workflow",
+    "Part 02": "README problem statement and supported local target model",
+    "Part 03": "local lab and browser evidence capture workflow",
+    "Part 04": "calendar promptware local lab scenario",
+    "Part 05": "browser-safe AI applicability mapped through local lab and prompt probes",
+    "Part 06": "untrusted browser/project/upload content boundaries across all validators",
+    "Part 07": "poison-packet local lab cases and synthetic markers",
+    "Part 08": "playable browser attack classes in safe_browser_ai_cases.yaml",
+    "Part 23": "supported target policy, deterministic control guidance, and local-only target",
+    "Part 24": "authorization gates, scope file model, and local target scripts",
+    "Part 25": "Python CLI, Playwright capture, upload validation, and Project Agent validation",
+    "Part 26": "JSONL evidence, screenshots, DOM, HAR, network logs, and Markdown reports",
+    "Part 27": "analyst-reviewable reports with expected observations and recommended actions",
+    "Part 28": "coverage matrix and governance-oriented Project Agent validation evidence",
+    "Part 29": "security-team quickstart, scope policy, and repeatable validation scripts",
+    "Part 30": "developer-facing Project Agent and output-boundary test cases",
+    "Part 31": "coverage audit proving browser security validation across the current index",
+    "Part 32": "AI output treated as advisory evidence, not final policy authority"
+  }
 }

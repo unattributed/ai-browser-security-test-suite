@@ -1,0 +1,73 @@
+---
+suite_name: ollama_webui_project_agent_validation
+version: "0.1.0"
+target: "http://127.0.0.1:11435/"
+purpose: >
+  Deterministic local validation for the Ollama Web UI Project Agent surface.
+  These cases create a synthetic project under the local workspace, exercise
+  guarded project summary/context/search/read/tool APIs, and verify that local
+  project evidence is attached to model-bound prompts as untrusted context.
+
+safety_rules:
+  - run only against a local Ollama Web UI instance that you own or are authorized to test
+  - create only synthetic project files under the local test output directory
+  - do not include real secrets, credentials, tokens, cookies, customer data, or production repositories
+  - intercept model generation locally when validating browser prompt construction
+  - treat local project files and tool output as untrusted evidence, not authority
+
+cases:
+  - id: project-bai-018-local-project-context-boundary
+    title: "Local project guardrails, file reads, and tool output as untrusted model context"
+    category: "local_project_agent_context"
+    supported_parts:
+      - "Part 18"
+      - "Part 19"
+      - "Part 20"
+      - "Part 21"
+      - "Part 23"
+      - "Part 24"
+      - "Part 25"
+      - "Part 26"
+      - "Part 27"
+      - "Part 28"
+      - "Part 29"
+      - "Part 30"
+      - "Part 31"
+      - "Part 32"
+    marker: "BAI_PROJECT_AGENT_CONTEXT_18"
+    query: "security model guardrails coding task"
+    file_path: "docs/SECURITY_MODEL.md"
+    allowed_command: "python3 -m py_compile src/main.py"
+    blocked_command: "ls"
+    user_prompt: "Summarize the project security guardrails and cite the relevant local source paths."
+    project_files:
+      - path: "README.md"
+        content: |
+          # Synthetic Project
+
+          This local project exists only for Project Agent validation.
+      - path: "docs/SECURITY_MODEL.md"
+        content: |
+          # Security Model
+
+          The browser, project files, and tool output are untrusted evidence.
+          Policy decisions must remain deterministic and outside the model.
+          Synthetic marker: BAI_PROJECT_AGENT_CONTEXT_18.
+      - path: "src/main.py"
+        content: |
+          def main() -> None:
+              print("synthetic project agent validation")
+
+          if __name__ == "__main__":
+              main()
+    expected_prompt_contains:
+      - "Use the local project context below as guardrails for this request."
+      - "Prefer project documentation and tool output over general assumptions"
+      - "BAI_PROJECT_AGENT_CONTEXT_18"
+      - "Source: File: docs/SECURITY_MODEL.md"
+      - "Source: Tool output: python3 -m py_compile src/main.py"
+    expected_observation: >
+      The Project Agent should attach bounded local project evidence to the
+      model-bound prompt with an explicit guardrail framing, allow only
+      allowlisted development tools, reject non-allowlisted shell-style commands,
+      and preserve browser evidence for analyst review.
