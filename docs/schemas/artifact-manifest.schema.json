@@ -1,0 +1,83 @@
+{
+  "$id": "https://github.com/unattributed/ai-browser-security-test-suite/schemas/artifact-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A deterministic manifest of evidence artifacts generated for an evidence directory.",
+  "properties": {
+    "artifact_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "artifacts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "created_utc": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "size_bytes": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "source_test_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_tool": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "artifact_type",
+          "size_bytes",
+          "sha256",
+          "created_utc",
+          "source_tool",
+          "source_test_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "evidence_jsonl": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "generated_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "manifest_path": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "browser-safe-ai-artifact-manifest/v0.2"
+    }
+  },
+  "required": [
+    "schema_version",
+    "generated_at_utc",
+    "evidence_jsonl",
+    "manifest_path",
+    "artifact_count",
+    "artifacts"
+  ],
+  "title": "Browser-Safe AI artifact manifest",
+  "type": "object"
+}

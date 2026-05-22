@@ -1,0 +1,77 @@
+{
+  "$id": "https://github.com/unattributed/ai-browser-security-test-suite/schemas/evidence-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A single browser-safe AI evidence record written to evidence.jsonl.",
+  "properties": {
+    "artifacts": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "evidence": {
+      "type": "object"
+    },
+    "recommended_action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "severity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "status": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "summary": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "supported_parts": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "target": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "test_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tool": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "tool",
+    "test_id",
+    "supported_parts",
+    "target",
+    "status",
+    "summary",
+    "timestamp_utc",
+    "severity",
+    "evidence",
+    "artifacts",
+    "recommended_action"
+  ],
+  "title": "Browser-Safe AI evidence record",
+  "type": "object"
+}

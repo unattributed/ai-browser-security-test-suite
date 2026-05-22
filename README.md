@@ -111,6 +111,7 @@ Ollama Web UI local target validation
 Playwright browser evidence capture
 structured JSONL evidence
 deterministic artifact manifest with SHA256 hashing
+explicit evidence and artifact manifest schema contracts
 Markdown reporting
 article-series mapping
 coverage auditing against the research series
@@ -132,6 +133,7 @@ uploaded-file prompt construction, untrusted-content boundaries, redaction risk,
 local project context handling, tool-output boundaries, model type filtering, and chat copy-control placement
 evidence quality for analysts and product-security review
 artifact path, size, SHA256, timestamp, source tool, and source test traceability
+evidence record and artifact manifest contract validation
 ```
 
 ## Attack classes covered
@@ -341,6 +343,30 @@ Current scope of this slice:
 proven: shared evidence manifest and SHA256 verification
 planned: OCR parser, QR decoder, iframe tree parser, ARIA tree parser, DOM/render diff engine, and visual diff engine
 ```
+
+## Evidence schema contracts
+
+The shared evidence layer now includes explicit runtime and documentation
+contracts for evidence records and artifact manifests.
+
+Contract implementation:
+
+```text
+src/ai_browser_security_suite/evidence_schema.py
+```
+
+Published schema files:
+
+```text
+docs/schemas/evidence-record.schema.json
+docs/schemas/artifact-manifest.schema.json
+```
+
+The runtime validator checks required fields, rejects unexpected evidence record
+fields, validates ISO-8601 timestamps, validates artifact hash field format, and
+confirms manifest artifact counts match the artifact list. This makes the
+evidence pipeline safer for future OCR, QR, iframe, ARIA, DOM/render, and
+visual-diff slices without claiming those parsers exist yet.
 
 ## Ollama Web UI validation through the CLI
 
