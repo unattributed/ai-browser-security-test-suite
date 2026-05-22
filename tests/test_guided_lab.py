@@ -1,0 +1,155 @@
+from __future__ import annotations
+
+import importlib.util
+from pathlib import Path
+
+import yaml
+
+from ai_browser_security_suite.guided_lab import (
+    GUIDED_LAB_SCHEMA_VERSION,
+    GuidedLabError,
+    guided_lab_manifest_summary,
+    load_guided_lab_manifest,
+    validate_guided_lab_manifest_payload,
+)
+from ai_browser_security_suite.target_contract import load_target_contract
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+GUIDED_LABS_PATH = REPO_ROOT / "payloads" / "guided_lab_scenarios.yaml"
+TARGET_CONTRACT_PATH = REPO_ROOT / "docs" / "target-contracts" / "ollama-webui-target-scenario-contract-v0.2.json"
+VALIDATE_SCRIPT_PATH = REPO_ROOT / "tools" / "validate_guided_labs.py"
+
+
+def _load_payload() -> dict:
+    payload = yaml.safe_load(GUIDED_LABS_PATH.read_text(encoding="utf-8"))
+    assert isinstance(payload, dict)
+    return payload
+
+
+def test_guided_lab_manifest_loads_with_target_contract() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    assert manifest.schema_version == GUIDED_LAB_SCHEMA_VERSION
+    assert manifest.implemented_labs == ()
+    assert {lab.lab_id for lab in manifest.planned_labs} == {
+        "guided.dom_render_mismatch",
+        "guided.redirect_chain_evidence",
+    }
+
+    summary = guided_lab_manifest_summary(manifest)
+    assert summary["lab_count"] == 2
+    assert summary["planned_lab_count"] == 2
+    assert summary["implemented_lab_count"] == 0
+
+
+def test_guided_labs_follow_required_workflow_language() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    for lab in manifest.labs:
+        assert lab.local_only is True
+        assert lab.synthetic_only is True
+        assert lab.authorized_only is True
+        assert "artifact-manifest.json" in lab.required_artifacts
+        assert "evidence.jsonl" in lab.required_artifacts
+        assert lab.current_target_scenario_ids
+        assert lab.planned_target_scenario_ids
+        assert any("conduct" in step.lower() for step in lab.conduct_test)
+        assert any("observe" in step.lower() for step in lab.observe)
+        assert any("vary" in step.lower() for step in lab.vary_test)
+        assert "Parrot OS" in lab.distributions
+        assert "Kali Linux" in lab.distributions
+
+
+
+def test_guided_labs_require_free_and_open_source_tooling() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    for lab in manifest.labs:
+        assert lab.free_and_open_source_only is True
+        policy = "\n".join(lab.tool_selection_policy).lower()
+        assert "free and open source" in policy
+        assert "purpose-built python" in policy
+        assert "commercial-only" in policy
+        assert "paid-only" in policy
+        assert "proprietary-only" in policy
+
+
+def test_guided_lab_manifest_rejects_non_foss_tooling_policy() -> None:
+    payload = _load_payload()
+    payload["labs"][0]["tooling"]["free_and_open_source_only"] = False
+
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    try:
+        validate_guided_lab_manifest_payload(payload, target_contract=target_contract)
+    except GuidedLabError as exc:
+        assert "free_and_open_source_only must be true" in str(exc)
+    else:
+        raise AssertionError("expected GuidedLabError")
+
+
+def test_guided_lab_manifest_rejects_commercial_only_tool_requirement() -> None:
+    payload = _load_payload()
+    payload["labs"][0]["tooling"]["tools"].append("commercial-only scanner")
+
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    try:
+        validate_guided_lab_manifest_payload(payload, target_contract=target_contract)
+    except GuidedLabError as exc:
+        assert "disallowed tooling term" in str(exc)
+    else:
+        raise AssertionError("expected GuidedLabError")
+
+
+def test_guided_lab_manifest_rejects_forbidden_commit_test_wording() -> None:
+    payload = _load_payload()
+    payload["labs"][0]["workflow"]["conduct_test"][0] = "Commit a test against the local target."
+
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    try:
+        validate_guided_lab_manifest_payload(payload, target_contract=target_contract)
+    except GuidedLabError as exc:
+        assert "forbidden wording" in str(exc)
+    else:
+        raise AssertionError("expected GuidedLabError")
+
+
+def test_guided_lab_manifest_rejects_unknown_current_target_scenario() -> None:
+    payload = _load_payload()
+    payload["labs"][0]["target_mapping"]["current_target_scenario_ids"] = ["browser.not_declared"]
+
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    try:
+        validate_guided_lab_manifest_payload(payload, target_contract=target_contract)
+    except GuidedLabError as exc:
+        assert "unknown target scenario" in str(exc)
+    else:
+        raise AssertionError("expected GuidedLabError")
+
+
+def test_guided_lab_manifest_rejects_missing_evidence_manifest() -> None:
+    payload = _load_payload()
+    artifacts = payload["labs"][0]["evidence"]["required_artifacts"]
+    payload["labs"][0]["evidence"]["required_artifacts"] = [
+        artifact for artifact in artifacts if artifact != "artifact-manifest.json"
+    ]
+
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    try:
+        validate_guided_lab_manifest_payload(payload, target_contract=target_contract)
+    except GuidedLabError as exc:
+        assert "artifact-manifest.json" in str(exc)
+    else:
+        raise AssertionError("expected GuidedLabError")
+
+
+def test_guided_lab_validator_script_main() -> None:
+    spec = importlib.util.spec_from_file_location("validate_guided_labs", VALIDATE_SCRIPT_PATH)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    assert module.main([]) == 0
+    assert module.main(["--guided-labs", str(REPO_ROOT / "missing-guided-labs.yaml")]) == 1

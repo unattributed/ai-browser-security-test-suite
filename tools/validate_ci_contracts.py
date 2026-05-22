@@ -8,6 +8,7 @@ make the toolkit's evidence and target-coverage claims reviewable:
 * the vendored target-contract snapshot is loadable and has the expected safety shape
 * active target scenarios are represented by toolkit payload mappings
 * incomplete payload mappings fail closed
+* guided lab manifests follow the Browser-Safe AI Systems series and safety model
 """
 from __future__ import annotations
 
@@ -30,6 +31,12 @@ from ai_browser_security_suite.evidence_schema import (  # noqa: E402
     EVIDENCE_RECORD_SCHEMA,
     EVIDENCE_RECORD_SCHEMA_VERSION,
 )
+from ai_browser_security_suite.guided_lab import (  # noqa: E402
+    GUIDED_LAB_SCHEMA_VERSION,
+    GuidedLabError,
+    GuidedLabManifest,
+    load_guided_lab_manifest,
+)
 from ai_browser_security_suite.target_contract import (  # noqa: E402
     TARGET_CONTRACT_SCHEMA_VERSION,
     TargetContract,
@@ -47,6 +54,7 @@ DEFAULT_TARGET_CONTRACT = (
     REPO_ROOT / "docs" / "target-contracts" / "ollama-webui-target-scenario-contract-v0.2.json"
 )
 DEFAULT_PRIMARY_PAYLOAD = REPO_ROOT / "payloads" / "ollama_webui_safe_prompts.yaml"
+DEFAULT_GUIDED_LABS = REPO_ROOT / "payloads" / "guided_lab_scenarios.yaml"
 DEFAULT_TARGET_PAYLOADS = [
     REPO_ROOT / "payloads" / "ollama_webui_file_upload_cases.yaml",
     REPO_ROOT / "payloads" / "ollama_webui_project_agent_cases.yaml",
@@ -61,6 +69,10 @@ EXPECTED_ACTIVE_SCENARIOS = {
     "project_agent.read_file",
     "project_agent.run_tool",
     "project_agent.search",
+}
+EXPECTED_GUIDED_LABS = {
+    "guided.dom_render_mismatch",
+    "guided.redirect_chain_evidence",
 }
 
 
@@ -174,6 +186,56 @@ def validate_target_contract_coverage(
     return failures
 
 
+def validate_guided_lab_snapshot(
+    guided_labs_path: Path = DEFAULT_GUIDED_LABS,
+    target_contract: TargetContract | None = None,
+) -> list[str]:
+    """Validate the guided lab manifest required by CI."""
+
+    failures: list[str] = []
+    if target_contract is None:
+        try:
+            target_contract = load_target_contract(DEFAULT_TARGET_CONTRACT)
+        except TargetContractError as exc:
+            return [str(exc)]
+
+    try:
+        manifest = load_guided_lab_manifest(guided_labs_path, target_contract=target_contract)
+    except GuidedLabError as exc:
+        return [str(exc)]
+
+    if manifest.schema_version != GUIDED_LAB_SCHEMA_VERSION:
+        failures.append(f"guided lab schema_version must be {GUIDED_LAB_SCHEMA_VERSION}")
+
+    lab_ids = set(manifest.lab_ids)
+    missing = sorted(EXPECTED_GUIDED_LABS - lab_ids)
+    extra = sorted(lab_ids - EXPECTED_GUIDED_LABS)
+    if missing:
+        failures.append("guided lab manifest missing lab(s): " + ", ".join(missing))
+    if extra:
+        failures.append("guided lab manifest has unexpected lab(s): " + ", ".join(extra))
+
+    if manifest.implemented_labs:
+        failures.append("guided lab manifest should not mark labs implemented before evidence slices exist")
+
+    for lab in manifest.labs:
+        if not lab.series_mapping:
+            failures.append(f"{lab.lab_id}: lab must map to Browser-Safe AI Systems series part(s)")
+        if not lab.current_target_scenario_ids:
+            failures.append(f"{lab.lab_id}: lab must map to at least one current target scenario id")
+        if not lab.planned_target_scenario_ids:
+            failures.append(f"{lab.lab_id}: lab must define planned target scenario id(s)")
+        if not lab.required_artifacts:
+            failures.append(f"{lab.lab_id}: lab must define required evidence artifacts")
+        if not lab.local_only or not lab.synthetic_only or not lab.authorized_only:
+            failures.append(f"{lab.lab_id}: lab safety flags must remain local, synthetic, and authorized only")
+        if not any("conduct" in step.lower() for step in lab.conduct_test):
+            failures.append(f"{lab.lab_id}: conduct_test must use guided test language")
+        if not any("vary" in step.lower() for step in lab.vary_test):
+            failures.append(f"{lab.lab_id}: vary_test must describe safe variation")
+
+    return failures
+
 def validate_all(args: argparse.Namespace) -> list[str]:
     """Run every CI contract validation check."""
 
@@ -195,6 +257,19 @@ def validate_all(args: argparse.Namespace) -> list[str]:
             target_payloads=args.target_payload,
         )
     )
+
+    try:
+        target_contract = load_target_contract(args.target_contract)
+    except TargetContractError as exc:
+        failures.append(str(exc))
+        target_contract = None
+
+    failures.extend(
+        validate_guided_lab_snapshot(
+            guided_labs_path=args.guided_labs,
+            target_contract=target_contract,
+        )
+    )
     return failures
 
 
@@ -203,6 +278,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--evidence-record-schema", type=Path, default=DEFAULT_EVIDENCE_RECORD_SCHEMA)
     parser.add_argument("--artifact-manifest-schema", type=Path, default=DEFAULT_ARTIFACT_MANIFEST_SCHEMA)
     parser.add_argument("--target-contract", type=Path, default=DEFAULT_TARGET_CONTRACT)
+    parser.add_argument("--guided-labs", type=Path, default=DEFAULT_GUIDED_LABS)
     parser.add_argument("--payload", type=Path, default=DEFAULT_PRIMARY_PAYLOAD)
     parser.add_argument("--target-payload", type=Path, action="append", default=list(DEFAULT_TARGET_PAYLOADS))
     return parser.parse_args(argv)
@@ -222,6 +298,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     print(f"artifact manifest schema version: {ARTIFACT_MANIFEST_SCHEMA_VERSION}")
     print(f"target contract: {args.target_contract}")
     print(f"active target scenario count: {len(EXPECTED_ACTIVE_SCENARIOS)}")
+    print(f"guided lab manifest: {args.guided_labs}")
+    print(f"guided lab count: {len(EXPECTED_GUIDED_LABS)}")
     return 0
 
 

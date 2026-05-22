@@ -43,8 +43,11 @@ jobs:
       - name: Run unit tests
         run: python -m pytest -q
 
-      - name: Validate schema and target-contract snapshots
+      - name: Validate schema, target-contract, and guided-lab snapshots
         run: python tools/validate_ci_contracts.py
+
+      - name: Validate guided lab manifest
+        run: python tools/validate_guided_labs.py
 
       - name: Run default coverage audit
         run: |

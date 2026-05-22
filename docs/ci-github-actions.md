@@ -31,6 +31,7 @@ It verifies that the toolkit still has:
 - target payload mappings for every active target scenario.
 - default article-series coverage audit output.
 - target-contract coverage audit output.
+- valid guided lab manifest output.
 
 ## Commands run by CI
 
@@ -38,6 +39,8 @@ It verifies that the toolkit still has:
 python -m compileall -q src tests tools
 python -m pytest -q
 python tools/validate_ci_contracts.py
+python tools/validate_guided_labs.py
+python tools/validate_guided_labs.py
 python tools/audit_series_coverage.py \
   --payload payloads/ollama_webui_safe_prompts.yaml \
   --out-dir /tmp/ai-browser-coverage-default
@@ -57,6 +60,8 @@ Run this before opening a PR that changes toolkit coverage, schemas, payloads, o
 python -m compileall -q src tests tools
 python -m pytest -q
 python tools/validate_ci_contracts.py
+python tools/validate_guided_labs.py
+python tools/validate_guided_labs.py
 python tools/audit_series_coverage.py \
   --payload payloads/ollama_webui_safe_prompts.yaml \
   --out-dir /tmp/ai-browser-coverage-default
@@ -81,3 +86,14 @@ Do not require a stale or misspelled check name. A stale required check can bloc
 ## Non-claims
 
 This CI workflow does not prove full browser-AI testing coverage. It does not yet execute OCR, QR, iframe, frame tree, DOM/render mismatch, visual-diff, or live browser deception checks. Those capabilities should be added as separate evidence-backed slices.
+
+
+## Guided lab check
+
+The guided lab check validates:
+
+```text
+payloads/guided_lab_scenarios.yaml
+```
+
+It confirms that guided labs are mapped to the Browser-Safe AI Systems series, remain local-only and synthetic, include evidence requirements, use professional test language, and do not claim implemented coverage before the evidence slices exist.

@@ -115,6 +115,8 @@ explicit evidence and artifact manifest schema contracts
 Markdown reporting
 article-series mapping
 coverage auditing against the research series
+guided lab manifest validation for professional lab exercises
+free and open source tooling requirement for guided labs with purpose-built Python fallback
 artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
 deterministic uploaded-file analysis tests for the local Ollama Web UI target
 deterministic Project Agent tests for local project guardrails, file reads, search, model type controls, copy controls, and allowlisted tool execution
@@ -321,13 +323,49 @@ The toolkit includes a GitHub Actions workflow that runs the repository's core i
 .github/workflows/security-ci.yml
 ```
 
-The CI gate runs compile checks, pytest, schema validation, target-contract snapshot validation, the default coverage audit, and the target-contract coverage audit. This does not claim full browser-AI penetration-testing coverage. It prevents regressions and overclaiming while new browser evidence parsers and tests are added.
+The CI gate runs compile checks, pytest, schema validation, target-contract snapshot validation, guided lab manifest validation, the default coverage audit, and the target-contract coverage audit. This does not claim full browser-AI penetration-testing coverage. It prevents regressions and overclaiming while new browser evidence parsers and tests are added.
 
 See:
 
 ```text
 docs/ci-gates.md
 ```
+
+
+## Guided Lab Mode
+
+Guided Lab Mode defines how the toolkit turns the Browser-Safe AI Systems series into structured, local, repeatable lab exercises.
+
+The guided lab model is documented in:
+
+```text
+docs/guided-lab-mode.md
+docs/guided-lab-template.md
+docs/guided-lab-execution-plan.md
+```
+
+The current lab manifest is:
+
+```text
+payloads/guided_lab_scenarios.yaml
+```
+
+Validate it locally:
+
+```bash
+python tools/validate_guided_labs.py
+```
+
+Guided labs are designed for users on Parrot OS, Kali Linux, or similar penetration-testing Linux distributions. A lab tells the user which open-source tool to open, how to conduct the test, what to observe, how to vary the input safely, what evidence should be produced, and which Browser-Safe AI Systems series parts the lab demonstrates.
+
+Current planned labs:
+
+```text
+guided.redirect_chain_evidence
+guided.dom_render_mismatch
+```
+
+These are planning records, not implemented evidence claims. They define the professional structure that the first real lab implementation slices must satisfy.
 
 ## Target contract ingestion
 
@@ -700,3 +738,10 @@ These tools are intended for authorized security testing and research purposes o
 Users are responsible for complying with all applicable laws, organizational rules, and written authorization requirements before testing any system.
 
 The author assumes no liability for misuse.
+
+
+## Guided lab tooling policy
+
+All guided lab tooling must be free and open source. Labs may use tools available from Parrot OS, Kali Linux, Debian-derived repositories, upstream project source, or project-managed Python code.
+
+If a suitable free and open source tool is not available for a lab, this project provides a purpose-built Python tool for that lab. Guided labs must not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling.
