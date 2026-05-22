@@ -19,6 +19,12 @@ cases:
   - id: project-bai-018-local-project-context-boundary
     title: "Local project guardrails, file reads, and tool output as untrusted model context"
     category: "local_project_agent_context"
+    target_scenarios:
+      - "project_agent.guardrail_context"
+      - "project_agent.search"
+      - "project_agent.read_file"
+      - "project_agent.run_tool"
+      - "model.catalog_filter"
     supported_parts:
       - "Part 18"
       - "Part 19"

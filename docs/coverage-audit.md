@@ -40,6 +40,38 @@ python tools/audit_series_coverage.py \
   --out-dir docs/coverage
 ```
 
+
+## Run the target contract coverage gate
+
+The vulnerable app publishes a target scenario contract. The toolkit stores a local snapshot in:
+
+```text
+docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json
+```
+
+Run the audit with all current `ollama-webui` payload families:
+
+```bash
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --target-payload payloads/ollama_webui_file_upload_cases.yaml \
+  --target-payload payloads/ollama_webui_project_agent_cases.yaml \
+  --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
+  --out-dir /tmp/ai-browser-target-contract-coverage
+```
+
+This gate fails when:
+
+```text
+an active target scenario has no toolkit payload mapping
+a toolkit payload references an unknown target scenario id
+the target contract is structurally invalid
+an active scenario only describes planned or unimplemented current coverage
+```
+
+The gate does not claim new OCR, QR, iframe, ARIA, DOM/render, or visual-diff parser coverage. It only verifies honest traceability between the vulnerable app contract and current toolkit payloads.
+
+
 ## Run coverage audit and test against ollama-webui
 
 Start `ollama-webui` first in a separate terminal:
@@ -88,3 +120,7 @@ The evidence pipeline now writes `artifact-manifest.json` for shared evidence-wr
 The shared evidence layer also publishes `docs/schemas/evidence-record.schema.json` and `docs/schemas/artifact-manifest.schema.json`, with runtime validation in `src/ai_browser_security_suite/evidence_schema.py`. This proves that evidence records and artifact manifests have explicit contracts before later parser-specific slices are added.
 
 It does not mean every possible browser artifact has been deeply tested. OCR parsing, QR decoding, iframe tree extraction, ARIA tree extraction, DOM/render comparison, and visual diffing remain planned maturity steps.
+
+## Target contract interpretation
+
+Passing the target contract gate means every active `ollama-webui` scenario currently declared by the vulnerable app has at least one toolkit payload mapping. It does not mean each scenario has deep browser parser coverage yet.
