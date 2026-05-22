@@ -1,49 +1,83 @@
-# GitHub Actions CI Template
+# GitHub Actions CI
 
-The repository verification command is:
+The repository CI workflow is stored at:
+
+```text
+.github/workflows/security-ci.yml
+```
+
+The workflow name is:
+
+```text
+Security CI
+```
+
+The required job name is:
+
+```text
+python-checks
+```
+
+## Purpose
+
+The workflow protects the Browser-Safe AI Systems toolkit from silent regressions while the project grows toward fuller browser-AI penetration-testing coverage.
+
+It verifies that the toolkit still has:
+
+- working Python source and tests.
+- valid evidence schema contracts.
+- valid artifact manifest schema contracts.
+- a valid `ollama-webui` target-contract snapshot.
+- target payload mappings for every active target scenario.
+- default article-series coverage audit output.
+- target-contract coverage audit output.
+
+## Commands run by CI
 
 ```bash
-RUN_OLLAMA_TARGET=0 scripts/test_series_coverage_against_ollama_webui.sh
+python -m compileall -q src tests tools
+python -m pytest -q
+python tools/validate_ci_contracts.py
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --out-dir /tmp/ai-browser-coverage-default
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --target-payload payloads/ollama_webui_file_upload_cases.yaml \
+  --target-payload payloads/ollama_webui_project_agent_cases.yaml \
+  --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
+  --out-dir /tmp/ai-browser-coverage-target-contract
 ```
 
-Use this workflow when enabling GitHub Actions for the repository:
+## Local equivalent
 
-```yaml
-name: CI
+Run this before opening a PR that changes toolkit coverage, schemas, payloads, or target-contract files:
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12"]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install package
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e ".[dev]"
-
-      - name: Compile
-        run: python -m compileall -q src tools
-
-      - name: Test
-        run: pytest
-
-      - name: Coverage metadata audit
-        run: |
-          python tools/audit_series_coverage.py \
-            --payload payloads/ollama_webui_safe_prompts.yaml \
-            --out-dir /tmp/ai-browser-coverage
+```bash
+python -m compileall -q src tests tools
+python -m pytest -q
+python tools/validate_ci_contracts.py
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --out-dir /tmp/ai-browser-coverage-default
+python tools/audit_series_coverage.py \
+  --payload payloads/ollama_webui_safe_prompts.yaml \
+  --target-payload payloads/ollama_webui_file_upload_cases.yaml \
+  --target-payload payloads/ollama_webui_project_agent_cases.yaml \
+  --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
+  --out-dir /tmp/ai-browser-coverage-target-contract
 ```
+
+## Branch protection note
+
+If branch protection requires status checks, use the exact job name shown by GitHub after the first workflow run:
+
+```text
+Security CI / python-checks
+```
+
+Do not require a stale or misspelled check name. A stale required check can block safe PRs even when the current workflow passes.
+
+## Non-claims
+
+This CI workflow does not prove full browser-AI testing coverage. It does not yet execute OCR, QR, iframe, frame tree, DOM/render mismatch, visual-diff, or live browser deception checks. Those capabilities should be added as separate evidence-backed slices.

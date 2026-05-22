@@ -312,6 +312,23 @@ python tools/audit_series_coverage.py \
 ```
 
 
+
+## CI gates
+
+The toolkit includes a GitHub Actions workflow that runs the repository's core integrity checks on pull requests and pushes to `main`:
+
+```text
+.github/workflows/security-ci.yml
+```
+
+The CI gate runs compile checks, pytest, schema validation, target-contract snapshot validation, the default coverage audit, and the target-contract coverage audit. This does not claim full browser-AI penetration-testing coverage. It prevents regressions and overclaiming while new browser evidence parsers and tests are added.
+
+See:
+
+```text
+docs/ci-gates.md
+```
+
 ## Target contract ingestion
 
 The toolkit can ingest the Browser-Safe AI target scenario contract published by the local `ollama-webui` vulnerable app.
