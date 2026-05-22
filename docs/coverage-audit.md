@@ -85,4 +85,6 @@ Passing this audit means the current branch has declared coverage for each requi
 
 The evidence pipeline now writes `artifact-manifest.json` for shared evidence-writer outputs. The manifest records artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. This proves artifact traceability for the current shared evidence layer.
 
+The shared evidence layer also publishes `docs/schemas/evidence-record.schema.json` and `docs/schemas/artifact-manifest.schema.json`, with runtime validation in `src/ai_browser_security_suite/evidence_schema.py`. This proves that evidence records and artifact manifests have explicit contracts before later parser-specific slices are added.
+
 It does not mean every possible browser artifact has been deeply tested. OCR parsing, QR decoding, iframe tree extraction, ARIA tree extraction, DOM/render comparison, and visual diffing remain planned maturity steps.

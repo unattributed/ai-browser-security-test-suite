@@ -86,4 +86,4 @@ artifact-manifest.json
 report.md
 ```
 
-The manifest provides artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. This supports Part 26 evidence collection and Part 27 analyst review. It does not yet claim OCR, QR decoding, iframe tree, ARIA tree, DOM/render diff, or visual diff coverage.
+The manifest provides artifact path, artifact type, size, SHA256 hash, creation timestamp, source tool, and source test identifier. The evidence schema contracts provide machine-checkable structure for `evidence.jsonl` and `artifact-manifest.json`. This supports Part 26 evidence collection and Part 27 analyst review. It does not yet claim OCR, QR decoding, iframe tree, ARIA tree, DOM/render diff, or visual diff coverage.

@@ -7,9 +7,14 @@ import hashlib
 import json
 from typing import Any
 
+from ai_browser_security_suite.evidence_schema import (
+    ARTIFACT_MANIFEST_SCHEMA_VERSION,
+    ARTIFACT_SHA256_SUFFIX,
+    validate_artifact_manifest,
+    validate_evidence_record,
+)
+
 ARTIFACT_MANIFEST_FILENAME = "artifact-manifest.json"
-ARTIFACT_MANIFEST_SCHEMA_VERSION = "browser-safe-ai-artifact-manifest/v0.2"
-ARTIFACT_SHA256_SUFFIX = "_sha256"
 
 
 def utc_now() -> str:
@@ -64,8 +69,13 @@ class EvidenceRecord:
     artifacts: dict[str, str] = field(default_factory=dict)
     recommended_action: str | None = None
 
+    def to_dict(self) -> dict[str, Any]:
+        record = asdict(self)
+        validate_evidence_record(record)
+        return record
+
     def to_json(self) -> str:
-        return json.dumps(asdict(self), sort_keys=True, ensure_ascii=False)
+        return json.dumps(self.to_dict(), sort_keys=True, ensure_ascii=False)
 
 
 @dataclass(frozen=True)
@@ -89,9 +99,10 @@ def load_jsonl_records(jsonl_path: str | Path) -> list[dict[str, Any]]:
 def artifact_entries_for_record(record: EvidenceRecord | dict[str, Any], evidence_dir: str | Path) -> list[EvidenceArtifact]:
     out_dir = Path(evidence_dir)
     if isinstance(record, EvidenceRecord):
-        record_data = asdict(record)
+        record_data = record.to_dict()
     else:
         record_data = record
+        validate_evidence_record(record_data)
 
     artifacts = record_data.get("artifacts", {})
     if not isinstance(artifacts, dict):
@@ -150,7 +161,7 @@ def build_artifact_manifest(evidence_dir: str | Path, records: list[dict[str, An
             deduped_entries[key] = entry
 
     entries = sorted(deduped_entries.values(), key=lambda entry: (entry.source_test_id, entry.artifact_type, entry.path))
-    return {
+    manifest = {
         "schema_version": ARTIFACT_MANIFEST_SCHEMA_VERSION,
         "generated_at_utc": utc_now(),
         "evidence_jsonl": _path_for_manifest(jsonl_path, out_dir),
@@ -158,6 +169,8 @@ def build_artifact_manifest(evidence_dir: str | Path, records: list[dict[str, An
         "artifact_count": len(entries),
         "artifacts": [asdict(entry) for entry in entries],
     }
+    validate_artifact_manifest(manifest)
+    return manifest
 
 
 def write_artifact_manifest(evidence_dir: str | Path, records: list[dict[str, Any]] | None = None) -> Path:
@@ -177,6 +190,7 @@ class EvidenceWriter:
         self.manifest_path = self.out_dir / ARTIFACT_MANIFEST_FILENAME
 
     def write(self, record: EvidenceRecord) -> None:
+        record.to_dict()
         artifact_entries_for_record(record, self.out_dir)
         with self.jsonl_path.open("a", encoding="utf-8") as handle:
             handle.write(record.to_json() + "\n")
