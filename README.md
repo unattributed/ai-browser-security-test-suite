@@ -110,6 +110,7 @@ playable local browser-safe AI examples mapped to the series
 Ollama Web UI local target validation
 Playwright browser evidence capture
 structured JSONL evidence
+deterministic artifact manifest with SHA256 hashing
 Markdown reporting
 article-series mapping
 coverage auditing against the research series
@@ -130,6 +131,7 @@ artifact-backed browser evidence for selected attack classes
 uploaded-file prompt construction, untrusted-content boundaries, redaction risk, and size-limit handling
 local project context handling, tool-output boundaries, model type filtering, and chat copy-control placement
 evidence quality for analysts and product-security review
+artifact path, size, SHA256, timestamp, source tool, and source test traceability
 ```
 
 ## Attack classes covered
@@ -307,6 +309,39 @@ python tools/audit_series_coverage.py \
   --out-dir /tmp/ai-browser-coverage
 ```
 
+## Evidence artifact manifest
+
+Every evidence directory written through the shared evidence writer now includes:
+
+```text
+artifact-manifest.json
+```
+
+The manifest is a deterministic review index for generated evidence artifacts.
+Each entry records:
+
+```text
+path
+artifact_type
+size_bytes
+sha256
+created_utc
+source_tool
+source_test_id
+```
+
+The Markdown report references the manifest, its SHA256 hash, and the number of
+manifested artifacts. Missing files or declared SHA256 mismatches fail before
+new evidence is written, so incomplete evidence does not silently become a
+passing report.
+
+Current scope of this slice:
+
+```text
+proven: shared evidence manifest and SHA256 verification
+planned: OCR parser, QR decoder, iframe tree parser, ARIA tree parser, DOM/render diff engine, and visual diff engine
+```
+
 ## Ollama Web UI validation through the CLI
 
 ```bash
@@ -326,6 +361,7 @@ Generated local evidence:
 
 ```text
 reports/ollama-webui-validation/evidence.jsonl
+reports/ollama-webui-validation/artifact-manifest.json
 reports/ollama-webui-validation/ollama-webui-validation-results.json
 reports/ollama-webui-validation/ollama-webui-validation-report.md
 reports/ollama-webui-validation/target-metadata.json
@@ -359,6 +395,7 @@ Generated upload evidence:
 
 ```text
 reports/ollama-webui-upload-validation/evidence.jsonl
+reports/ollama-webui-upload-validation/artifact-manifest.json
 reports/ollama-webui-upload-validation/ollama-webui-upload-validation-results.json
 reports/ollama-webui-upload-validation/ollama-webui-upload-validation-report.md
 reports/ollama-webui-upload-validation/target-metadata.json
@@ -383,6 +420,7 @@ Generated Project Agent evidence:
 
 ```text
 reports/ollama-webui-project-agent-validation/evidence.jsonl
+reports/ollama-webui-project-agent-validation/artifact-manifest.json
 reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-results.json
 reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-report.md
 reports/ollama-webui-project-agent-validation/target-metadata.json
@@ -538,6 +576,7 @@ artifact-backed tests for visual deception, DOM/render mismatch, QR handoff, and
 uploaded-file analysis tests that capture exact model-bound prompts
 Project Agent tests that capture local project context and allowlisted tool output boundaries
 JSONL evidence suitable for later SIEM or SOC enrichment
+artifact manifests with SHA256 hashes for reproducibility review
 Markdown reports suitable for human review
 explicit safety boundaries to reduce misuse
 ```
