@@ -31,16 +31,13 @@ def test_guided_lab_manifest_loads_with_target_contract() -> None:
     manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
 
     assert manifest.schema_version == GUIDED_LAB_SCHEMA_VERSION
-    assert manifest.implemented_labs == ()
-    assert {lab.lab_id for lab in manifest.planned_labs} == {
-        "guided.dom_render_mismatch",
-        "guided.redirect_chain_evidence",
-    }
+    assert {lab.lab_id for lab in manifest.implemented_labs} == {"guided.redirect_chain_evidence"}
+    assert {lab.lab_id for lab in manifest.planned_labs} == {"guided.dom_render_mismatch"}
 
     summary = guided_lab_manifest_summary(manifest)
     assert summary["lab_count"] == 2
-    assert summary["planned_lab_count"] == 2
-    assert summary["implemented_lab_count"] == 0
+    assert summary["planned_lab_count"] == 1
+    assert summary["implemented_lab_count"] == 1
 
 
 def test_guided_labs_follow_required_workflow_language() -> None:
@@ -54,13 +51,31 @@ def test_guided_labs_follow_required_workflow_language() -> None:
         assert "artifact-manifest.json" in lab.required_artifacts
         assert "evidence.jsonl" in lab.required_artifacts
         assert lab.current_target_scenario_ids
-        assert lab.planned_target_scenario_ids
+        if lab.is_planned:
+            assert lab.planned_target_scenario_ids
+        if lab.is_implemented:
+            assert not lab.planned_target_scenario_ids
         assert any("conduct" in step.lower() for step in lab.conduct_test)
         assert any("observe" in step.lower() for step in lab.observe)
         assert any("vary" in step.lower() for step in lab.vary_test)
         assert "Parrot OS" in lab.distributions
         assert "Kali Linux" in lab.distributions
 
+
+
+def test_redirect_chain_lab_is_implemented_against_declared_target() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    redirect_lab = next(lab for lab in manifest.labs if lab.lab_id == "guided.redirect_chain_evidence")
+    assert redirect_lab.status == "implemented"
+    assert redirect_lab.current_target_scenario_ids == ("browser.redirect_chain",)
+    assert redirect_lab.planned_target_scenario_ids == ()
+    assert "purpose-built Python redirect-chain helper" in redirect_lab.tools
+    assert "redirect-chain.json" in redirect_lab.required_artifacts
+    assert "http-status-sequence.txt" in redirect_lab.required_artifacts
+    assert "final-page.html" in redirect_lab.required_artifacts
+    assert "model-bound-context.txt" in redirect_lab.required_artifacts
 
 
 def test_guided_labs_require_free_and_open_source_tooling() -> None:

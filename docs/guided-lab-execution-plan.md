@@ -147,3 +147,24 @@ what remains unimplemented
 Every lab implementation must use free and open source tooling only. The accepted tooling sources are Parrot OS, Kali Linux, Debian-derived repositories, upstream project source, and project-managed Python code.
 
 If a specific free and open source tool is not available for a lab, the lab must include a purpose-built Python tool in this repository. Commercial-only, paid-only, proprietary-only, trialware, and closed-source required tooling are out of scope.
+
+
+## Current redirect-chain implementation status
+
+```text
+guided.redirect_chain_evidence
+```
+
+is now implemented in the toolkit as a local-only evidence capture helper. It maps to:
+
+```text
+browser.redirect_chain
+```
+
+The implementation uses free and open-source tooling only. The purpose-built Python helper is:
+
+```text
+tools/run_redirect_chain_lab.py
+```
+
+It captures redirect-chain JSON, HTTP status sequence, final URL, final page HTML, model-bound context, model-response placeholder, evidence JSONL, artifact manifest, and report output.

@@ -96,3 +96,14 @@ docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json
 The CI validator checks this snapshot against the expected target identity, schema version, production-safety flag, and active scenario ids. The validator also confirms that all active target scenarios are represented by toolkit payload mappings.
 
 If the vulnerable app contract changes, update the snapshot and payload mappings in the same development slice.
+
+
+## Redirect-chain target payload
+
+The CI target-contract coverage gate includes:
+
+```text
+payloads/ollama_webui_redirect_chain_cases.yaml
+```
+
+This payload maps the implemented `guided.redirect_chain_evidence` lab to the active `browser.redirect_chain` target scenario. The gate fails if the active target scenario is removed from payload mappings or if payloads reference unknown scenario ids.

@@ -138,6 +138,32 @@ artifact path, size, SHA256, timestamp, source tool, and source test traceabilit
 evidence record and artifact manifest contract validation
 ```
 
+
+## Guided redirect-chain lab
+
+The toolkit includes an implemented Guided Lab Mode slice for local redirect-chain evidence.
+
+```text
+guided.redirect_chain_evidence
+```
+
+Target scenario:
+
+```text
+browser.redirect_chain
+```
+
+Purpose-built free and open-source helper:
+
+```bash
+python tools/run_redirect_chain_lab.py \
+  --base-url http://127.0.0.1:11435 \
+  --variant all \
+  --out-dir /tmp/browser-safe-redirect-chain-lab
+```
+
+The helper captures the local redirect path, HTTP status sequence, final URL, final page HTML, model-bound context artifact, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and lab report. It refuses non-loopback redirect locations and is intended only for local synthetic testing against the `ollama-webui` target.
+
 ## Attack classes covered
 
 | Attack class | Series reference | Current support |

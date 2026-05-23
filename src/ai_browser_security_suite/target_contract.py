@@ -70,6 +70,8 @@ class TargetScenario:
     article_parts: tuple[str, ...]
     toolkit_current: tuple[str, ...]
     toolkit_planned: tuple[str, ...]
+    toolkit_guided_lab_id: str | None = None
+    toolkit_implementation_status: str | None = None
 
     @property
     def is_active(self) -> bool:
@@ -139,7 +141,22 @@ def _require_keys(mapping: Mapping[str, Any], required: Iterable[str], label: st
         raise TargetContractError(f"{label} missing required field(s): {', '.join(missing)}")
 
 
-def _reject_planned_only_current_mapping(entries: Iterable[str], label: str) -> None:
+def _optional_non_empty_string(value: Any, label: str) -> str | None:
+    if value is None:
+        return None
+    return _require_non_empty_string(value, label)
+
+
+def _reject_planned_only_current_mapping(
+    entries: Iterable[str],
+    label: str,
+    *,
+    implementation_status: str | None = None,
+) -> None:
+    status = (implementation_status or "").strip().lower()
+    if status in {"target-ready", "implemented"}:
+        return
+
     for entry in entries:
         normalized = entry.strip().lower()
         if any(term in normalized for term in PLANNED_ONLY_TERMS):
@@ -208,8 +225,19 @@ def validate_target_contract_payload(payload: Mapping[str, Any]) -> TargetContra
             toolkit_mapping.get("planned"), f"{scenario_id}.toolkit_mapping.planned"
         )
 
+        toolkit_guided_lab_id = _optional_non_empty_string(
+            toolkit_mapping.get("guided_lab_id"), f"{scenario_id}.toolkit_mapping.guided_lab_id"
+        )
+        toolkit_implementation_status = _optional_non_empty_string(
+            toolkit_mapping.get("implementation_status"), f"{scenario_id}.toolkit_mapping.implementation_status"
+        )
+
         if status == "active":
-            _reject_planned_only_current_mapping(toolkit_current, f"{scenario_id}.toolkit_mapping.current")
+            _reject_planned_only_current_mapping(
+                toolkit_current,
+                f"{scenario_id}.toolkit_mapping.current",
+                implementation_status=toolkit_implementation_status,
+            )
 
         scenarios.append(
             TargetScenario(
@@ -234,6 +262,8 @@ def validate_target_contract_payload(payload: Mapping[str, Any]) -> TargetContra
                 ),
                 toolkit_current=toolkit_current,
                 toolkit_planned=toolkit_planned,
+                toolkit_guided_lab_id=toolkit_guided_lab_id,
+                toolkit_implementation_status=toolkit_implementation_status,
             )
         )
 
