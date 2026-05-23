@@ -147,3 +147,14 @@ Current planned labs:
 | `guided.dom_render_mismatch` | planned | Part 10, Part 11, Part 12, Part 24, Part 25, Part 26 | teach DOM versus rendered content mismatch and model-bound context risk |
 
 These labs are planned, not implemented. They define the professional structure that future evidence slices must satisfy before claiming coverage.
+
+
+## Guided redirect-chain evidence
+
+```text
+tools/run_redirect_chain_lab.py
+```
+
+implements the first Guided Lab Mode evidence helper. It maps `guided.redirect_chain_evidence` to `browser.redirect_chain` and supports Browser-Safe AI Systems Parts 13, 15, 24, 25, 26, and 28.
+
+The helper is local-only, uses free and open-source Python tooling, rejects non-loopback redirect locations, writes structured evidence, and produces artifact-manifest hashes for analyst review.

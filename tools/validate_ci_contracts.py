@@ -58,10 +58,12 @@ DEFAULT_GUIDED_LABS = REPO_ROOT / "payloads" / "guided_lab_scenarios.yaml"
 DEFAULT_TARGET_PAYLOADS = [
     REPO_ROOT / "payloads" / "ollama_webui_file_upload_cases.yaml",
     REPO_ROOT / "payloads" / "ollama_webui_project_agent_cases.yaml",
+    REPO_ROOT / "payloads" / "ollama_webui_redirect_chain_cases.yaml",
 ]
 EXPECTED_TARGET_NAME = "ollama-webui"
 EXPECTED_TARGET_REPOSITORY = "https://github.com/unattributed/ollama-webui"
 EXPECTED_ACTIVE_SCENARIOS = {
+    "browser.redirect_chain",
     "chat.basic_prompt",
     "file_upload.text_context",
     "model.catalog_filter",
@@ -73,6 +75,12 @@ EXPECTED_ACTIVE_SCENARIOS = {
 EXPECTED_GUIDED_LABS = {
     "guided.dom_render_mismatch",
     "guided.redirect_chain_evidence",
+}
+EXPECTED_IMPLEMENTED_GUIDED_LABS = {
+    "guided.redirect_chain_evidence",
+}
+EXPECTED_PLANNED_GUIDED_LABS = {
+    "guided.dom_render_mismatch",
 }
 
 
@@ -215,16 +223,30 @@ def validate_guided_lab_snapshot(
     if extra:
         failures.append("guided lab manifest has unexpected lab(s): " + ", ".join(extra))
 
-    if manifest.implemented_labs:
-        failures.append("guided lab manifest should not mark labs implemented before evidence slices exist")
+    implemented_ids = {lab.lab_id for lab in manifest.implemented_labs}
+    planned_ids = {lab.lab_id for lab in manifest.planned_labs}
+    missing_implemented = sorted(EXPECTED_IMPLEMENTED_GUIDED_LABS - implemented_ids)
+    extra_implemented = sorted(implemented_ids - EXPECTED_IMPLEMENTED_GUIDED_LABS)
+    missing_planned = sorted(EXPECTED_PLANNED_GUIDED_LABS - planned_ids)
+    extra_planned = sorted(planned_ids - EXPECTED_PLANNED_GUIDED_LABS)
+    if missing_implemented:
+        failures.append("guided lab manifest missing implemented lab(s): " + ", ".join(missing_implemented))
+    if extra_implemented:
+        failures.append("guided lab manifest has unexpected implemented lab(s): " + ", ".join(extra_implemented))
+    if missing_planned:
+        failures.append("guided lab manifest missing planned lab(s): " + ", ".join(missing_planned))
+    if extra_planned:
+        failures.append("guided lab manifest has unexpected planned lab(s): " + ", ".join(extra_planned))
 
     for lab in manifest.labs:
         if not lab.series_mapping:
             failures.append(f"{lab.lab_id}: lab must map to Browser-Safe AI Systems series part(s)")
         if not lab.current_target_scenario_ids:
             failures.append(f"{lab.lab_id}: lab must map to at least one current target scenario id")
-        if not lab.planned_target_scenario_ids:
-            failures.append(f"{lab.lab_id}: lab must define planned target scenario id(s)")
+        if lab.is_planned and not lab.planned_target_scenario_ids:
+            failures.append(f"{lab.lab_id}: planned lab must define planned target scenario id(s)")
+        if lab.is_implemented and lab.planned_target_scenario_ids:
+            failures.append(f"{lab.lab_id}: implemented lab should not rely on planned target scenario id(s)")
         if not lab.required_artifacts:
             failures.append(f"{lab.lab_id}: lab must define required evidence artifacts")
         if not lab.local_only or not lab.synthetic_only or not lab.authorized_only:

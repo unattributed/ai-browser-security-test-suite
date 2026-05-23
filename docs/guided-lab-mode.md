@@ -177,3 +177,24 @@ Guided labs must remain local and synthetic. They must not include credential th
 All guided lab tooling must be free and open source. Labs may use tools available on Parrot OS, Kali Linux, Debian-derived repositories, upstream project source, or project-managed Python code.
 
 If a suitable free and open source tool is not available for a lab, the project must provide a purpose-built Python tool for that lab. Guided labs must not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling.
+
+
+## Current redirect-chain implementation status
+
+```text
+guided.redirect_chain_evidence
+```
+
+is now implemented in the toolkit as a local-only evidence capture helper. It maps to:
+
+```text
+browser.redirect_chain
+```
+
+The implementation uses free and open-source tooling only. The purpose-built Python helper is:
+
+```text
+tools/run_redirect_chain_lab.py
+```
+
+It captures redirect-chain JSON, HTTP status sequence, final URL, final page HTML, model-bound context, model-response placeholder, evidence JSONL, artifact manifest, and report output.

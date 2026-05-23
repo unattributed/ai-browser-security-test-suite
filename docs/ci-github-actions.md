@@ -97,3 +97,14 @@ payloads/guided_lab_scenarios.yaml
 ```
 
 It confirms that guided labs are mapped to the Browser-Safe AI Systems series, remain local-only and synthetic, include evidence requirements, use professional test language, and do not claim implemented coverage before the evidence slices exist.
+
+
+## Redirect-chain target payload
+
+The CI target-contract coverage gate includes:
+
+```text
+payloads/ollama_webui_redirect_chain_cases.yaml
+```
+
+This payload maps the implemented `guided.redirect_chain_evidence` lab to the active `browser.redirect_chain` target scenario. The gate fails if the active target scenario is removed from payload mappings or if payloads reference unknown scenario ids.
