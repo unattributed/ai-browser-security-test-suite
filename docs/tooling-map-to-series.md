@@ -127,3 +127,23 @@ This maps most directly to:
 - Part 32, treating AI as an untrusted classifier inside a controlled security pipeline.
 
 The CI gate is not itself a browser-AI attack simulation. It is the regression boundary that keeps future browser-AI tests honest and traceable.
+
+
+## Guided Lab Mode mapping
+
+Guided Lab Mode turns the series into structured lab exercises that a user can conduct against the local vulnerable `ollama-webui` target.
+
+Current manifest:
+
+```text
+payloads/guided_lab_scenarios.yaml
+```
+
+Current planned labs:
+
+| Lab id | Status | Primary series mapping | Purpose |
+|---|---|---|---|
+| `guided.redirect_chain_evidence` | planned | Part 13, Part 15, Part 24, Part 25, Part 26, Part 28 | teach redirect-chain evidence, staged browser workflow observation, and analyst-reviewable provenance |
+| `guided.dom_render_mismatch` | planned | Part 10, Part 11, Part 12, Part 24, Part 25, Part 26 | teach DOM versus rendered content mismatch and model-bound context risk |
+
+These labs are planned, not implemented. They define the professional structure that future evidence slices must satisfy before claiming coverage.

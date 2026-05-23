@@ -41,3 +41,19 @@ def test_ci_contract_validator_main_returns_nonzero_for_bad_schema_path(tmp_path
     missing_schema = tmp_path / "missing-evidence.schema.json"
     exit_code = validate_ci_contracts.main(["--evidence-record-schema", str(missing_schema)])
     assert exit_code == 1
+
+
+def test_guided_lab_manifest_gate_passes() -> None:
+    target_contract = validate_ci_contracts.load_target_contract(validate_ci_contracts.DEFAULT_TARGET_CONTRACT)
+    assert validate_ci_contracts.validate_guided_lab_snapshot(target_contract=target_contract) == []
+
+
+def test_guided_lab_manifest_gate_fails_for_missing_manifest(tmp_path: Path) -> None:
+    missing_manifest = tmp_path / "missing-guided-labs.yaml"
+    target_contract = validate_ci_contracts.load_target_contract(validate_ci_contracts.DEFAULT_TARGET_CONTRACT)
+    failures = validate_ci_contracts.validate_guided_lab_snapshot(
+        guided_labs_path=missing_manifest,
+        target_contract=target_contract,
+    )
+    assert failures
+    assert any("missing guided lab manifest" in failure for failure in failures)
