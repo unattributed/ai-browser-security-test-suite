@@ -28,6 +28,7 @@ def test_load_target_contract_snapshot():
         "browser.dom_render_mismatch",
         "browser.iframe_frame_tree",
         "browser.redirect_chain",
+        "browser.storage_state_boundary",
         "chat.basic_prompt",
         "file_upload.text_context",
         "model.catalog_filter",
@@ -55,6 +56,12 @@ def test_load_target_contract_snapshot():
     assert iframe_scenario.toolkit_implementation_status == "target-ready"
     assert "frame-tree evidence capture with browser rendering" in iframe_scenario.allowed_tests
 
+    storage_scenario = contract.scenario_by_id("browser.storage_state_boundary")
+    assert storage_scenario.evidence_class == "storage_state_boundary_context"
+    assert storage_scenario.toolkit_guided_lab_id == "guided.storage_state_boundary_evidence"
+    assert storage_scenario.toolkit_implementation_status == "target-ready"
+    assert "local-only browser state observation" in storage_scenario.allowed_tests
+
 
 def test_target_contract_summary_is_stable():
     contract = load_target_contract(CONTRACT_PATH)
@@ -62,7 +69,7 @@ def test_target_contract_summary_is_stable():
 
     assert summary["schema_version"] == TARGET_CONTRACT_SCHEMA_VERSION
     assert summary["target_name"] == "ollama-webui"
-    assert summary["active_scenario_count"] == 10
+    assert summary["active_scenario_count"] == 11
     assert summary["active_scenarios"] == sorted(contract.active_scenario_ids)
 
 

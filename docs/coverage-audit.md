@@ -119,7 +119,7 @@ The evidence pipeline now writes `artifact-manifest.json` for shared evidence-wr
 
 The shared evidence layer also publishes `docs/schemas/evidence-record.schema.json` and `docs/schemas/artifact-manifest.schema.json`, with runtime validation in `src/ai_browser_security_suite/evidence_schema.py`. This proves that evidence records and artifact manifests have explicit contracts before later parser-specific slices are added.
 
-It does not mean every possible browser artifact has been deeply tested. OCR parsing, QR decoding, iframe tree extraction, ARIA tree extraction, DOM/render comparison, and visual diffing remain planned maturity steps.
+It does not mean every possible browser artifact has been deeply tested. OCR parsing, QR decoding, ARIA tree extraction, and visual diffing remain planned maturity steps. DOM/render comparison, iframe tree extraction, and storage-state boundary evidence now have purpose-built guided lab coverage.
 
 ## Target contract interpretation
 
