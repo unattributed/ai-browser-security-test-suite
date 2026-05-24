@@ -183,3 +183,18 @@ python tools/run_dom_render_lab.py \
 ```
 
 Run the `baseline`, `hidden_instruction`, and `rendered_contradiction` variants. Analysts should compare the screenshot, rendered text, raw DOM text, hidden DOM findings, computed style findings, and final report before forming a conclusion.
+
+## Storage state boundary implementation status
+
+The storage state boundary slice is implemented after the vulnerable target declared `browser.storage_state_boundary`.
+
+Execution path:
+
+```text
+python tools/run_storage_state_boundary_lab.py \
+  --base-url http://127.0.0.1:11435 \
+  --variant all \
+  --out-dir output/storage-state-boundary-guided-lab
+```
+
+Run the `baseline_no_state`, `cookie_state_boundary`, `local_storage_state_boundary`, `session_storage_state_boundary`, and `combined_state_boundary` variants. Analysts should compare browser-state-before, browser-state-after, storage findings, model-bound context, model response placeholder, state boundary findings, and final report before forming a conclusion. Browser rendering and browser storage observation are required. Static HTML parsing alone is not sufficient.

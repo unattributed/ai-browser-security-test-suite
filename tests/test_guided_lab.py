@@ -35,13 +35,14 @@ def test_guided_lab_manifest_loads_with_target_contract() -> None:
         "guided.dom_render_mismatch",
         "guided.iframe_frame_tree_evidence",
         "guided.redirect_chain_evidence",
+        "guided.storage_state_boundary_evidence",
     }
     assert {lab.lab_id for lab in manifest.planned_labs} == set()
 
     summary = guided_lab_manifest_summary(manifest)
-    assert summary["lab_count"] == 3
+    assert summary["lab_count"] == 4
     assert summary["planned_lab_count"] == 0
-    assert summary["implemented_lab_count"] == 3
+    assert summary["implemented_lab_count"] == 4
 
 
 def test_guided_labs_follow_required_workflow_language() -> None:
@@ -120,6 +121,26 @@ def test_iframe_frame_tree_lab_is_implemented_against_declared_target() -> None:
     assert "srcdoc-findings.json" in iframe_lab.required_artifacts
     assert "cross-frame-rendered-text.txt" in iframe_lab.required_artifacts
     assert any("frame-tree observation" in item.lower() for item in iframe_lab.acceptance_criteria)
+
+def test_storage_state_boundary_lab_is_implemented_against_declared_target() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    storage_lab = next(lab for lab in manifest.labs if lab.lab_id == "guided.storage_state_boundary_evidence")
+    assert storage_lab.status == "implemented"
+    assert storage_lab.current_target_scenario_ids == ("browser.storage_state_boundary",)
+    assert storage_lab.planned_target_scenario_ids == ()
+    assert "Playwright" in storage_lab.tools
+    assert "purpose-built Python storage-state boundary helper" in storage_lab.tools
+    assert "browser-state-before.json" in storage_lab.required_artifacts
+    assert "browser-state-after.json" in storage_lab.required_artifacts
+    assert "cookie-findings.json" in storage_lab.required_artifacts
+    assert "local-storage-findings.json" in storage_lab.required_artifacts
+    assert "session-storage-findings.json" in storage_lab.required_artifacts
+    assert "cache-like-findings.json" in storage_lab.required_artifacts
+    assert "state-boundary-findings.json" in storage_lab.required_artifacts
+    assert any("model-bound context" in item.lower() for item in storage_lab.acceptance_criteria)
+
 
 def test_guided_labs_require_free_and_open_source_tooling() -> None:
     target_contract = load_target_contract(TARGET_CONTRACT_PATH)

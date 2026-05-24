@@ -117,7 +117,7 @@ article-series mapping
 coverage auditing against the research series
 guided lab manifest validation for professional lab exercises
 free and open source tooling requirement for guided labs with purpose-built Python fallback
-artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
+artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, delayed DOM mutation, iframe frame-tree evidence, and storage-state boundary evidence
 deterministic uploaded-file analysis tests for the local Ollama Web UI target
 deterministic Project Agent tests for local project guardrails, file reads, search, model type controls, copy controls, and allowlisted tool execution
 playground files for safe local ollama-webui upload practice
@@ -134,6 +134,7 @@ artifact-backed browser evidence for selected attack classes
 uploaded-file prompt construction, untrusted-content boundaries, redaction risk, and size-limit handling
 local project context handling, tool-output boundaries, model type filtering, and chat copy-control placement
 evidence quality for analysts and product-security review
+browser storage boundary evidence for cookies, localStorage, sessionStorage, cache-like state, and model-bound context separation
 artifact path, size, SHA256, timestamp, source tool, and source test traceability
 evidence record and artifact manifest contract validation
 ```
@@ -188,6 +189,32 @@ python tools/run_iframe_frame_tree_lab.py \
 ```
 
 The helper captures `frame-tree.json`, `frame-url-list.txt`, `top-page-dom-snapshot.html`, child frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient.
+
+
+## Guided storage state boundary lab
+
+The toolkit includes an implemented local-only Guided Lab Mode slice for browser storage-state boundary evidence.
+
+```text
+guided.storage_state_boundary_evidence
+```
+
+Target scenario:
+
+```text
+browser.storage_state_boundary
+```
+
+Purpose-built free and open-source helper:
+
+```bash
+python tools/run_storage_state_boundary_lab.py \
+  --base-url http://127.0.0.1:11435 \
+  --variant all \
+  --out-dir /tmp/browser-safe-storage-state-boundary-lab
+```
+
+The helper captures `browser-state-before.json`, `browser-state-after.json`, cookie findings, localStorage findings, sessionStorage findings, cache-like state findings, `model-bound-context.txt`, `model-response.json`, `state-boundary-findings.json`, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and browser storage observation are required. Static HTML parsing alone is not sufficient. Protected browser state is synthetic and is preserved as bounded evidence while remaining outside model-bound context.
 
 ## Attack classes covered
 
