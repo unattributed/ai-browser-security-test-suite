@@ -111,3 +111,10 @@ This payload maps the implemented `guided.redirect_chain_evidence` lab to the ac
 ## DOM/render mismatch CI gate
 
 CI validates the DOM/render mismatch slice through pytest, guided lab manifest validation, target-contract snapshot validation, target-contract coverage audit, and DOM/render unit tests. The target-contract coverage audit includes `payloads/ollama_webui_dom_render_cases.yaml`.
+
+
+## Iframe/frame-tree CI gate
+
+CI validates the iframe/frame-tree slice through pytest, guided lab manifest validation, target-contract snapshot validation, target-contract coverage audit, and iframe/frame-tree unit tests. The target-contract coverage audit includes `payloads/ollama_webui_iframe_frame_tree_cases.yaml`.
+
+The gate expects `guided.iframe_frame_tree_evidence` to remain local-only, synthetic-only, authorized-only, and free/open-source. Negative tests prove external frame URLs and wrong target scenario headers fail closed.

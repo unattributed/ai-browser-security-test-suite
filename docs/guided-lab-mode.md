@@ -98,6 +98,7 @@ The current manifest defines the lab model and the first planned lab candidates:
 ```text
 guided.redirect_chain_evidence
 guided.dom_render_mismatch
+guided.iframe_frame_tree_evidence
 ```
 
 These labs are intentionally marked `planned`. They do not claim implemented browser-AI testing coverage yet.
@@ -221,3 +222,27 @@ report.md
 ```
 
 The lab is intentionally not a static HTML parser. It must compare raw DOM state, browser-rendered visible text, computed style findings, and screenshot evidence.
+
+
+## Implemented iframe/frame-tree evidence lab
+
+`guided.iframe_frame_tree_evidence` is implemented as a local-only lab against `browser.iframe_frame_tree`.
+
+A valid run must preserve:
+
+```text
+frame-tree.json
+frame-url-list.txt
+top-page-dom-snapshot.html
+frame-dom-snapshots/
+sandbox-findings.json
+srcdoc-findings.json
+cross-frame-rendered-text.txt
+model-bound-context.txt
+model-response.json
+evidence.jsonl
+artifact-manifest.json
+report.md
+```
+
+The lab requires browser rendering and frame-tree observation. Static HTML parsing alone is not sufficient because the top document can hide or omit the browser-observed child-frame DOM and nested browsing context relationships.

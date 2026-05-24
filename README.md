@@ -164,6 +164,31 @@ python tools/run_redirect_chain_lab.py \
 
 The helper captures the local redirect path, HTTP status sequence, final URL, final page HTML, model-bound context artifact, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and lab report. It refuses non-loopback redirect locations and is intended only for local synthetic testing against the `ollama-webui` target.
 
+## Guided iframe/frame-tree lab
+
+The toolkit includes an implemented local-only Guided Lab Mode slice for browser-observed iframe/frame-tree evidence.
+
+```text
+guided.iframe_frame_tree_evidence
+```
+
+Target scenario:
+
+```text
+browser.iframe_frame_tree
+```
+
+Purpose-built free and open-source helper:
+
+```bash
+python tools/run_iframe_frame_tree_lab.py \
+  --base-url http://127.0.0.1:11435 \
+  --variant all \
+  --out-dir /tmp/browser-safe-iframe-frame-tree-lab
+```
+
+The helper captures `frame-tree.json`, `frame-url-list.txt`, `top-page-dom-snapshot.html`, child frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient.
+
 ## Attack classes covered
 
 | Attack class | Series reference | Current support |
@@ -389,6 +414,7 @@ Current planned labs:
 ```text
 guided.redirect_chain_evidence
 guided.dom_render_mismatch
+guided.iframe_frame_tree_evidence
 ```
 
 These are planning records, not implemented evidence claims. They define the professional structure that the first real lab implementation slices must satisfy.
@@ -785,3 +811,17 @@ src/ai_browser_security_suite/dom_render.py
 The lab maps to `guided.dom_render_mismatch` and target scenario `browser.dom_render_mismatch`. It captures raw DOM state, browser-rendered visible text, computed style findings, screenshot evidence, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
 
 Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.
+
+### Guided iframe/frame-tree lab
+
+The toolkit includes an implemented local-only Guided Lab Mode exercise for iframe and nested browsing context evidence.
+
+```text
+tools/run_iframe_frame_tree_lab.py
+payloads/ollama_webui_iframe_frame_tree_cases.yaml
+src/ai_browser_security_suite/iframe_frame_tree.py
+```
+
+The lab maps to `guided.iframe_frame_tree_evidence` and target scenario `browser.iframe_frame_tree`. It captures browser-observed frame relationships, frame URLs, top-page DOM, child-frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
+
+Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.

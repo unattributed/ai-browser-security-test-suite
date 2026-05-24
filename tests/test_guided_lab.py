@@ -33,14 +33,15 @@ def test_guided_lab_manifest_loads_with_target_contract() -> None:
     assert manifest.schema_version == GUIDED_LAB_SCHEMA_VERSION
     assert {lab.lab_id for lab in manifest.implemented_labs} == {
         "guided.dom_render_mismatch",
+        "guided.iframe_frame_tree_evidence",
         "guided.redirect_chain_evidence",
     }
     assert {lab.lab_id for lab in manifest.planned_labs} == set()
 
     summary = guided_lab_manifest_summary(manifest)
-    assert summary["lab_count"] == 2
+    assert summary["lab_count"] == 3
     assert summary["planned_lab_count"] == 0
-    assert summary["implemented_lab_count"] == 2
+    assert summary["implemented_lab_count"] == 3
 
 
 def test_guided_labs_follow_required_workflow_language() -> None:
@@ -99,6 +100,26 @@ def test_dom_render_lab_is_implemented_against_declared_target() -> None:
     assert "computed-style-findings.json" in dom_lab.required_artifacts
     assert "rendered-screenshot.png" in dom_lab.required_artifacts
     assert any("browser rendering evidence" in item.lower() for item in dom_lab.acceptance_criteria)
+
+
+def test_iframe_frame_tree_lab_is_implemented_against_declared_target() -> None:
+    target_contract = load_target_contract(TARGET_CONTRACT_PATH)
+    manifest = load_guided_lab_manifest(GUIDED_LABS_PATH, target_contract=target_contract)
+
+    iframe_lab = next(lab for lab in manifest.labs if lab.lab_id == "guided.iframe_frame_tree_evidence")
+    assert iframe_lab.status == "implemented"
+    assert iframe_lab.current_target_scenario_ids == ("browser.iframe_frame_tree",)
+    assert iframe_lab.planned_target_scenario_ids == ()
+    assert "Playwright" in iframe_lab.tools
+    assert "purpose-built Python iframe/frame-tree helper" in iframe_lab.tools
+    assert "frame-tree.json" in iframe_lab.required_artifacts
+    assert "frame-url-list.txt" in iframe_lab.required_artifacts
+    assert "top-page-dom-snapshot.html" in iframe_lab.required_artifacts
+    assert "frame-dom-snapshots/" in iframe_lab.required_artifacts
+    assert "sandbox-findings.json" in iframe_lab.required_artifacts
+    assert "srcdoc-findings.json" in iframe_lab.required_artifacts
+    assert "cross-frame-rendered-text.txt" in iframe_lab.required_artifacts
+    assert any("frame-tree observation" in item.lower() for item in iframe_lab.acceptance_criteria)
 
 def test_guided_labs_require_free_and_open_source_tooling() -> None:
     target_contract = load_target_contract(TARGET_CONTRACT_PATH)
