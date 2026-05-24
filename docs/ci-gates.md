@@ -107,3 +107,7 @@ payloads/ollama_webui_redirect_chain_cases.yaml
 ```
 
 This payload maps the implemented `guided.redirect_chain_evidence` lab to the active `browser.redirect_chain` target scenario. The gate fails if the active target scenario is removed from payload mappings or if payloads reference unknown scenario ids.
+
+## DOM/render mismatch CI gate
+
+CI validates the DOM/render mismatch slice through pytest, guided lab manifest validation, target-contract snapshot validation, target-contract coverage audit, and DOM/render unit tests. The target-contract coverage audit includes `payloads/ollama_webui_dom_render_cases.yaml`.

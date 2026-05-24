@@ -1,7 +1,7 @@
 schema_version: browser-safe-ai-guided-labs/v0.2
 program: Browser-Safe AI Systems
-purpose: Define guided, local-only lab exercises that map the Browser-Safe AI Systems
-  series to controlled tests against the vulnerable ollama-webui target.
+purpose: Define guided, local-only lab exercises that map the Browser-Safe AI Systems series to controlled
+  tests against the vulnerable ollama-webui target.
 labs:
 - id: guided.redirect_chain_evidence
   status: implemented
@@ -25,9 +25,9 @@ labs:
   - part: Part 28
     title: Vendor due diligence and buying questions
     url: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-  attack_principle: A staged browser workflow can change the content that reaches
-    an AI security decision. A professional test must preserve the redirect path,
-    final page state, model-bound context, and analyst evidence.
+  attack_principle: A staged browser workflow can change the content that reaches an AI security decision.
+    A professional test must preserve the redirect path, final page state, model-bound context, and analyst
+    evidence.
   target_mapping:
     current_target_scenario_ids:
     - browser.redirect_chain
@@ -46,13 +46,12 @@ labs:
     - the toolkit evidence writer
     free_and_open_source_only: true
     tool_selection_policy:
-    - Use only free and open source tooling that is available from Parrot OS, Kali
-      Linux, Debian-derived repositories, upstream project source, or project-managed
-      Python code.
-    - If a suitable free and open source tool is not available for a lab, implement
-      a purpose-built Python tool in this repository for that lab.
-    - Do not require commercial-only, paid-only, proprietary-only, trialware, or closed-source
-      tooling for any guided lab.
+    - Use only free and open source tooling that is available from Parrot OS, Kali Linux, Debian-derived
+      repositories, upstream project source, or project-managed Python code.
+    - If a suitable free and open source tool is not available for a lab, implement a purpose-built Python
+      tool in this repository for that lab.
+    - Do not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling
+      for any guided lab.
   workflow:
     setup:
     - Start the local ollama-webui target on 127.0.0.1.
@@ -61,33 +60,27 @@ labs:
     - Prepare an evidence output directory for the toolkit redirect-chain helper.
     conduct_test:
     - Conduct the guided redirect-chain test against the local target only.
-    - Execute the purpose-built Python helper tools/run_redirect_chain_lab.py against
-      http://127.0.0.1:11435.
+    - Execute the purpose-built Python helper tools/run_redirect_chain_lab.py against http://127.0.0.1:11435.
     - Run the baseline, encoded, and slow safe variants.
-    - Optionally observe the same local chain manually with curl or browser developer
-      tools.
+    - Optionally observe the same local chain manually with curl or browser developer tools.
     observe:
-    - Observe each redirect hop, HTTP status code, Location header, final URL, and
-      final page HTML.
+    - Observe each redirect hop, HTTP status code, Location header, final URL, and final page HTML.
     - Review redirect-chain.json, http-status-sequence.txt, final-page.html, model-bound-context.txt,
       evidence.jsonl, artifact-manifest.json, and report.md.
-    - Compare the user-visible final page with the full evidence path preserved by
-      the toolkit.
+    - Compare the user-visible final page with the full evidence path preserved by the toolkit.
     vary_test:
     - Vary the guided test by running variant=baseline.
     - Vary the guided test by running variant=encoded.
     - Vary the guided test by running variant=slow.
     expected_vulnerable_behavior:
-    - The vulnerable target may treat final page content as trustworthy model context
-      without preserving enough redirect provenance for analyst review.
-    - The model response may reason over the final content without explaining the
-      staged browser path.
+    - The vulnerable target may treat final page content as trustworthy model context without preserving
+      enough redirect provenance for analyst review.
+    - The model response may reason over the final content without explaining the staged browser path.
     secure_system_expectation:
     - A secure browser-AI system preserves redirect provenance as evidence.
-    - A secure browser-AI system constrains the model verdict and keeps the policy
-      decision deterministic.
-    - A secure browser-AI system reports redirect-chain risk without treating the
-      model as the policy authority.
+    - A secure browser-AI system constrains the model verdict and keeps the policy decision deterministic.
+    - A secure browser-AI system reports redirect-chain risk without treating the model as the policy
+      authority.
   evidence:
     required_artifacts:
     - redirect-chain.json
@@ -115,28 +108,28 @@ labs:
   - The lab remains local-only, synthetic-only, and authorized-only.
   - The lab uses only free and open source tooling or project-managed Python code.
   - The toolkit captures redirect-chain evidence for baseline, encoded, and slow variants.
-  - evidence.jsonl records the guided lab id, target scenario id, variant, hop count,
-    final URL, and final status code.
-  - artifact-manifest.json hashes redirect-chain, final page, model-bound context,
-    model-response, and report artifacts.
+  - evidence.jsonl records the guided lab id, target scenario id, variant, hop count, final URL, and final
+    status code.
+  - artifact-manifest.json hashes redirect-chain, final page, model-bound context, model-response, and
+    report artifacts.
   - The lab report explains what the redirect-chain evidence proves and does not prove.
   - Negative tests prove external redirect locations fail closed.
-  - CI validators, pytest, target-contract coverage audit, guided lab validation,
-    and git diff checks pass.
+  - CI validators, pytest, target-contract coverage audit, guided lab validation, and git diff checks
+    pass.
   expected_vulnerable_behavior:
   - The vulnerable target exposes a deterministic local redirect chain.
   - The final page can be reviewed without losing the redirect path.
-  - The vulnerable workflow demonstrates why final page content is insufficient without
-    redirect-chain evidence.
+  - The vulnerable workflow demonstrates why final page content is insufficient without redirect-chain
+    evidence.
   secure_system_expectation:
-  - A secure browser-AI system preserves redirect history, final page state, and model-bound
-    context as separate reviewable evidence.
-  - A secure browser-AI system rejects or fails closed when redirect-chain evidence
-    is missing or leaves the authorized local scope.
-  - A secure browser-AI system treats AI output as advisory and keeps deterministic
-    policy outside the model.
+  - A secure browser-AI system preserves redirect history, final page state, and model-bound context as
+    separate reviewable evidence.
+  - A secure browser-AI system rejects or fails closed when redirect-chain evidence is missing or leaves
+    the authorized local scope.
+  - A secure browser-AI system treats AI output as advisory and keeps deterministic policy outside the
+    model.
 - id: guided.dom_render_mismatch
-  status: planned
+  status: implemented
   title: DOM versus rendered content mismatch lab
   series_mapping:
   - part: Part 10
@@ -157,14 +150,12 @@ labs:
   - part: Part 26
     title: Evidence collection, what must be logged and verified
     url: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-  attack_principle: Browser-visible content and machine-extracted DOM content can
-    diverge. A professional browser-AI test must preserve both views and explain which
-    one influenced the model-bound context.
+  attack_principle: Browser-visible content and machine-extracted DOM content can diverge. A professional
+    browser-AI test must preserve both views and explain which one influenced the model-bound context.
   target_mapping:
     current_target_scenario_ids:
-    - chat.basic_prompt
-    planned_target_scenario_ids:
     - browser.dom_render_mismatch
+    planned_target_scenario_ids: []
   tooling:
     distributions:
     - Parrot OS
@@ -175,52 +166,57 @@ labs:
     - Playwright
     - curl
     - the toolkit evidence writer
+    - purpose-built Python DOM/render helper
     free_and_open_source_only: true
     tool_selection_policy:
-    - Use only free and open source tooling that is available from Parrot OS, Kali
-      Linux, Debian-derived repositories, upstream project source, or project-managed
-      Python code.
-    - If a suitable free and open source tool is not available for a lab, implement
-      a purpose-built Python tool in this repository for that lab.
-    - Do not require commercial-only, paid-only, proprietary-only, trialware, or closed-source
-      tooling for any guided lab.
+    - Use only free and open source tooling that is available from Parrot OS, Kali Linux, Debian-derived
+      repositories, upstream project source, or project-managed Python code.
+    - If a suitable free and open source tool is not available for a lab, implement a purpose-built Python
+      tool in this repository for that lab.
+    - Do not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling
+      for any guided lab.
   workflow:
     setup:
     - Start the local ollama-webui target on 127.0.0.1.
-    - Start the toolkit controlled DOM/render mismatch lab page.
-    - Open browser developer tools before conducting the test.
+    - Confirm /api/browser-safe/target-contract exposes browser.dom_render_mismatch.
+    - Install Playwright browser dependencies from free and open source upstream tooling if the local
+      browser runtime is not already available.
+    - Prepare an evidence output directory for the toolkit DOM/render helper.
     conduct_test:
     - Conduct the guided DOM/render mismatch test against the local target only.
-    - Execute the prescribed local page load that contains visible text and hidden
-      DOM instructions.
-    - Submit the extracted or copied content to the vulnerable LLM workflow according
-      to the lab guide.
+    - Execute the purpose-built Python helper tools/run_dom_render_lab.py against http://127.0.0.1:11435.
+    - Run the baseline, hidden_instruction, and rendered_contradiction safe variants.
+    - Optionally observe the same local page manually with browser developer tools.
     observe:
-    - Observe the rendered browser view.
-    - Observe the DOM snapshot captured by the toolkit.
-    - Observe the model-bound prompt and identify whether hidden or visible content
-      influenced the response.
+    - Observe the rendered browser view, raw DOM snapshot, rendered visible text, computed style findings,
+      and screenshot evidence.
+    - Review dom-snapshot.html, raw-dom-text.txt, rendered-text.txt, hidden-dom-findings.json, computed-style-findings.json,
+      dom-render-diff.json, rendered-screenshot.png, evidence.jsonl, artifact-manifest.json, and report.md.
+    - Compare the user-visible rendered page with the raw DOM text preserved by the toolkit.
     vary_test:
-    - Vary the guided test by running it where hidden DOM text is benign.
-    - Run a guided test where hidden DOM text carries a safe synthetic instruction
-      marker.
-    - Run a guided test where rendered text and DOM text intentionally disagree.
+    - Vary the guided test by running variant=baseline.
+    - Vary the guided test by running variant=hidden_instruction.
+    - Vary the guided test by running variant=rendered_contradiction.
     expected_vulnerable_behavior:
-    - The vulnerable target may let DOM-extracted text influence the model without
-      preserving enough rendered-view evidence.
-    - The model response may appear reasonable while the evidence shows mismatched
-      browser and extraction views.
+    - The vulnerable target may let hidden DOM text influence model-bound context without preserving enough
+      rendered-view evidence.
+    - The model response may appear reasonable while the evidence shows mismatched browser-visible and
+      DOM-extracted views.
     secure_system_expectation:
-    - A secure browser-AI system captures both DOM and rendered evidence.
-    - A secure browser-AI system treats hidden DOM and visual mismatch as risk signals.
-    - A secure browser-AI system constrains the model verdict and keeps enforcement
-      outside the model.
+    - A secure browser-AI system captures both raw DOM and browser-rendered evidence.
+    - A secure browser-AI system treats hidden DOM, computed style mismatches, and rendered contradictions
+      as risk signals.
+    - A secure browser-AI system constrains the model verdict and keeps enforcement outside the model.
   evidence:
     required_artifacts:
-    - rendered-screenshot.png
     - dom-snapshot.html
+    - raw-dom-text.txt
+    - rendered-text.txt
+    - hidden-dom-findings.json
+    - computed-style-findings.json
     - dom-render-diff.json
-    - model-bound-prompt.txt
+    - rendered-screenshot.png
+    - model-bound-context.txt
     - model-response.json
     - evidence.jsonl
     - artifact-manifest.json
@@ -238,10 +234,10 @@ labs:
     - token extraction
     - destructive actions
   acceptance_criteria:
-  - The lab guide lets a user conduct the test, compare DOM and rendered output, and
-    vary the input safely.
+  - The lab guide lets a user conduct the test, compare raw DOM and browser-rendered output, and vary
+    the input safely.
   - The lab is local-only and uses synthetic markers.
+  - The helper produces browser rendering evidence instead of relying on static HTML parsing alone.
   - Evidence artifacts are written and listed in artifact-manifest.json.
   - The report states what the lab proves and what it does not prove.
-  - Coverage mapping references the Browser-Safe AI Systems series and the target
-    scenario contract.
+  - Coverage mapping references the Browser-Safe AI Systems series and the target scenario contract.

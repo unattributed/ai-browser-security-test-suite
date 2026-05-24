@@ -198,3 +198,26 @@ tools/run_redirect_chain_lab.py
 ```
 
 It captures redirect-chain JSON, HTTP status sequence, final URL, final page HTML, model-bound context, model-response placeholder, evidence JSONL, artifact manifest, and report output.
+
+## Implemented DOM/render mismatch lab
+
+`guided.dom_render_mismatch` is implemented as a local-only lab against `browser.dom_render_mismatch`.
+
+A valid run must preserve:
+
+```text
+dom-snapshot.html
+raw-dom-text.txt
+rendered-text.txt
+hidden-dom-findings.json
+computed-style-findings.json
+dom-render-diff.json
+rendered-screenshot.png
+model-bound-context.txt
+model-response.json
+evidence.jsonl
+artifact-manifest.json
+report.md
+```
+
+The lab is intentionally not a static HTML parser. It must compare raw DOM state, browser-rendered visible text, computed style findings, and screenshot evidence.

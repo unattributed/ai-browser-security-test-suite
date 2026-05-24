@@ -108,3 +108,7 @@ payloads/ollama_webui_redirect_chain_cases.yaml
 ```
 
 This payload maps the implemented `guided.redirect_chain_evidence` lab to the active `browser.redirect_chain` target scenario. The gate fails if the active target scenario is removed from payload mappings or if payloads reference unknown scenario ids.
+
+## DOM/render mismatch workflow coverage
+
+The GitHub Actions workflow includes `payloads/ollama_webui_dom_render_cases.yaml` in the target-contract coverage audit. This prevents the toolkit from claiming target-contract coverage while omitting the DOM/render guided lab payload.

@@ -158,3 +158,9 @@ tools/run_redirect_chain_lab.py
 implements the first Guided Lab Mode evidence helper. It maps `guided.redirect_chain_evidence` to `browser.redirect_chain` and supports Browser-Safe AI Systems Parts 13, 15, 24, 25, 26, and 28.
 
 The helper is local-only, uses free and open-source Python tooling, rejects non-loopback redirect locations, writes structured evidence, and produces artifact-manifest hashes for analyst review.
+
+## DOM/render mismatch guided lab mapping
+
+The DOM/render mismatch guided lab maps to Browser-Safe AI Systems Parts 10, 11, 12, 24, 25, and 26.
+
+The implementation uses free and open-source tooling only. The live renderer uses Playwright, and deterministic tests use purpose-built Python renderers to keep CI repeatable.
