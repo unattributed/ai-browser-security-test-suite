@@ -37,13 +37,14 @@ def test_coverage_audit_passes_target_contract_mapping():
             Path("payloads/ollama_webui_project_agent_cases.yaml"),
             Path("payloads/ollama_webui_redirect_chain_cases.yaml"),
             Path("payloads/ollama_webui_dom_render_cases.yaml"),
+            Path("payloads/ollama_webui_iframe_frame_tree_cases.yaml"),
         ]
     )
 
     report, failures = audit_target_contract_coverage(contract, payloads)
 
     assert not failures
-    assert report["contract"]["active_scenario_count"] == 9
+    assert report["contract"]["active_scenario_count"] == 10
     for scenario_id in contract.active_scenario_ids:
         assert report["scenario_coverage"][scenario_id]
 
@@ -69,6 +70,10 @@ def test_coverage_audit_fails_when_active_target_scenarios_are_missing():
     )
     assert any(
         failure == "active target scenario not represented by toolkit payloads: browser.dom_render_mismatch"
+        for failure in failures
+    )
+    assert any(
+        failure == "active target scenario not represented by toolkit payloads: browser.iframe_frame_tree"
         for failure in failures
     )
 
