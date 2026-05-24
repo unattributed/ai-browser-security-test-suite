@@ -59,10 +59,12 @@ DEFAULT_TARGET_PAYLOADS = [
     REPO_ROOT / "payloads" / "ollama_webui_file_upload_cases.yaml",
     REPO_ROOT / "payloads" / "ollama_webui_project_agent_cases.yaml",
     REPO_ROOT / "payloads" / "ollama_webui_redirect_chain_cases.yaml",
+    REPO_ROOT / "payloads" / "ollama_webui_dom_render_cases.yaml",
 ]
 EXPECTED_TARGET_NAME = "ollama-webui"
 EXPECTED_TARGET_REPOSITORY = "https://github.com/unattributed/ollama-webui"
 EXPECTED_ACTIVE_SCENARIOS = {
+    "browser.dom_render_mismatch",
     "browser.redirect_chain",
     "chat.basic_prompt",
     "file_upload.text_context",
@@ -77,11 +79,10 @@ EXPECTED_GUIDED_LABS = {
     "guided.redirect_chain_evidence",
 }
 EXPECTED_IMPLEMENTED_GUIDED_LABS = {
+    "guided.dom_render_mismatch",
     "guided.redirect_chain_evidence",
 }
-EXPECTED_PLANNED_GUIDED_LABS = {
-    "guided.dom_render_mismatch",
-}
+EXPECTED_PLANNED_GUIDED_LABS: set[str] = set()
 
 
 class CiContractError(RuntimeError):

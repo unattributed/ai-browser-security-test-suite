@@ -771,3 +771,17 @@ The author assumes no liability for misuse.
 All guided lab tooling must be free and open source. Labs may use tools available from Parrot OS, Kali Linux, Debian-derived repositories, upstream project source, or project-managed Python code.
 
 If a suitable free and open source tool is not available for a lab, this project provides a purpose-built Python tool for that lab. Guided labs must not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling.
+
+### Guided DOM/render mismatch lab
+
+The toolkit includes an implemented local-only Guided Lab Mode exercise for DOM versus browser-rendered content mismatch.
+
+```text
+tools/run_dom_render_lab.py
+payloads/ollama_webui_dom_render_cases.yaml
+src/ai_browser_security_suite/dom_render.py
+```
+
+The lab maps to `guided.dom_render_mismatch` and target scenario `browser.dom_render_mismatch`. It captures raw DOM state, browser-rendered visible text, computed style findings, screenshot evidence, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
+
+Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.

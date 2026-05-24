@@ -168,3 +168,18 @@ tools/run_redirect_chain_lab.py
 ```
 
 It captures redirect-chain JSON, HTTP status sequence, final URL, final page HTML, model-bound context, model-response placeholder, evidence JSONL, artifact manifest, and report output.
+
+## DOM/render mismatch implementation status
+
+The DOM/render mismatch slice is implemented after the vulnerable target declared `browser.dom_render_mismatch`.
+
+Execution path:
+
+```text
+python tools/run_dom_render_lab.py \
+  --base-url http://127.0.0.1:11435 \
+  --variant hidden_instruction \
+  --out-dir output/dom-render-lab
+```
+
+Run the `baseline`, `hidden_instruction`, and `rendered_contradiction` variants. Analysts should compare the screenshot, rendered text, raw DOM text, hidden DOM findings, computed style findings, and final report before forming a conclusion.

@@ -25,6 +25,7 @@ def test_load_target_contract_snapshot():
     assert contract.target_name == "ollama-webui"
     assert contract.production_safe is False
     assert contract.active_scenario_ids == {
+        "browser.dom_render_mismatch",
         "browser.redirect_chain",
         "chat.basic_prompt",
         "file_upload.text_context",
@@ -41,6 +42,12 @@ def test_load_target_contract_snapshot():
     assert redirect_scenario.toolkit_implementation_status == "target-ready"
     assert "Part 13" in redirect_scenario.article_parts
 
+    dom_scenario = contract.scenario_by_id("browser.dom_render_mismatch")
+    assert dom_scenario.evidence_class == "dom_render_mismatch_context"
+    assert dom_scenario.toolkit_guided_lab_id == "guided.dom_render_mismatch"
+    assert dom_scenario.toolkit_implementation_status == "target-ready"
+    assert "local-only browser rendering evidence capture" in dom_scenario.allowed_tests
+
 
 def test_target_contract_summary_is_stable():
     contract = load_target_contract(CONTRACT_PATH)
@@ -48,7 +55,7 @@ def test_target_contract_summary_is_stable():
 
     assert summary["schema_version"] == TARGET_CONTRACT_SCHEMA_VERSION
     assert summary["target_name"] == "ollama-webui"
-    assert summary["active_scenario_count"] == 8
+    assert summary["active_scenario_count"] == 9
     assert summary["active_scenarios"] == sorted(contract.active_scenario_ids)
 
 
