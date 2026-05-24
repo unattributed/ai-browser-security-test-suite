@@ -246,3 +246,29 @@ report.md
 ```
 
 The lab requires browser rendering and frame-tree observation. Static HTML parsing alone is not sufficient because the top document can hide or omit the browser-observed child-frame DOM and nested browsing context relationships.
+
+## Implemented storage-state boundary evidence lab
+
+`guided.storage_state_boundary_evidence` is implemented as a local-only lab against `browser.storage_state_boundary`.
+
+A valid run must preserve:
+
+```text
+browser-state-before.json
+browser-state-after.json
+storage-state-summary.json
+cookie-findings.json
+local-storage-findings.json
+session-storage-findings.json
+cache-like-findings.json
+state-boundary-findings.json
+model-bound-context.txt
+model-response.json
+evidence.jsonl
+artifact-manifest.json
+report.md
+```
+
+The lab requires browser rendering and browser storage observation. Static HTML parsing alone is not sufficient because the security question is whether synthetic cookies, localStorage, sessionStorage, and cache-like state are observed as bounded evidence while protected values remain outside model-bound context.
+
+The lab remains local-only, synthetic-only, and authorized-only. It must fail closed when an external URL is attempted, expected scenario headers are missing or wrong, expected state is missing, or protected browser state appears in model-bound context.
