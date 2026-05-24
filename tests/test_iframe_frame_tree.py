@@ -230,3 +230,85 @@ def test_write_iframe_frame_tree_evidence_outputs_manifest(tmp_path: Path) -> No
     report = (out_dir / "iframe-frame-tree/srcdoc_hidden_context/report.md").read_text(encoding="utf-8")
     assert "frame-tree observation" in report
     assert "Static HTML parsing alone is not sufficient" in report
+
+def test_write_iframe_frame_tree_evidence_preserves_empty_sandbox_attribute(tmp_path: Path) -> None:
+    renderer = FakeFrameTreeRenderer(
+        headers={
+            "X-Browser-Safe-Lab": IFRAME_FRAME_TREE_LAB_ID,
+            "X-Browser-Safe-Scenario": IFRAME_FRAME_TREE_TARGET_SCENARIO_ID,
+            "X-Browser-Safe-Variant": "sandboxed_frame",
+        },
+        final_url="http://127.0.0.1:11435/browser-safe/iframe-frame-tree?variant=sandboxed_frame",
+        frames=(
+            FrameNodeEvidence(
+                frame_key="top",
+                parent_frame_key=None,
+                depth=0,
+                name="",
+                url="http://127.0.0.1:11435/browser-safe/iframe-frame-tree?variant=sandboxed_frame",
+                title_text="Browser-Safe AI Iframe Frame-Tree Lab",
+                dom_snapshot_html='<html><body><iframe id="frame-sandboxed_frame" sandbox=""></iframe></body></html>',
+                rendered_text="Top visible text",
+                child_frame_keys=("frame-1",),
+            ),
+            FrameNodeEvidence(
+                frame_key="frame-1",
+                parent_frame_key="top",
+                depth=1,
+                name="frame-sandboxed_frame",
+                url="http://127.0.0.1:11435/browser-safe/iframe-frame-tree/frame?variant=sandboxed_frame&depth=1&frame_id=sandboxed_frame",
+                title_text="Browser-Safe sandboxed local frame",
+                dom_snapshot_html="<html><body><p>sandbox visible text</p></body></html>",
+                rendered_text="sandbox visible text",
+                child_frame_keys=(),
+            ),
+        ),
+        sandbox_findings=(
+            SandboxFinding(
+                parent_frame_key="top",
+                iframe_selector="#frame-sandboxed_frame",
+                iframe_id="frame-sandboxed_frame",
+                iframe_name="frame-sandboxed_frame",
+                iframe_title="Browser-Safe sandboxed local frame",
+                sandbox="",
+                src="/browser-safe/iframe-frame-tree/frame?variant=sandboxed_frame&depth=1&frame_id=sandboxed_frame",
+                srcdoc_present=False,
+                sandbox_present=True,
+                data_role="child",
+            ),
+        ),
+        srcdoc_findings=(),
+    )
+
+    out_dir = write_iframe_frame_tree_evidence(
+        base_url="http://127.0.0.1:11435",
+        out_dir=tmp_path,
+        variant="sandboxed_frame",
+        renderer=renderer,
+    )
+
+    sandbox_findings = json.loads(
+        (out_dir / "iframe-frame-tree/sandboxed_frame/sandbox-findings.json").read_text(encoding="utf-8")
+    )
+    assert sandbox_findings == [
+        {
+            "data_role": "child",
+            "iframe_id": "frame-sandboxed_frame",
+            "iframe_name": "frame-sandboxed_frame",
+            "iframe_selector": "#frame-sandboxed_frame",
+            "iframe_title": "Browser-Safe sandboxed local frame",
+            "parent_frame_key": "top",
+            "sandbox": "",
+            "sandbox_present": True,
+            "src": "/browser-safe/iframe-frame-tree/frame?variant=sandboxed_frame&depth=1&frame_id=sandboxed_frame",
+            "srcdoc_present": False,
+        }
+    ]
+
+    record = json.loads((out_dir / "evidence.jsonl").read_text(encoding="utf-8").strip())
+    assert record["evidence"]["sandbox_finding_count"] == 1
+
+    report = (out_dir / "iframe-frame-tree/sandboxed_frame/report.md").read_text(encoding="utf-8")
+    assert "#frame-sandboxed_frame" in report
+    assert "sandbox=`[empty]`" in report
+    assert "No iframe sandbox attributes observed" not in report

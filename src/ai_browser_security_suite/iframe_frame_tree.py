@@ -71,6 +71,7 @@ class SandboxFinding:
     sandbox: str
     src: str
     srcdoc_present: bool
+    sandbox_present: bool = True
     data_role: str | None = None
 
 
@@ -254,6 +255,7 @@ def _coerce_sandbox_finding(raw: Mapping[str, Any]) -> SandboxFinding:
         sandbox=str(raw.get("sandbox") or ""),
         src=str(raw.get("src") or ""),
         srcdoc_present=bool(raw.get("srcdoc_present") or raw.get("srcdoc")),
+        sandbox_present=bool(raw.get("sandbox_present", True)),
         data_role=str(raw.get("data_role")) if raw.get("data_role") is not None else None,
     )
 
@@ -398,8 +400,9 @@ class PlaywrightFrameTreeRenderer:
                       sandbox: element.getAttribute('sandbox') || '',
                       src: element.getAttribute('src') || '',
                       srcdoc_present: element.hasAttribute('srcdoc'),
+                      sandbox_present: element.hasAttribute('sandbox'),
                       data_role: element.getAttribute('data-browser-safe-frame-role'),
-                    })).filter((item) => item.sandbox !== '')
+                    })).filter((item) => item.sandbox_present)
                     """
                 )
                 srcdoc_raw = page.evaluate(
@@ -590,7 +593,8 @@ def _lab_report(capture: IframeFrameTreeCapture) -> str:
     if capture.sandbox_findings:
         for finding in capture.sandbox_findings:
             lines.append(
-                f"- `{finding.iframe_selector}` sandbox=`{finding.sandbox}` src=`{finding.src}` role=`{finding.data_role or ''}`"
+                f"- `{finding.iframe_selector}` sandbox=`{finding.sandbox if finding.sandbox else '[empty]'}` "
+                f"src=`{finding.src}` role=`{finding.data_role or ''}`"
             )
     else:
         lines.append("- No iframe sandbox attributes observed.")
