@@ -272,3 +272,36 @@ report.md
 The lab requires browser rendering and browser storage observation. Static HTML parsing alone is not sufficient because the security question is whether synthetic cookies, localStorage, sessionStorage, and cache-like state are observed as bounded evidence while protected values remain outside model-bound context.
 
 The lab remains local-only, synthetic-only, and authorized-only. It must fail closed when an external URL is attempted, expected scenario headers are missing or wrong, expected state is missing, or protected browser state appears in model-bound context.
+
+<!-- storage-state-boundary-guided-lab-index-v8.10.2:start -->
+
+## Storage-state-boundary evidence chain
+
+The implemented storage-state-boundary lab now has a concise validation-documentation index in:
+
+```text
+docs/validation/README.md
+```
+
+That index links these reviewer records:
+
+```text
+docs/validation/storage-state-boundary-full-guided-evidence-closure-v8.9.9.md
+docs/validation/storage-state-boundary-reviewer-workflow-v8.10.0.md
+docs/validation/storage-state-boundary-reviewer-acceptance-gate-v8.10.1.md
+```
+
+The indexed evidence identity is:
+
+```text
+evidence archive: storage-state-boundary-full-guided-evidence-20260524-221652.tar.gz
+evidence archive sha256: e923d059b338189877e24561ee2119a2ecbdb5a6ad8b0adb564fde3930453355
+guided lab id: guided.storage_state_boundary_evidence
+target scenario id: browser.storage_state_boundary
+evidence record count: 5
+manifest artifact count: 70
+```
+
+The evidence chain remains local-only, synthetic-only, and authorized-only. It records that all five validated evidence records reported `boundary-preserved` and `model_bound_context_leak_count: 0` for the cited run. It does not prove production browser-AI security, real secret protection, third-party system behavior, protection against all browser-state attacks, or protection across all models, browsers, deployments, or tenants.
+
+<!-- storage-state-boundary-guided-lab-index-v8.10.2:end -->
