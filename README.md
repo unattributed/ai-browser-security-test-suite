@@ -216,6 +216,23 @@ python tools/run_storage_state_boundary_lab.py \
 
 The helper captures `browser-state-before.json`, `browser-state-after.json`, cookie findings, localStorage findings, sessionStorage findings, cache-like state findings, `model-bound-context.txt`, `model-response.json`, `state-boundary-findings.json`, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and browser storage observation are required. Static HTML parsing alone is not sufficient. Protected browser state is synthetic and is preserved as bounded evidence while remaining outside model-bound context.
 
+<!-- storage-state-boundary-evidence-chain-v8.10.2:start -->
+
+### Storage-state-boundary evidence chain
+
+The storage-state-boundary evidence chain is indexed for reviewer navigation in:
+
+```text
+docs/validation/README.md
+```
+
+The index links the v8.9.9 evidence closure document, the v8.10.0 reviewer workflow document, and the v8.10.1 reviewer acceptance gate document. It records the evidence archive name, SHA256, guided lab id, target scenario id, five validated variants, evidence record count of 5, and manifest artifact count of 70.
+
+This is a documentation index for the existing local-only, synthetic-only, authorized-only evidence set. It does not rerun the lab, modify runtime code, modify the target app, or make a production security claim.
+
+<!-- storage-state-boundary-evidence-chain-v8.10.2:end -->
+
+
 ## Attack classes covered
 
 | Attack class | Series reference | Current support |
