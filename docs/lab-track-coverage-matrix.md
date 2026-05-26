@@ -150,7 +150,7 @@ current maturity:
 
 ```text
 release hardening:
-  create offline classroom release bundle
+  validate generated offline classroom release bundle in rehearsal
   add instructor runbook and timing rehearsal evidence
   add grading calibration examples using Lab 12 packages
   add workshop-wide troubleshooting checks to Lab 00 or a release helper
