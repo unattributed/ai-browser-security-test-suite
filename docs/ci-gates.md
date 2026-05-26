@@ -39,7 +39,7 @@ The gates prove that:
 - complete toolkit payload mappings cover every active target scenario.
 - incomplete target payload mappings fail closed.
 - guided lab manifests follow the Browser-Safe AI Systems series, safety boundaries, and professional workflow language.
-- guided lab manifests do not claim implemented lab coverage before evidence slices exist.
+- guided lab manifests separate helper implementation from evidence closure, reviewer gates, and workshop readiness.
 - default article-series coverage audit still passes.
 - target-contract coverage audit still passes.
 

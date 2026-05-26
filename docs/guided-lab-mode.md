@@ -93,15 +93,22 @@ The guided lab manifest is:
 payloads/guided_lab_scenarios.yaml
 ```
 
-The current manifest defines the lab model and the first planned lab candidates:
+The current manifest defines implemented guided labs for the local `ollama-webui` target:
 
 ```text
 guided.redirect_chain_evidence
 guided.dom_render_mismatch
 guided.iframe_frame_tree_evidence
+guided.storage_state_boundary_evidence
 ```
 
-These labs are intentionally marked `planned`. They do not claim implemented browser-AI testing coverage yet.
+These labs are marked `implemented` in `payloads/guided_lab_scenarios.yaml`. That status means a local helper and manifest mapping exist. It does not automatically mean the lab is evidence-closed, reviewer-gated, or workshop-ready.
+
+Use the project maturity matrix to separate helper implementation from evidence closure and workshop readiness:
+
+```text
+docs/lab-track-coverage-matrix.md
+```
 
 ## Professional acceptance criteria
 
