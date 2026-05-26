@@ -28,7 +28,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 |---|---|---|
 | Lab 00 | Environment and Target Setup | Initial working lab |
 | Lab 01 | Baseline Browser-AI Evidence Capture | Initial working lab |
-| Lab 02 | Indirect Prompt Injection Through Browser Content | Planned |
+| Lab 02 | Indirect Prompt Injection Through Browser Content | Initial working lab |
 | Lab 03 | Hidden DOM and Low-Visibility Content | Planned |
 | Lab 04 | DOM Versus Rendered-Page Mismatch | Planned |
 | Lab 05 | Screenshot and Visual Deception | Planned |
