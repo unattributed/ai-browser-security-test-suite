@@ -487,9 +487,15 @@ python tools/audit_series_coverage.py \
   --payload payloads/ollama_webui_safe_prompts.yaml \
   --target-payload payloads/ollama_webui_file_upload_cases.yaml \
   --target-payload payloads/ollama_webui_project_agent_cases.yaml \
+  --target-payload payloads/ollama_webui_redirect_chain_cases.yaml \
+  --target-payload payloads/ollama_webui_dom_render_cases.yaml \
+  --target-payload payloads/ollama_webui_iframe_frame_tree_cases.yaml \
+  --target-payload payloads/ollama_webui_storage_state_boundary_cases.yaml \
   --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
   --out-dir /tmp/ai-browser-target-contract-coverage
 ```
+
+This command must stay aligned with the `Run target-contract coverage audit` step in `.github/workflows/security-ci.yml` so local reviewer validation and GitHub Actions evaluate the same target payload families.
 
 When the target contract gate is enabled, the audit fails if an active target scenario is not represented by toolkit payload mappings or if a payload references an unknown scenario id. This keeps toolkit coverage claims aligned with the intentionally vulnerable local target.
 
