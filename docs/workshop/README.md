@@ -31,7 +31,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 02 | Indirect Prompt Injection Through Browser Content | Initial working lab |
 | Lab 03 | Hidden DOM and Low-Visibility Content | Initial working lab |
 | Lab 04 | DOM Versus Rendered-Page Mismatch | Initial working lab |
-| Lab 05 | Screenshot and Visual Deception | Planned |
+| Lab 05 | Screenshot and Visual Deception | Initial working lab |
 | Lab 06 | iframe and Frame-Tree Source Confusion | Planned |
 | Lab 07 | Delayed Content and State Transition Risk | Planned |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | Planned |
