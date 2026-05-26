@@ -38,7 +38,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
 | Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
-| Lab 12 | Capstone Attack Chain | Planned |
+| Lab 12 | Capstone Attack Chain | Initial working capstone lab |
 
 ## Safety boundary
 
