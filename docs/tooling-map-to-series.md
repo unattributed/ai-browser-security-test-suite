@@ -139,14 +139,20 @@ Current manifest:
 payloads/guided_lab_scenarios.yaml
 ```
 
-Current planned labs:
+Current guided lab implementation status:
 
 | Lab id | Status | Primary series mapping | Purpose |
 |---|---|---|---|
-| `guided.redirect_chain_evidence` | planned | Part 13, Part 15, Part 24, Part 25, Part 26, Part 28 | teach redirect-chain evidence, staged browser workflow observation, and analyst-reviewable provenance |
-| `guided.dom_render_mismatch` | planned | Part 10, Part 11, Part 12, Part 24, Part 25, Part 26 | teach DOM versus rendered content mismatch and model-bound context risk |
+| `guided.redirect_chain_evidence` | implemented helper | Part 13, Part 15, Part 24, Part 25, Part 26, Part 28 | teach redirect-chain evidence, staged browser workflow observation, and analyst-reviewable provenance |
+| `guided.dom_render_mismatch` | implemented helper | Part 10, Part 11, Part 12, Part 24, Part 25, Part 26 | teach DOM versus rendered content mismatch and model-bound context risk |
+| `guided.iframe_frame_tree_evidence` | implemented helper | Part 12, Part 15, Part 24, Part 25, Part 26 | teach nested browsing-context evidence, frame source mapping, and cross-frame rendered text review |
+| `guided.storage_state_boundary_evidence` | implemented helper, evidence-closed, reviewer-gated | Part 06, Part 18, Part 19, Part 24, Part 25, Part 26 | teach browser storage-state evidence boundaries and model-bound context exclusion |
 
-These labs are planned, not implemented. They define the professional structure that future evidence slices must satisfy before claiming coverage.
+Implementation means the toolkit has a local guided-lab helper and manifest mapping. It does not mean the same thing as full evidence closure, reviewer gate, or workshop readiness. The canonical maturity view is maintained in:
+
+```text
+docs/lab-track-coverage-matrix.md
+```
 
 
 ## Guided redirect-chain evidence

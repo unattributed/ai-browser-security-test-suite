@@ -453,15 +453,22 @@ python tools/validate_guided_labs.py
 
 Guided labs are designed for users on Parrot OS, Kali Linux, or similar penetration-testing Linux distributions. A lab tells the user which open-source tool to open, how to conduct the test, what to observe, how to vary the input safely, what evidence should be produced, and which Browser-Safe AI Systems series parts the lab demonstrates.
 
-Current planned labs:
+Current guided lab implementation status:
+
+| Guided lab id | Target scenario id | Helper status | Evidence maturity | Workshop readiness |
+|---|---|---|---|---|
+| `guided.redirect_chain_evidence` | `browser.redirect_chain` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
+| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
+| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
+| `guided.storage_state_boundary_evidence` | `browser.storage_state_boundary` | implemented | full guided evidence closure and reviewer gate | reviewer-gated lab component |
+
+The implementation status comes from `payloads/guided_lab_scenarios.yaml`. Implementation does not automatically mean workshop-ready. Workshop readiness requires student instructions, provisioning notes, expected artifacts, troubleshooting, and reviewer criteria.
+
+The canonical matrix for current maturity, tooling, model mode, provisioning notes, and next gaps is:
 
 ```text
-guided.redirect_chain_evidence
-guided.dom_render_mismatch
-guided.iframe_frame_tree_evidence
+docs/lab-track-coverage-matrix.md
 ```
-
-These are planning records, not implemented evidence claims. They define the professional structure that the first real lab implementation slices must satisfy.
 
 ## Target contract ingestion
 

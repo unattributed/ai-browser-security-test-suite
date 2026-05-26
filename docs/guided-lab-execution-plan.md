@@ -37,8 +37,8 @@ pytest passes
 guided lab validator passes
 CI contract validator passes
 workflow smoke includes guided lab validation
-manifest contains planned redirect-chain and DOM/render mismatch labs
-manifest does not claim implemented lab coverage
+manifest records implemented helper status only for labs with runnable local helpers
+manifest separates helper implementation from evidence closure and workshop readiness
 ```
 
 ## Stage 2, first lab implementation
