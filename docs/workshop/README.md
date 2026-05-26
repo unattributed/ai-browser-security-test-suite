@@ -33,7 +33,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 04 | DOM Versus Rendered-Page Mismatch | Initial working lab |
 | Lab 05 | Screenshot and Visual Deception | Initial working lab |
 | Lab 06 | iframe and Frame-Tree Source Confusion | Initial working guided lab |
-| Lab 07 | Delayed Content and State Transition Risk | Planned |
+| Lab 07 | Delayed Content and State Transition Risk | Initial working fixture lab |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | Planned |
 | Lab 09 | Synthetic Sensitive-Data Handling | Planned |
 | Lab 10 | Model Verdict Manipulation | Planned |
