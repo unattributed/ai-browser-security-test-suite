@@ -157,8 +157,7 @@ mkdir -p "${LAB01_RUN}"
 Record the run location:
 
 ```bash
-printf '%s
-' "${LAB01_RUN}" | tee "${LAB01_RUN}/run-directory.txt"
+printf '%s\n' "${LAB01_RUN}" | tee "${LAB01_RUN}/run-directory.txt"
 ```
 
 ## Step 2: activate the test-suite environment
@@ -193,7 +192,10 @@ The Ollama version command may fail if this lab is being run in deterministic-pl
 Run:
 
 ```bash
-python tools/run_redirect_chain_lab.py   --base-url "${TARGET_URL}"   --variant baseline   --out-dir "${LAB01_RUN}/redirect-chain-baseline"
+python tools/run_redirect_chain_lab.py \
+  --base-url "${TARGET_URL}" \
+  --variant baseline \
+  --out-dir "${LAB01_RUN}/redirect-chain-baseline"
 ```
 
 Review:
@@ -219,7 +221,10 @@ redirect-chain evidence for a local route only
 Run:
 
 ```bash
-python tools/run_dom_render_lab.py   --base-url "${TARGET_URL}"   --variant baseline   --out-dir "${LAB01_RUN}/dom-render-baseline"
+python tools/run_dom_render_lab.py \
+  --base-url "${TARGET_URL}" \
+  --variant baseline \
+  --out-dir "${LAB01_RUN}/dom-render-baseline"
 ```
 
 Review:
@@ -249,7 +254,10 @@ The baseline variant should show aligned raw DOM and rendered text while still p
 Run:
 
 ```bash
-python tools/run_iframe_frame_tree_lab.py   --base-url "${TARGET_URL}"   --variant baseline   --out-dir "${LAB01_RUN}/iframe-frame-tree-baseline"
+python tools/run_iframe_frame_tree_lab.py \
+  --base-url "${TARGET_URL}" \
+  --variant baseline \
+  --out-dir "${LAB01_RUN}/iframe-frame-tree-baseline"
 ```
 
 Review:
@@ -278,7 +286,10 @@ report.md
 Run:
 
 ```bash
-python tools/run_storage_state_boundary_lab.py   --base-url "${TARGET_URL}"   --variant baseline_no_state   --out-dir "${LAB01_RUN}/storage-state-baseline"
+python tools/run_storage_state_boundary_lab.py \
+  --base-url "${TARGET_URL}" \
+  --variant baseline_no_state \
+  --out-dir "${LAB01_RUN}/storage-state-baseline"
 ```
 
 Review:
@@ -321,7 +332,10 @@ Run:
 Create checksums:
 
 ```bash
-find "${LAB01_RUN}" -type f -print0   | sort -z   | xargs -0 sha256sum   | tee "${LAB01_RUN}/SHA256SUMS.txt"
+find "${LAB01_RUN}" -type f -print0 \
+  | sort -z \
+  | xargs -0 sha256sum \
+  | tee "${LAB01_RUN}/SHA256SUMS.txt"
 ```
 
 Verify checksums:
