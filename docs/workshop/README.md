@@ -10,6 +10,18 @@ browser artifact -> captured evidence -> model input -> model response -> policy
 
 The labs use only local targets, synthetic markers, and free and open-source tooling. They are designed for Parrot OS and Kali users who need repeatable evidence, not uncontrolled demonstrations.
 
+## Workshop architecture references
+
+The workshop provisioning and runtime model is documented in:
+
+```text
+docs/workshop/provisioning-model.md
+docs/workshop/tooling-baseline.md
+docs/workshop/model-runtime-modes.md
+```
+
+The workshop uses a VM or bare-metal workstation as the primary student environment, local services where useful, and a native Python fallback for core labs. GPU acceleration is optional. A specific Ollama model is not the security claim, the evidence path is.
+
 ## Lab track
 
 | Lab | Title | Status |

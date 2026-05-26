@@ -103,6 +103,16 @@ The specific model is a dependency, not the thing being tested. Every evidence p
 | Tesseract OCR | optional until OCR labs are mature | Use only with explicit OCR limitations. |
 | Burp Suite Community | optional professional comparison | Free manual tool, but not open source, so not a required project dependency. |
 
+## Workshop architecture references
+
+```text
+docs/workshop/provisioning-model.md
+docs/workshop/tooling-baseline.md
+docs/workshop/model-runtime-modes.md
+```
+
+These documents define the provisioning path, required and optional tools, model runtime modes, CPU fallback, GPU policy, and deterministic-placeholder mode that later workshop labs must reference.
+
 ## Current status summary
 
 ```text
