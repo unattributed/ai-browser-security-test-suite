@@ -36,7 +36,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 07 | Delayed Content and State Transition Risk | Initial working fixture lab |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | Initial working fixture lab |
 | Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
-| Lab 10 | Model Verdict Manipulation | Planned |
+| Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Planned |
 | Lab 12 | Capstone Attack Chain | Planned |
 
