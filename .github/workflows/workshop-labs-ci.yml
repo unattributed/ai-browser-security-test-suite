@@ -1,0 +1,35 @@
+name: workshop-labs-ci
+
+on:
+  pull_request:
+    paths:
+      - "docs/workshop/**"
+      - "tools/validate_workshop_labs.py"
+      - "tools/run_workshop_lab_00_preflight.py"
+      - ".github/workflows/workshop-labs-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/workshop/**"
+      - "tools/validate_workshop_labs.py"
+      - "tools/run_workshop_lab_00_preflight.py"
+      - ".github/workflows/workshop-labs-ci.yml"
+
+jobs:
+  validate-workshop-labs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Validate workshop lab documents
+        run: python tools/validate_workshop_labs.py
+
+      - name: Compile workshop lab tooling
+        run: python -m py_compile tools/validate_workshop_labs.py tools/run_workshop_lab_00_preflight.py
