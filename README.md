@@ -457,9 +457,9 @@ Current guided lab implementation status:
 
 | Guided lab id | Target scenario id | Helper status | Evidence maturity | Workshop readiness |
 |---|---|---|---|---|
-| `guided.redirect_chain_evidence` | `browser.redirect_chain` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
-| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
-| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | implemented | tested helper, not yet full guided evidence closure | draft lab component |
+| `guided.redirect_chain_evidence` | `browser.redirect_chain` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
+| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
+| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
 | `guided.storage_state_boundary_evidence` | `browser.storage_state_boundary` | implemented | full guided evidence closure and reviewer gate | reviewer-gated lab component |
 
 The implementation status comes from `payloads/guided_lab_scenarios.yaml`. Implementation does not automatically mean workshop-ready. Workshop readiness requires student instructions, provisioning notes, expected artifacts, troubleshooting, and reviewer criteria.

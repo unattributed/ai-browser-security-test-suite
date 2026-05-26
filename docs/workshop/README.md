@@ -40,6 +40,19 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
 | Lab 12 | Capstone Attack Chain | Initial working capstone lab |
 
+## Closure and reviewer materials
+
+The complete initial lab track is supported by these closure and reviewer documents:
+
+```text
+docs/workshop/lab-track-closure-audit.md
+docs/workshop/instructor-notes.md
+docs/workshop/troubleshooting.md
+docs/workshop/reviewer-grading-rubric.md
+```
+
+These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, and define reviewer expectations for local synthetic evidence packages.
+
 ## Safety boundary
 
 Do not use these labs against third-party systems, production SaaS tenants, real users, or real credentials.
