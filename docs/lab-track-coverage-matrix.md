@@ -49,17 +49,17 @@ The specific model is a dependency, not the thing being tested. Every evidence p
 
 | Guided lab id | Target scenario id | Helper | Payload file | Current maturity | Workshop readiness | Required evidence | Required tools | Optional tools | Model mode | Provisioning notes | Current gap | Next slice |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `guided.redirect_chain_evidence` | `browser.redirect_chain` | `tools/run_redirect_chain_lab.py` | `payloads/ollama_webui_redirect_chain_cases.yaml` | m3 tested helper | draft lab component | redirect chain, response metadata, model-bound context placeholder, `evidence.jsonl`, artifact manifest, report | Python, curl, jq, local `ollama-webui` | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | CPU-only acceptable, browser evidence not always required for chain sanity checks | full guided evidence archive and reviewer gate not yet closed | redirect-chain full guided evidence pack |
-| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | `tools/run_dom_render_lab.py` | `payloads/ollama_webui_dom_render_cases.yaml` | m3 tested helper | draft lab component | raw DOM, rendered visible text, computed style findings, screenshot, model-bound context, model-response placeholder, `evidence.jsonl`, artifact manifest, report | Python, Playwright, Chromium, local `ollama-webui` | OWASP ZAP, mitmproxy, OCR tools for later image variants | `live-local-text`, `ocr-to-text`, or `deterministic-placeholder` | browser automation required, CPU-only acceptable | full guided evidence archive and reviewer gate not yet closed | DOM/render full guided evidence pack |
-| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | `tools/run_iframe_frame_tree_lab.py` | `payloads/ollama_webui_iframe_frame_tree_cases.yaml` | m3 tested helper | draft lab component | frame tree, frame URLs, top DOM, child-frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder, `evidence.jsonl`, artifact manifest, report | Python, Playwright, Chromium, local `ollama-webui` | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | browser automation required, CPU-only acceptable | full guided evidence archive and reviewer gate not yet closed | iframe/frame-tree full guided evidence pack |
-| `guided.storage_state_boundary_evidence` | `browser.storage_state_boundary` | `tools/run_storage_state_boundary_lab.py` | `payloads/ollama_webui_storage_state_boundary_cases.yaml` | m5 reviewer gate | reviewer-gated lab component | browser state before and after, cookie findings, localStorage findings, sessionStorage findings, cache-like findings, model-bound context, model response placeholder, `evidence.jsonl`, artifact manifest, report, SHA256 archive, reviewer workflow, acceptance gate | Python, Playwright, Chromium, local `ollama-webui`, jq, sha256sum | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | browser automation required, CPU-only acceptable | not yet integrated into a complete student-facing workshop sequence | workshop lab integration |
+| `guided.redirect_chain_evidence` | `browser.redirect_chain` | `tools/run_redirect_chain_lab.py` | `payloads/ollama_webui_redirect_chain_cases.yaml` | m3 tested helper | workshop-integrated helper component | redirect chain, response metadata, model-bound context placeholder, `evidence.jsonl`, artifact manifest, report | Python, curl, jq, local `ollama-webui` | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | CPU-only acceptable, browser evidence not always required for chain sanity checks | full guided evidence archive and reviewer gate not yet closed | redirect-chain full guided evidence pack |
+| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | `tools/run_dom_render_lab.py` | `payloads/ollama_webui_dom_render_cases.yaml` | m3 tested helper | workshop-integrated helper component | raw DOM, rendered visible text, computed style findings, screenshot, model-bound context, model-response placeholder, `evidence.jsonl`, artifact manifest, report | Python, Playwright, Chromium, local `ollama-webui` | OWASP ZAP, mitmproxy, OCR tools for later image variants | `live-local-text`, `ocr-to-text`, or `deterministic-placeholder` | browser automation required, CPU-only acceptable | full guided evidence archive and reviewer gate not yet closed | DOM/render full guided evidence pack |
+| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | `tools/run_iframe_frame_tree_lab.py` | `payloads/ollama_webui_iframe_frame_tree_cases.yaml` | m3 tested helper | workshop-integrated helper component | frame tree, frame URLs, top DOM, child-frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder, `evidence.jsonl`, artifact manifest, report | Python, Playwright, Chromium, local `ollama-webui` | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | browser automation required, CPU-only acceptable | full guided evidence archive and reviewer gate not yet closed | iframe/frame-tree full guided evidence pack |
+| `guided.storage_state_boundary_evidence` | `browser.storage_state_boundary` | `tools/run_storage_state_boundary_lab.py` | `payloads/ollama_webui_storage_state_boundary_cases.yaml` | m5 reviewer gate | reviewer-gated lab component | browser state before and after, cookie findings, localStorage findings, sessionStorage findings, cache-like findings, model-bound context, model response placeholder, `evidence.jsonl`, artifact manifest, report, SHA256 archive, reviewer workflow, acceptance gate | Python, Playwright, Chromium, local `ollama-webui`, jq, sha256sum | OWASP ZAP, mitmproxy | `live-local-text` or `deterministic-placeholder` | browser automation required, CPU-only acceptable | integrated into the complete student-facing workshop sequence, pending additional classroom timing validation | workshop lab integration |
 
 ## Workshop lab track matrix
 
 | Workshop lab | Status | Related guided lab or target | Primary tool classes | Model mode | Evidence expectation | Current gap |
 |---|---|---|---|---|---|---|
-| Lab 00, environment and target setup | initial working lab | service preflight and local target readiness | Python, Playwright, curl, jq, rg, sha256sum, Ollama | any locally runnable model or no model for preflight | preflight report, hashes, local endpoint checks | needs final provisioning model and instructor notes |
-| Lab 01, baseline browser-AI evidence capture | initial working lab | baseline capture across current helpers | Python, Playwright, browser devtools, jq, sha256sum | `live-local-text` or `deterministic-placeholder` | screenshot, DOM, rendered text, model-bound context, model output or placeholder, JSONL, artifact manifest, report, SHA256 index | needs live classroom timing validation and instructor notes |
+| Lab 00, environment and target setup | initial working lab | service preflight and local target readiness | Python, Playwright, curl, jq, rg, sha256sum, Ollama | any locally runnable model or no model for preflight | preflight report, hashes, local endpoint checks | provisioning model and instructor notes documented, needs classroom timing validation |
+| Lab 01, baseline browser-AI evidence capture | initial working lab | baseline capture across current helpers | Python, Playwright, browser devtools, jq, sha256sum | `live-local-text` or `deterministic-placeholder` | screenshot, DOM, rendered text, model-bound context, model output or placeholder, JSONL, artifact manifest, report, SHA256 index | needs live classroom timing validation |
 | Lab 02, indirect prompt injection through browser content | initial working fixture lab | local synthetic visible text, hidden DOM, and metadata fixtures | Python, local fixture generator, browser DevTools, jq, sha256sum | `live-local-text` or `deterministic-placeholder` | visible instruction fixture, hidden DOM fixture, metadata fixture, fixture manifest, SHA256 index, analyst notes | needs browser evidence capture integration against `ollama-webui` model-bound context |
 | Lab 03, hidden DOM and low-visibility content | initial working fixture lab | local synthetic display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixtures | Python, local fixture generator, browser DevTools, jq, sha256sum | `live-local-text`, `ocr-to-text`, or `deterministic-placeholder` | concealment-class fixtures, fixture manifest, SHA256 index, analyst notes | needs Playwright evidence capture integration with computed-style and screenshot comparison |
 | Lab 04, DOM versus rendered-page mismatch | initial working fixture lab | local synthetic DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixtures | Python, local fixture generator, browser DevTools, jq, sha256sum | `live-local-text` or `deterministic-placeholder` | mismatch-class fixtures, expected DOM observation, expected rendered observation, fixture manifest, SHA256 index, analyst notes | needs Playwright evidence capture integration with `guided.dom_render_mismatch` and screenshot comparison |
@@ -98,8 +98,8 @@ The specific model is a dependency, not the thing being tested. Every evidence p
 | mitmproxy | recommended | Free and open-source scriptable proxy for advanced labs. |
 | Browser devtools | recommended | Manual verification path for DOM, storage, network, console, and frames. |
 | nmap, ss, tcpdump | optional diagnostics | Useful for local-only exposure checks and network proof. |
-| QR generator and decoder | future required for QR labs | Use only local QR targets. |
-| ImageMagick or Pillow | future required for image fixture labs | Generate controlled image-borne instruction fixtures. |
+| QR generator and decoder | optional later integration | Lab 08 uses local QR-style metadata now. Any production QR decoder integration must remain local-only. |
+| ImageMagick or Pillow | optional later integration | Generate controlled image-borne instruction fixtures when image expansion is added. |
 | Tesseract OCR | optional until OCR labs are mature | Use only with explicit OCR limitations. |
 | Burp Suite Community | optional professional comparison | Free manual tool, but not open source, so not a required project dependency. |
 
@@ -116,7 +116,22 @@ These documents define the provisioning path, required and optional tools, model
 ## Current status summary
 
 ```text
-implemented:
+implemented workshop sequence:
+  Lab 00, environment and target setup
+  Lab 01, baseline browser-AI evidence capture
+  Lab 02, indirect prompt injection through browser content
+  Lab 03, hidden DOM and low-visibility content
+  Lab 04, DOM versus rendered-page mismatch
+  Lab 05, screenshot and visual deception
+  Lab 06, iframe and frame-tree source confusion
+  Lab 07, delayed content and state transition risk
+  Lab 08, QR handoff and off-browser transition risk
+  Lab 09, synthetic sensitive-data handling
+  Lab 10, model verdict manipulation and policy simulator
+  Lab 11, fail-open pressure and exception abuse
+  Lab 12, capstone attack chain evidence package
+
+implemented guided labs:
   guided.redirect_chain_evidence
   guided.dom_render_mismatch
   guided.iframe_frame_tree_evidence
@@ -125,32 +140,29 @@ implemented:
 evidence-closed and reviewer-gated:
   guided.storage_state_boundary_evidence
 
-implemented but not yet evidence-closed:
-  guided.redirect_chain_evidence
-  guided.dom_render_mismatch
-  guided.iframe_frame_tree_evidence
-
-workshop layer:
-  Lab 00 exists as an initial working lab
-  Labs 01 through 12 remain planned student-facing labs
+current maturity:
+  the first complete student-facing workshop lab sequence exists
+  the track remains local-only, synthetic-only, and authorized-only
+  classroom timing validation and instructor rehearsal remain open release-hardening tasks
 ```
 
 ## Next recommended slices
 
 ```text
-Slice 0.3:
-  correct target-contract audit command documentation
+release hardening:
+  create offline classroom release bundle
+  add instructor runbook and timing rehearsal evidence
+  add grading calibration examples using Lab 12 packages
+  add workshop-wide troubleshooting checks to Lab 00 or a release helper
 
-Slice 0.4:
-  document workshop provisioning model, tooling baseline, and model runtime modes
-
-Evidence closure:
+guided evidence closure:
   redirect-chain full guided evidence pack
   DOM/render full guided evidence pack
   iframe/frame-tree full guided evidence pack
 
-Workshop architecture:
-  Lab 01 baseline evidence capture
-  fixture generator design
-  QR, image, delayed content, verdict, and exception-abuse targets
+integration maturity:
+  Playwright timeline capture for Lab 07
+  Playwright upload and redaction tracker for Lab 09
+  model-response capture integration for Lab 10
+  exception workflow evidence capture integration for Lab 11
 ```
