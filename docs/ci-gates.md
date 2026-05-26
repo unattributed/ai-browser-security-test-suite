@@ -24,8 +24,10 @@ python -m pytest -q
 python tools/validate_ci_contracts.py
 python tools/validate_guided_labs.py
 python tools/audit_series_coverage.py --payload payloads/ollama_webui_safe_prompts.yaml --out-dir /tmp/ai-browser-coverage-default
-python tools/audit_series_coverage.py --payload payloads/ollama_webui_safe_prompts.yaml --target-payload payloads/ollama_webui_file_upload_cases.yaml --target-payload payloads/ollama_webui_project_agent_cases.yaml --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json --out-dir /tmp/ai-browser-coverage-target-contract
+python tools/audit_series_coverage.py --payload payloads/ollama_webui_safe_prompts.yaml --target-payload payloads/ollama_webui_file_upload_cases.yaml --target-payload payloads/ollama_webui_project_agent_cases.yaml --target-payload payloads/ollama_webui_redirect_chain_cases.yaml --target-payload payloads/ollama_webui_dom_render_cases.yaml --target-payload payloads/ollama_webui_iframe_frame_tree_cases.yaml --target-payload payloads/ollama_webui_storage_state_boundary_cases.yaml --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json --out-dir /tmp/ai-browser-coverage-target-contract
 ```
+
+The documented target-contract audit command must include every current `payloads/ollama_webui_*_cases.yaml` family that maps active target scenarios. The source of truth is the `Run target-contract coverage audit` step in `.github/workflows/security-ci.yml`.
 
 ## What the gates prove
 
