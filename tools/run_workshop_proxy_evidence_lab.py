@@ -184,6 +184,9 @@ def build_plan(case: dict[str, Any], base_url: str, cases_path: Path) -> dict[st
 def command_texts(plan: dict[str, Any]) -> dict[str, str]:
     target_url = plan["target_url"]
     base_url = plan["base_url"]
+    parsed = urlparse(base_url)
+    host = parsed.hostname or "127.0.0.1"
+    port = parsed.port or (443 if parsed.scheme == "https" else 80)
     return {
         "zap-passive-command.txt": "\n".join(
             [
@@ -211,16 +214,16 @@ def command_texts(plan: dict[str, Any]) -> dict[str, str]:
         "nmap-loopback-command.txt": "\n".join(
             [
                 "# local service exposure proof",
-                "nmap -sT -Pn -p 11435 127.0.0.1",
+                f"nmap -sT -Pn -p {port} {host}",
                 "",
             ]
         ),
         "tcpdump-loopback-command.txt": "\n".join(
             [
                 "# optional packet-level locality proof, requires suitable privileges",
-                "tcpdump -i lo -nn host 127.0.0.1 and tcp port 11435 -w loopback-ollama-webui.pcap",
+                f"tcpdump -i lo -nn host {host} and tcp port {port} -w loopback-proxy-evidence.pcap",
                 "# alternative when available:",
-                "tshark -i lo -f 'host 127.0.0.1 and tcp port 11435' -w loopback-ollama-webui.pcapng",
+                f"tshark -i lo -f 'host {host} and tcp port {port}' -w loopback-proxy-evidence.pcapng",
                 "",
             ]
         ),

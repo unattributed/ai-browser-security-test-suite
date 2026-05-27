@@ -186,3 +186,61 @@ def test_lab01_proxy_case_requires_reconciliation_questions() -> None:
     assert "model-bound context" in questions
     assert "production security validation" in questions
     assert "compare direct and proxied responses" in lab01_case["student_action"]
+
+
+
+def test_lab02_live_proxy_exercise_is_not_shallow_prose() -> None:
+    text = (ROOT / "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md").read_text(encoding="utf-8")
+    required_terms = [
+        "temporary loopback-only fixture server",
+        "OWASP ZAP passive local HTTP history review",
+        "mitmdump live capture",
+        "direct local responses with proxied responses",
+        "browser evidence and model-bound context evidence",
+        "proxy-evidence/lab02-indirect-prompt-proxy-package/proxy-tool-readiness.json",
+        "http-replay/direct/visible-text-instruction-response.http",
+        "http-replay/proxied/visible-text-instruction-response.http",
+        "browser-evidence/browser-fixture-review.md",
+        "comparisons/marker-provenance-review.md",
+        "comparisons/model-bound-context-review.md",
+        "Artifact checklist",
+        "Instructor grading notes",
+        "zap.sh -cmd -version",
+        "mitmproxy CA private material",
+        "no production security validation",
+    ]
+    for term in required_terms:
+        assert term in text
+
+
+def test_lab02_proxy_case_requires_marker_context_reconciliation_questions() -> None:
+    data = yaml.safe_load(CASES_PATH.read_text(encoding="utf-8"))
+    lab02_case = next(case for case in data["cases"] if case["case_id"] == "lab02_indirect_prompt_proxy_capture")
+    questions = "\n".join(lab02_case["reviewer_questions"])
+    assert lab02_case["target_path"] == "/visible-text-instruction.html"
+    assert "visible text, hidden DOM, and metadata" in lab02_case["student_action"]
+    assert "direct and proxied responses" in lab02_case["student_action"]
+    assert "model-bound context" in lab02_case["student_action"]
+    assert "production security validation" in questions
+    assert "direct HTTP response" in questions
+    assert "proxied HTTP response" in questions
+    assert "mitmdump artifact" in questions
+    assert "ZAP passive review" in questions
+    assert "model-bound context" in questions
+
+
+def test_proxy_evidence_helper_uses_dynamic_loopback_port(tmp_path: Path) -> None:
+    module = load_module(PROXY_MODULE_PATH, "run_workshop_proxy_evidence_lab_dynamic_port")
+
+    summary = module.write_proxy_evidence_package(
+        cases_path=CASES_PATH,
+        case_id="lab02_indirect_prompt_proxy_capture",
+        base_url="http://127.0.0.1:18082",
+        out_dir=tmp_path / "lab02-proxy-evidence",
+    )
+
+    assert summary["case_id"] == "lab02_indirect_prompt_proxy_capture"
+    nmap_command = (tmp_path / "lab02-proxy-evidence" / "nmap-loopback-command.txt").read_text(encoding="utf-8")
+    tcpdump_command = (tmp_path / "lab02-proxy-evidence" / "tcpdump-loopback-command.txt").read_text(encoding="utf-8")
+    assert "18082" in nmap_command
+    assert "18082" in tcpdump_command
