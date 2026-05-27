@@ -55,9 +55,9 @@ cases:
   - case_id: lab02_indirect_prompt_proxy_capture
     lab: Lab 02
     lab_document: docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md
-    target_path: /local-lab/lab02-indirect-prompt
-    technique: synthetic indirect prompt marker observed through browser and proxy evidence
-    student_action: load a local synthetic indirect prompt fixture, capture request and response evidence, and compare proxy evidence to model-bound context
+    target_path: /visible-text-instruction.html
+    technique: synthetic indirect prompt marker observed through local fixture browser evidence, proxy evidence, request replay, and model-bound context comparison
+    student_action: generate local synthetic fixtures, serve them from a loopback-only fixture server, capture visible text, hidden DOM, and metadata fixture evidence through browser review, capture direct and proxied local responses, compare direct and proxied responses, reconcile SYNTHETIC-LAB-MARKER provenance with model-bound context, and record the deterministic reviewer decision
     synthetic_marker: SYNTHETIC-LAB-MARKER
     required_evidence:
       - proxy-evidence-plan.json
@@ -65,13 +65,26 @@ cases:
       - zap-passive-command.txt
       - mitmproxy-capture-command.txt
       - curl-replay-command.txt
+      - nmap-loopback-command.txt
       - proxy-evidence-report.md
       - proxy-artifact-manifest.json
       - SHA256SUMS.txt
+      - fixture-manifest.json
+      - browser-fixture-review.md
+      - direct-vs-proxied-review.md
+      - marker-provenance-review.md
+      - model-bound-context-review.md
     reviewer_questions:
       - Which artifact first contains SYNTHETIC-LAB-MARKER?
+      - Which browser artifact proves whether the marker was visible text, hidden DOM text, or metadata and attribute content?
+      - Which direct HTTP response carried the marker?
+      - Which proxied HTTP response carried the marker?
+      - Which mitmdump artifact captured the local fixture traffic?
+      - Which ZAP passive review artifact or note covers the local fixture requests?
       - Did the marker cross into model-bound context?
+      - If it crossed into model-bound context, was it repeated, followed, transformed, or ignored?
       - What deterministic policy or reviewer decision should apply?
+      - Which limitation prevents a production security validation claim?
   - case_id: lab06_iframe_frame_tree_proxy_capture
     lab: Lab 06
     lab_document: docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md

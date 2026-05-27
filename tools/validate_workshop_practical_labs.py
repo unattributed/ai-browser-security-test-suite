@@ -27,9 +27,10 @@ TOOLING_BASELINE_DOC = Path("docs/workshop/tooling-baseline.md")
 README_DOC = Path("docs/workshop/README.md")
 CASES_FILE = Path("payloads/workshop_proxy_evidence_cases.yaml")
 LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md")
+LAB02_DOC = Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md")
 LAB_DOCS = [
     LAB01_DOC,
-    Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md"),
+    LAB02_DOC,
     Path("docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md"),
 ]
 
@@ -38,6 +39,25 @@ REQUIRED_LAB01_LIVE_PROXY_TERMS = [
     "mitmdump live capture",
     "direct local responses with proxied responses",
     "browser evidence and model-bound context evidence",
+    "Artifact checklist",
+    "Instructor grading notes",
+    "zap.sh -cmd -version",
+    "mitmproxy CA private material",
+    "no production security validation",
+]
+
+REQUIRED_LAB02_LIVE_PROXY_TERMS = [
+    "temporary loopback-only fixture server",
+    "OWASP ZAP passive local HTTP history review",
+    "mitmdump live capture",
+    "direct local responses with proxied responses",
+    "browser evidence and model-bound context evidence",
+    "proxy-evidence/lab02-indirect-prompt-proxy-package/proxy-tool-readiness.json",
+    "http-replay/direct/visible-text-instruction-response.http",
+    "http-replay/proxied/visible-text-instruction-response.http",
+    "browser-evidence/browser-fixture-review.md",
+    "comparisons/marker-provenance-review.md",
+    "comparisons/model-bound-context-review.md",
     "Artifact checklist",
     "Instructor grading notes",
     "zap.sh -cmd -version",
@@ -156,6 +176,9 @@ def validate_all(repo_root: Path) -> list[str]:
 
     lab01_text = read(repo_root, LAB01_DOC)
     failures.extend(validate_text_contains(str(LAB01_DOC), lab01_text, REQUIRED_LAB01_LIVE_PROXY_TERMS))
+
+    lab02_text = read(repo_root, LAB02_DOC)
+    failures.extend(validate_text_contains(str(LAB02_DOC), lab02_text, REQUIRED_LAB02_LIVE_PROXY_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures
