@@ -51,9 +51,10 @@ docs/workshop/troubleshooting.md
 docs/workshop/reviewer-grading-rubric.md
 docs/workshop/offline-release-bundle.md
 docs/workshop/release-rehearsal-and-timing.md
+docs/workshop/release-candidate-acceptance-gate.md
 ```
 
-These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, and define reviewer expectations for local synthetic evidence packages.
+These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide a release-candidate acceptance gate for final reviewer readiness decisions. The release-candidate acceptance gate does not claim production security validation.
 
 ## Safety boundary
 

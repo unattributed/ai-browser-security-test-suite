@@ -35,6 +35,7 @@ REQUIRED_CLOSURE_DOCS = [
     Path("docs/workshop/instructor-notes.md"),
     Path("docs/workshop/troubleshooting.md"),
     Path("docs/workshop/reviewer-grading-rubric.md"),
+    Path("docs/workshop/release-candidate-acceptance-gate.md"),
 ]
 
 REQUIRED_TOP_LEVEL_FILES = [
