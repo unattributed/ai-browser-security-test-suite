@@ -83,6 +83,16 @@ REQUIRED_SAFETY_TERMS = [
     "no production security validation claim",
 ]
 
+LAB02_END_TO_END_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_02_live_evidence.py",
+    "Lab 02 end-to-end live evidence runner",
+    "browser source, DOM, visible text, and screenshot evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -385,6 +395,32 @@ def check_synthetic_markers(repo_root: Path) -> GateCheck:
         else:
             evidence.append(relative_path)
     return make_check("synthetic marker coverage", "synthetic adversarial fixture docs and generators retain SYNTHETIC-LAB-MARKER", evidence, failures)
+
+
+def check_lab02_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 02 end-to-end live evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md",
+        "docs/workshop/local-proxy-evidence-workflow.md",
+        "docs/lab-track-coverage-matrix.md",
+        "tools/run_workshop_lab_02_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 02 end-to-end evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(f"Lab 02 end-to-end live evidence runner missing term: {term}" for term in LAB02_END_TO_END_EVIDENCE_TERMS if term not in combined)
+    return make_check(
+        "Lab 02 end-to-end live evidence runner",
+        "Lab 02 has an automated local-only synthetic evidence runner and release-gated evidence standard",
+        evidence_paths,
+        failures,
+    )
 
 
 def check_acceptance_document(repo_root: Path) -> GateCheck:
@@ -740,6 +776,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_reviewer_rubric(repo_root),
         check_safety_boundary(repo_root),
         check_synthetic_markers(repo_root),
+        check_lab02_end_to_end_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]
