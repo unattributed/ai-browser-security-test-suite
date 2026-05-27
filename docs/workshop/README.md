@@ -50,6 +50,7 @@ docs/workshop/instructor-notes.md
 docs/workshop/troubleshooting.md
 docs/workshop/reviewer-grading-rubric.md
 docs/workshop/offline-release-bundle.md
+docs/workshop/release-rehearsal-and-timing.md
 ```
 
 These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, and define reviewer expectations for local synthetic evidence packages.
