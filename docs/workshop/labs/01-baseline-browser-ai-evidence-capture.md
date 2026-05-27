@@ -460,3 +460,26 @@ which artifacts prove the above
 ```
 
 This lab establishes that review pattern before adversarial content is introduced.
+
+## Practical proxy evidence exercise
+
+This lab now includes a local proxy evidence exercise for baseline request and response capture.
+
+Student action:
+
+```bash
+.venv/bin/python tools/run_workshop_proxy_evidence_lab.py \
+  --case-id lab01_baseline_proxy_capture \
+  --base-url http://127.0.0.1:11435 \
+  --out-dir "$HOME/browser-safe-ai-workshop/proxy-evidence/lab01-baseline"
+```
+
+The exercise prepares OWASP ZAP, mitmproxy or mitmdump, curl, jq, nmap, and optional tcpdump or tshark evidence commands. The student must capture a local-only baseline workflow, preserve `SYNTHETIC-LAB-MARKER` handling where fixture content is involved, and compare proxy evidence to browser evidence and model-bound context.
+
+Reference workflow:
+
+```text
+docs/workshop/local-proxy-evidence-workflow.md
+```
+
+This exercise remains local-only, synthetic-only, and authorized-only. It does not claim production security validation.

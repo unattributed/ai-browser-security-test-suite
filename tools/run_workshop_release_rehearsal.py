@@ -54,6 +54,8 @@ REQUIRED_DOCUMENTS = [
     "docs/workshop/reviewer-grading-rubric.md",
     "docs/workshop/offline-release-bundle.md",
     "docs/workshop/release-candidate-acceptance-gate.md",
+    "docs/workshop/practical-adversarial-lab-standard.md",
+    "docs/workshop/local-proxy-evidence-workflow.md",
     "docs/workshop/lab-track-closure-audit.md",
     "docs/lab-track-coverage-matrix.md",
 ]

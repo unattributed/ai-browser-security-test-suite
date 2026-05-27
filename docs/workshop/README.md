@@ -52,9 +52,11 @@ docs/workshop/reviewer-grading-rubric.md
 docs/workshop/offline-release-bundle.md
 docs/workshop/release-rehearsal-and-timing.md
 docs/workshop/release-candidate-acceptance-gate.md
+docs/workshop/practical-adversarial-lab-standard.md
+docs/workshop/local-proxy-evidence-workflow.md
 ```
 
-These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide a release-candidate acceptance gate for final reviewer readiness decisions. The release-candidate acceptance gate does not claim production security validation.
+These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide a release-candidate acceptance gate for final reviewer readiness decisions. They also define the practical adversarial lab standard and local proxy evidence workflow used to keep future lab creation hands-on, local-only, synthetic-only, and reviewer-grade. The release-candidate acceptance gate does not claim production security validation.
 
 ## Safety boundary
 

@@ -451,3 +451,26 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to page content, frame content, model-bound text, or a model response.
+
+## Practical proxy evidence exercise
+
+This lab now includes a local proxy evidence exercise for iframe and frame-source provenance.
+
+Student action:
+
+```bash
+.venv/bin/python tools/run_workshop_proxy_evidence_lab.py \
+  --case-id lab06_iframe_frame_tree_proxy_capture \
+  --base-url http://127.0.0.1:11435 \
+  --out-dir "$HOME/browser-safe-ai-workshop/proxy-evidence/lab06-iframe-frame-tree"
+```
+
+The student must capture local frame-related requests through OWASP ZAP and mitmproxy or mitmdump, compare frame URLs to `frame-tree.json`, preserve top-frame versus child-frame provenance, and explain whether `SYNTHETIC-LAB-MARKER` content was correctly bounded before model-bound context was formed.
+
+Reference workflow:
+
+```text
+docs/workshop/local-proxy-evidence-workflow.md
+```
+
+This exercise remains local-only, synthetic-only, and authorized-only. It does not test public sites, third-party browser-AI products, or production controls.
