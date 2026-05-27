@@ -31,7 +31,7 @@ cases:
     lab_document: docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md
     target_path: /
     technique: baseline local browser and API traffic capture
-    student_action: capture a normal local ollama-webui workflow through OWASP ZAP and mitmdump, then replay one local request with curl
+    student_action: capture a normal local ollama-webui browser workflow through OWASP ZAP and mitmdump, replay selected loopback requests with curl, inspect JSON with jq, compare direct and proxied responses, and reconcile proxy evidence with browser evidence and model-bound context evidence
     synthetic_marker: SYNTHETIC-LAB-MARKER
     required_evidence:
       - proxy-evidence-plan.json
@@ -47,6 +47,11 @@ cases:
       - Which request establishes the local baseline workflow?
       - Which artifact proves the target was loopback only?
       - Which artifact proves the model mode or deterministic placeholder mode?
+      - Which direct response was replayed through the proxy?
+      - Which artifact compares direct and proxied responses?
+      - Which browser artifact is reconciled with proxy evidence?
+      - Which model-bound context artifact proves what the model would receive?
+      - Which limitation prevents a production security validation claim?
   - case_id: lab02_indirect_prompt_proxy_capture
     lab: Lab 02
     lab_document: docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md

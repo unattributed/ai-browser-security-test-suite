@@ -26,10 +26,23 @@ PROXY_WORKFLOW_DOC = Path("docs/workshop/local-proxy-evidence-workflow.md")
 TOOLING_BASELINE_DOC = Path("docs/workshop/tooling-baseline.md")
 README_DOC = Path("docs/workshop/README.md")
 CASES_FILE = Path("payloads/workshop_proxy_evidence_cases.yaml")
+LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md")
 LAB_DOCS = [
-    Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md"),
+    LAB01_DOC,
     Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md"),
     Path("docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md"),
+]
+
+REQUIRED_LAB01_LIVE_PROXY_TERMS = [
+    "OWASP ZAP passive local HTTP history review",
+    "mitmdump live capture",
+    "direct local responses with proxied responses",
+    "browser evidence and model-bound context evidence",
+    "Artifact checklist",
+    "Instructor grading notes",
+    "zap.sh -cmd -version",
+    "mitmproxy CA private material",
+    "no production security validation",
 ]
 
 REQUIRED_STANDARD_TERMS = [
@@ -140,6 +153,9 @@ def validate_all(repo_root: Path) -> list[str]:
         for term in ["Practical proxy evidence exercise", "local-only", "SYNTHETIC-LAB-MARKER", str(PROXY_WORKFLOW_DOC)]:
             if term not in text:
                 failures.append(f"{lab_doc} missing practical proxy term: {term}")
+
+    lab01_text = read(repo_root, LAB01_DOC)
+    failures.extend(validate_text_contains(str(LAB01_DOC), lab01_text, REQUIRED_LAB01_LIVE_PROXY_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures
