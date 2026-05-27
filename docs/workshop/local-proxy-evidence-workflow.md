@@ -137,3 +137,9 @@ student action is required
 reviewer questions are present
 failure conditions are explicit
 ```
+
+## Slice 2.2 live local evidence workflow
+
+The verified setup and live evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`.
+
+A live run should start `ollama-webui` on `127.0.0.1:11435`, verify loopback-only binding, replay local routes directly, replay the same routes through `mitmdump`, generate Lab 01, Lab 02, and Lab 06 proxy evidence packages, remove generated mitmproxy CA private material before final archiving, and stop the weak target after capture.

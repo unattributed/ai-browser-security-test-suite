@@ -200,3 +200,9 @@ closed-source and account-required tools are not required
 labs 01, 02, and 06 reference practical proxy evidence for the first integration slice
 release-candidate gate inputs include this standard
 ```
+
+## Proxy setup and live evidence enforcement
+
+Practical proxy labs that rely on live local proxy evidence must follow `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`.
+
+Maintainers must not require APT package transactions, NVIDIA driver changes, CUDA changes, DKMS changes, linux-image changes, or linux-headers changes as part of a practical proxy lab. Tool setup and lab evidence must remain separated so evidence can be reproduced without changing GPU driver state.

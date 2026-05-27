@@ -1,0 +1,183 @@
+# Proxy Tool Setup and Live Local Evidence
+
+## Purpose
+
+This document records the Slice 2.2 setup and live evidence standard for practical proxy labs in the Browser-Safe AI Systems workshop.
+
+The goal is to make local proxy evidence reproducible without turning student workstations into uncontrolled package-upgrade targets. The workflow is designed for local-only, synthetic-only, authorized-only evidence against the deliberately weak `ollama-webui` target on `127.0.0.1:11435`.
+
+This workflow does not claim production security validation.
+
+## Tooling decision
+
+Slice 2.2 keeps the required practical proxy evidence lane limited to tools that are free, open source, locally runnable, usable without an account, and credible to experienced security practitioners.
+
+Required practical proxy tools:
+
+```text
+OWASP ZAP
+mitmproxy or mitmdump
+curl
+jq
+nmap
+sha256sum
+rg or grep
+```
+
+Optional advanced packet evidence tools:
+
+```text
+tcpdump
+tshark
+```
+
+Burp Suite Community and Postman remain optional manual comparison tools only. They are not required evidence gates because the required evidence path must remain free, open source, local, and reproducible without accounts.
+
+## Verified Slice 2.2 workstation state
+
+The Slice 2.2 local workstation validation verified this state:
+
+```text
+OWASP ZAP: 2.17.0, available through /usr/local/bin/zap.sh
+mitmproxy: 12.2.3, available through /usr/local/bin/mitmproxy
+mitmdump: 12.2.3, available through /usr/local/bin/mitmdump
+mitmweb: 12.2.3, available through /usr/local/bin/mitmweb
+curl: available
+jq: available
+nmap: available
+tcpdump: available
+tshark: available
+ollama: reachable on 127.0.0.1:11434
+ollama-webui: started on 127.0.0.1:11435 during live evidence capture
+```
+
+The run also recorded that the NVIDIA driver state was unchanged. Core workshop correctness must not depend on installing, reinstalling, upgrading, removing, or configuring NVIDIA drivers. GPU acceleration is optional and should use an already validated workstation state.
+
+## No-APT installation boundary
+
+The Slice 2.2 workstation had pending kernel package configuration in APT simulation. Because kernel image or header configuration can affect NVIDIA driver state, the project must not use APT as part of this slice's proxy tool setup on this workstation.
+
+The verified setup path is:
+
+```text
+no apt install
+no apt upgrade
+no apt autoremove
+no kernel package configuration
+no NVIDIA package change
+no CUDA package change
+no DKMS package change
+no linux-image change
+no linux-headers change
+```
+
+ZAP and mitmproxy were installed from standalone upstream release archives under:
+
+```text
+/opt/browser-safe-ai-tools/zap/current
+/opt/browser-safe-ai-tools/mitmproxy/current
+```
+
+The repository should document this as a workstation setup decision, not as a hidden dependency for automated tests.
+
+## Safe version checks
+
+Do not use a ZAP version check that launches the GUI in automation.
+
+Use this headless form:
+
+```bash
+timeout 30s zap.sh -cmd -version
+```
+
+mitmproxy tools can be checked with:
+
+```bash
+mitmproxy --version
+mitmdump --version
+mitmweb --version
+```
+
+## Live local evidence command
+
+After the tools are installed and `ollama` is reachable on `127.0.0.1:11434`, run:
+
+```bash
+.venv/bin/python tools/run_workshop_live_proxy_evidence.py   --repo-root /home/foo/Workspace/ai-browser-security-test-suite   --target-root /home/foo/Workspace/ollama-webui   --out-dir "$HOME/browser-safe-ai-workshop-development-evidence/slice-2.2-workshop-proxy-tool-install-and-live-local-evidence/live-proxy-evidence-$(date -u +%Y%m%d-%H%M%S)"   --base-url http://127.0.0.1:11435   --ollama-url http://127.0.0.1:11434
+```
+
+The helper starts the local weak target, verifies loopback binding, captures direct local HTTP responses, captures the same local workflow through `mitmdump`, generates Lab 01, Lab 02, and Lab 06 proxy evidence packages, writes SHA256 manifests, removes mitmproxy generated CA private material from the archive set, stops the target, and writes an evidence archive.
+
+## Required live evidence proof
+
+A successful Slice 2.2 evidence run must show:
+
+```text
+ollama-webui started on 127.0.0.1:11435
+ollama daemon reachable on 127.0.0.1:11434
+target health endpoint returned status ok
+target listener was loopback-only
+direct local probes succeeded
+mitmdump proxy replay probes succeeded
+mitmproxy flow archive was created
+Lab 01 proxy evidence reported ready
+Lab 02 proxy evidence reported ready
+Lab 06 proxy evidence reported ready
+post-run listener check showed 11435 no longer listening
+final git status was clean
+```
+
+## Sensitive proxy material rule
+
+mitmproxy creates local CA material under its configuration directory. For this workshop, HTTP loopback evidence does not require preserving mitmproxy CA private keys. The live evidence helper must remove generated mitmproxy CA private material before final archiving.
+
+The evidence package should keep:
+
+```text
+mitmproxy-flows.mitm
+mitmdump.log
+proxy replay response files
+command logs
+SHA256SUMS.txt
+live proxy evidence report
+```
+
+The evidence package should not preserve generated mitmproxy CA private keys.
+
+## Safety boundary
+
+The workflow must preserve:
+
+```text
+127.0.0.1 or localhost targets only
+local-only
+synthetic-only
+authorized-only
+SYNTHETIC-LAB-MARKER fixtures only
+no real credentials
+no real customer data
+no real cookies
+no real tokens
+no public callback endpoints
+no third-party target testing
+no production SaaS tenant testing
+no malware
+no browser command and control
+no production security validation claim
+```
+
+## Acceptance criteria
+
+Slice 2.2 is acceptable when:
+
+```text
+proxy tool readiness moved from needs-tools to ready
+live target evidence was captured through mitmdump
+Lab 01, Lab 02, and Lab 06 proxy packages reported ready
+ZAP and mitmproxy versions were recorded
+ollama-webui was loopback-only during the run
+no APT package transaction was used for repository validation
+no NVIDIA, CUDA, DKMS, linux-image, or linux-headers change was made
+mitmproxy CA private material was not retained in the final evidence archive
+release-candidate acceptance gate includes this document
+```

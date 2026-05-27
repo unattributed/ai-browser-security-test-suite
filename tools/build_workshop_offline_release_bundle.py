@@ -38,6 +38,7 @@ REQUIRED_CLOSURE_DOCS = [
     Path("docs/workshop/release-candidate-acceptance-gate.md"),
     Path("docs/workshop/practical-adversarial-lab-standard.md"),
     Path("docs/workshop/local-proxy-evidence-workflow.md"),
+    "docs/workshop/proxy-tool-setup-and-live-local-evidence.md",
 ]
 
 REQUIRED_TOP_LEVEL_FILES = [

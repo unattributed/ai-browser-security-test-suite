@@ -54,6 +54,7 @@ docs/workshop/release-rehearsal-and-timing.md
 docs/workshop/release-candidate-acceptance-gate.md
 docs/workshop/practical-adversarial-lab-standard.md
 docs/workshop/local-proxy-evidence-workflow.md
+docs/workshop/proxy-tool-setup-and-live-local-evidence.md
 ```
 
 These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide a release-candidate acceptance gate for final reviewer readiness decisions. They also define the practical adversarial lab standard and local proxy evidence workflow used to keep future lab creation hands-on, local-only, synthetic-only, and reviewer-grade. The release-candidate acceptance gate does not claim production security validation.
@@ -63,3 +64,7 @@ These documents do not claim production security validation. They reconcile the 
 Do not use these labs against third-party systems, production SaaS tenants, real users, or real credentials.
 
 The intended target is the deliberately weak local `ollama-webui` lab application running on localhost.
+
+## Slice 2.2 live proxy evidence
+
+Slice 2.2 records the verified local proxy tool setup and live local evidence workflow in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`. The workflow keeps ZAP and mitmproxy evidence local-only, synthetic-only, authorized-only, and does not claim production security validation.

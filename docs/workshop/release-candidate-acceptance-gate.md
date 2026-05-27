@@ -334,3 +334,11 @@ proxy exercises remain loopback-only, synthetic-only, and authorized-only
 ```
 
 This gate prevents future lab creation from drifting into shallow documentation-only exercises or tool popularity lists. A practical lab must require student action, artifacts, reviewer questions, failure conditions, and explicit limitations.
+
+## Gate 11, practical proxy setup and live local evidence
+
+The reviewer should mark this gate `pass` only when `docs/workshop/proxy-tool-setup-and-live-local-evidence.md` exists and the evidence package records whether practical proxy labs are `ready` or `needs-tools`.
+
+A live local proxy evidence run is a release-hardening input. It proves that the local weak target can be reached on `127.0.0.1:11435`, that direct and proxied loopback requests can be captured, and that Lab 01, Lab 02, and Lab 06 proxy evidence packages can move from `needs-tools` to `ready` when required tools are present.
+
+This gate must not require NVIDIA driver installation, CUDA installation, DKMS changes, kernel image changes, kernel header changes, public callback endpoints, third-party target testing, or production security validation claims.
