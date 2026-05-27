@@ -36,6 +36,8 @@ REQUIRED_CLOSURE_DOCS = [
     Path("docs/workshop/troubleshooting.md"),
     Path("docs/workshop/reviewer-grading-rubric.md"),
     Path("docs/workshop/release-candidate-acceptance-gate.md"),
+    Path("docs/workshop/practical-adversarial-lab-standard.md"),
+    Path("docs/workshop/local-proxy-evidence-workflow.md"),
 ]
 
 REQUIRED_TOP_LEVEL_FILES = [
@@ -335,6 +337,7 @@ sha256sum -c SHA256SUMS.txt
 echo "[verify] python: $("$PYTHON_BIN" --version)"
 {dependency_preflight_script()}"$PYTHON_BIN" -m compileall -q .
 "$PYTHON_BIN" tools/validate_workshop_labs.py
+"$PYTHON_BIN" tools/validate_workshop_practical_labs.py
 "$PYTHON_BIN" tools/validate_ci_contracts.py
 "$PYTHON_BIN" tools/validate_guided_labs.py
 "$PYTHON_BIN" -m pytest

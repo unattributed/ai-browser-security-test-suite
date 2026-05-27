@@ -114,6 +114,8 @@ The offline release bundle must include:
 ```text
 docs/workshop/
 docs/workshop/release-candidate-acceptance-gate.md
+docs/workshop/practical-adversarial-lab-standard.md
+docs/workshop/local-proxy-evidence-workflow.md
 docs/schemas/
 docs/target-contracts/
 examples/
@@ -316,3 +318,19 @@ overall decision: pass
 Any `fail` result blocks release-candidate status.
 
 Any `needs-owner` result blocks release-candidate status until the missing evidence or explanation is supplied.
+
+## Gate 12, practical adversarial lab creation standard
+
+The reviewer should mark this gate `pass` only when the workshop preserves the practical lab-creation standard:
+
+```text
+docs/workshop/practical-adversarial-lab-standard.md exists
+docs/workshop/local-proxy-evidence-workflow.md exists
+payloads/workshop_proxy_evidence_cases.yaml exists
+tools/validate_workshop_practical_labs.py passes
+required proxy and API evidence tools remain free, open source, locally runnable, and usable without accounts
+Burp Suite Community and Postman are not required evidence gates
+proxy exercises remain loopback-only, synthetic-only, and authorized-only
+```
+
+This gate prevents future lab creation from drifting into shallow documentation-only exercises or tool popularity lists. A practical lab must require student action, artifacts, reviewer questions, failure conditions, and explicit limitations.

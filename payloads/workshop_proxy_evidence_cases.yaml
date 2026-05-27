@@ -1,0 +1,89 @@
+schema_version: browser-safe-ai-workshop-proxy-evidence-cases/v0.1
+safety_boundary:
+  local_only: true
+  synthetic_only: true
+  authorized_only: true
+  marker: SYNTHETIC-LAB-MARKER
+  no_real_credentials: true
+  no_real_customer_data: true
+  no_public_callbacks: true
+  no_third_party_targets: true
+  no_production_security_validation_claim: true
+required_tools:
+  - owasp_zap
+  - mitmproxy_or_mitmdump
+  - curl
+  - jq
+  - nmap
+  - sha256sum
+  - rg_or_grep
+optional_tools:
+  - tcpdump_or_tshark
+excluded_required_tools:
+  - burp_suite_community
+  - postman
+  - cloud_scanners
+  - public_oast_services
+  - graphql_specific_tools_without_discovered_graphql_surface
+cases:
+  - case_id: lab01_baseline_proxy_capture
+    lab: Lab 01
+    lab_document: docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md
+    target_path: /
+    technique: baseline local browser and API traffic capture
+    student_action: capture a normal local ollama-webui workflow through OWASP ZAP and mitmdump, then replay one local request with curl
+    synthetic_marker: SYNTHETIC-LAB-MARKER
+    required_evidence:
+      - proxy-evidence-plan.json
+      - proxy-tool-readiness.json
+      - zap-passive-command.txt
+      - mitmproxy-capture-command.txt
+      - curl-replay-command.txt
+      - nmap-loopback-command.txt
+      - proxy-evidence-report.md
+      - proxy-artifact-manifest.json
+      - SHA256SUMS.txt
+    reviewer_questions:
+      - Which request establishes the local baseline workflow?
+      - Which artifact proves the target was loopback only?
+      - Which artifact proves the model mode or deterministic placeholder mode?
+  - case_id: lab02_indirect_prompt_proxy_capture
+    lab: Lab 02
+    lab_document: docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md
+    target_path: /local-lab/lab02-indirect-prompt
+    technique: synthetic indirect prompt marker observed through browser and proxy evidence
+    student_action: load a local synthetic indirect prompt fixture, capture request and response evidence, and compare proxy evidence to model-bound context
+    synthetic_marker: SYNTHETIC-LAB-MARKER
+    required_evidence:
+      - proxy-evidence-plan.json
+      - proxy-tool-readiness.json
+      - zap-passive-command.txt
+      - mitmproxy-capture-command.txt
+      - curl-replay-command.txt
+      - proxy-evidence-report.md
+      - proxy-artifact-manifest.json
+      - SHA256SUMS.txt
+    reviewer_questions:
+      - Which artifact first contains SYNTHETIC-LAB-MARKER?
+      - Did the marker cross into model-bound context?
+      - What deterministic policy or reviewer decision should apply?
+  - case_id: lab06_iframe_frame_tree_proxy_capture
+    lab: Lab 06
+    lab_document: docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md
+    target_path: /browser-safe/iframe-frame-tree
+    technique: iframe and frame-source provenance preserved through proxy and browser evidence
+    student_action: capture frame-related requests, compare frame URLs to frame-tree evidence, and explain provenance risk
+    synthetic_marker: SYNTHETIC-LAB-MARKER
+    required_evidence:
+      - proxy-evidence-plan.json
+      - proxy-tool-readiness.json
+      - zap-passive-command.txt
+      - mitmproxy-capture-command.txt
+      - curl-replay-command.txt
+      - proxy-evidence-report.md
+      - proxy-artifact-manifest.json
+      - SHA256SUMS.txt
+    reviewer_questions:
+      - Which frame URL or response carried the synthetic marker?
+      - Which browser artifact proves top-frame versus child-frame provenance?
+      - Did the analyst preserve source provenance before forming a model-bound context?

@@ -313,3 +313,26 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to the page content or to the model response.
+
+## Practical proxy evidence exercise
+
+This lab now includes a local proxy evidence exercise for synthetic indirect prompt injection through browser content.
+
+Student action:
+
+```bash
+.venv/bin/python tools/run_workshop_proxy_evidence_lab.py \
+  --case-id lab02_indirect_prompt_proxy_capture \
+  --base-url http://127.0.0.1:11435 \
+  --out-dir "$HOME/browser-safe-ai-workshop/proxy-evidence/lab02-indirect-prompt"
+```
+
+The student must load the local synthetic fixture, capture request and response evidence through OWASP ZAP and mitmproxy or mitmdump, replay a selected local request with curl, inspect JSON evidence with jq where applicable, and determine whether `SYNTHETIC-LAB-MARKER` crossed into model-bound context.
+
+Reference workflow:
+
+```text
+docs/workshop/local-proxy-evidence-workflow.md
+```
+
+This exercise remains local-only, synthetic-only, and authorized-only. It does not use real credentials, real customer data, public callback endpoints, or third-party AI products.

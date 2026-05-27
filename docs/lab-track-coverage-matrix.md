@@ -166,3 +166,25 @@ integration maturity:
   model-response capture integration for Lab 10
   exception workflow evidence capture integration for Lab 11
 ```
+
+## Slice 2.1 practical proxy evidence enforcement
+
+Slice 2.1 adds a practical lab-creation standard and local proxy evidence workflow. The purpose is to make future labs interactive, evidence-first, and suitable for experienced security practitioners.
+
+```text
+standard document: docs/workshop/practical-adversarial-lab-standard.md
+proxy workflow: docs/workshop/local-proxy-evidence-workflow.md
+proxy cases: payloads/workshop_proxy_evidence_cases.yaml
+validator: tools/validate_workshop_practical_labs.py
+proxy helper: tools/run_workshop_proxy_evidence_lab.py
+```
+
+Initial practical proxy integration targets:
+
+| Lab | Practical evidence objective |
+|---|---|
+| Lab 01 | Baseline local browser and API request evidence through OWASP ZAP, mitmproxy or mitmdump, curl, jq, and nmap. |
+| Lab 02 | Synthetic indirect prompt marker capture through browser evidence, proxy evidence, request replay, and model-bound context comparison. |
+| Lab 06 | iframe and frame-source provenance capture through browser frame-tree evidence and HTTP proxy evidence. |
+
+Required practical proxy and API evidence tools must remain free, open source, locally runnable, usable without an account, and bounded to loopback targets. Burp Suite Community and Postman may be optional manual comparison tools, but they are not required dependencies and not evidence gates.
