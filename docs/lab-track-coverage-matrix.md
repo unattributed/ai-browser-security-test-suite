@@ -188,3 +188,18 @@ Initial practical proxy integration targets:
 | Lab 06 | iframe and frame-source provenance capture through browser frame-tree evidence and HTTP proxy evidence. |
 
 Required practical proxy and API evidence tools must remain free, open source, locally runnable, usable without an account, and bounded to loopback targets. Burp Suite Community and Postman may be optional manual comparison tools, but they are not required dependencies and not evidence gates.
+
+## Slice 2.2 proxy tool install and live local evidence
+
+Slice 2.2 adds the verified setup and live local proxy evidence workflow:
+
+```text
+document: docs/workshop/proxy-tool-setup-and-live-local-evidence.md
+helper: tools/run_workshop_live_proxy_evidence.py
+validator: tools/validate_workshop_proxy_tool_setup.py
+test: tests/test_workshop_proxy_tool_setup.py
+```
+
+The slice records ZAP and mitmproxy readiness, starts the local weak target on `127.0.0.1:11435`, captures direct and mitmdump-proxied local requests, and regenerates Lab 01, Lab 02, and Lab 06 proxy evidence packages with `overall_decision` set to `ready` when tools are present.
+
+The slice does not install, reinstall, upgrade, remove, or configure NVIDIA drivers, CUDA packages, DKMS packages, linux-image packages, or linux-headers packages.

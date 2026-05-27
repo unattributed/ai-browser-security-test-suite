@@ -159,3 +159,11 @@ Burp Suite Community and Postman are documented as optional and not open source
 active scanning and fuzzing tools remain future explicit-scope work
 tools map to evidence artifacts, not tool popularity
 ```
+
+## Verified Slice 2.2 proxy tool setup
+
+The verified local setup and live evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`.
+
+Slice 2.2 verified OWASP ZAP 2.17.0 and mitmproxy 12.2.3 through standalone tool paths without using APT during repository validation. The workflow explicitly avoids NVIDIA, CUDA, DKMS, linux-image, and linux-headers changes. Core workshop correctness must not depend on GPU driver modification.
+
+Automation must use `zap.sh -cmd -version` for ZAP version checks so the GUI is not launched during validation.

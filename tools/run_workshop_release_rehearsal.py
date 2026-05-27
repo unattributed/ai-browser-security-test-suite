@@ -56,6 +56,7 @@ REQUIRED_DOCUMENTS = [
     "docs/workshop/release-candidate-acceptance-gate.md",
     "docs/workshop/practical-adversarial-lab-standard.md",
     "docs/workshop/local-proxy-evidence-workflow.md",
+    "docs/workshop/proxy-tool-setup-and-live-local-evidence.md",
     "docs/workshop/lab-track-closure-audit.md",
     "docs/lab-track-coverage-matrix.md",
 ]

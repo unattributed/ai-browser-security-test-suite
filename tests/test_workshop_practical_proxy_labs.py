@@ -143,3 +143,12 @@ def test_selected_labs_link_practical_proxy_workflow() -> None:
         assert "docs/workshop/local-proxy-evidence-workflow.md" in text
         assert "SYNTHETIC-LAB-MARKER" in text
         assert "local-only" in text
+
+def test_slice_2_2_proxy_tool_setup_doc_is_release_gated() -> None:
+    required_doc = "docs/workshop/proxy-tool-setup-and-live-local-evidence.md"
+    for relative_path in [
+        "tools/build_workshop_offline_release_bundle.py",
+        "tools/run_workshop_release_rehearsal.py",
+        "tools/run_workshop_release_candidate_acceptance_gate.py",
+    ]:
+        assert required_doc in (ROOT / relative_path).read_text(encoding="utf-8")
