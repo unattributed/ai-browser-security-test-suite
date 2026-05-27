@@ -152,3 +152,37 @@ def test_slice_2_2_proxy_tool_setup_doc_is_release_gated() -> None:
         "tools/run_workshop_release_candidate_acceptance_gate.py",
     ]:
         assert required_doc in (ROOT / relative_path).read_text(encoding="utf-8")
+
+
+
+def test_lab01_live_proxy_exercise_is_not_shallow_prose() -> None:
+    text = (ROOT / "docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md").read_text(encoding="utf-8")
+    required_terms = [
+        "OWASP ZAP passive local HTTP history review",
+        "mitmdump live capture",
+        "direct local responses with proxied responses",
+        "browser evidence and model-bound context evidence",
+        "proxy-evidence/lab01-baseline-proxy-package/proxy-tool-readiness.json",
+        "proxy-evidence/mitmdump-live/mitmproxy-flows.mitm",
+        "comparisons/direct-vs-proxied-review.md",
+        "comparisons/browser-proxy-model-context-comparison.md",
+        "Artifact checklist",
+        "Instructor grading notes",
+        "zap.sh -cmd -version",
+        "mitmproxy CA private material",
+        "no production security validation",
+    ]
+    for term in required_terms:
+        assert term in text
+
+
+def test_lab01_proxy_case_requires_reconciliation_questions() -> None:
+    data = yaml.safe_load(CASES_PATH.read_text(encoding="utf-8"))
+    lab01_case = next(case for case in data["cases"] if case["case_id"] == "lab01_baseline_proxy_capture")
+    questions = "\n".join(lab01_case["reviewer_questions"])
+    assert "direct response" in questions
+    assert "proxied responses" in questions
+    assert "browser artifact" in questions
+    assert "model-bound context" in questions
+    assert "production security validation" in questions
+    assert "compare direct and proxied responses" in lab01_case["student_action"]
