@@ -28,6 +28,7 @@ README_DOC = Path("docs/workshop/README.md")
 CASES_FILE = Path("payloads/workshop_proxy_evidence_cases.yaml")
 LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md")
 LAB02_DOC = Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md")
+LAB02_LIVE_RUNNER = Path("tools/run_workshop_lab_02_live_evidence.py")
 LAB_DOCS = [
     LAB01_DOC,
     LAB02_DOC,
@@ -63,6 +64,29 @@ REQUIRED_LAB02_LIVE_PROXY_TERMS = [
     "zap.sh -cmd -version",
     "mitmproxy CA private material",
     "no production security validation",
+]
+
+REQUIRED_LAB02_END_TO_END_TERMS = [
+    "tools/run_workshop_lab_02_live_evidence.py",
+    "one-command Lab 02 end-to-end live evidence runner",
+    "browser source, DOM, visible text, and screenshot evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "mitmproxy CA private material",
+    "no production security validation",
+]
+
+REQUIRED_LAB02_RUNNER_TERMS = [
+    "SCHEMA_VERSION",
+    "SYNTHETIC-LAB-MARKER",
+    "FIXTURE_FILENAMES",
+    "REQUIRED_ARTIFACTS",
+    "capture_browser_evidence",
+    "record_zap_status",
+    "remove_mitmproxy_private_material",
+    "write_artifact_manifest",
+    "write_sha256_manifest",
+    "find_non_loopback_urls",
 ]
 
 REQUIRED_STANDARD_TERMS = [
@@ -179,6 +203,10 @@ def validate_all(repo_root: Path) -> list[str]:
 
     lab02_text = read(repo_root, LAB02_DOC)
     failures.extend(validate_text_contains(str(LAB02_DOC), lab02_text, REQUIRED_LAB02_LIVE_PROXY_TERMS))
+    failures.extend(validate_text_contains(str(LAB02_DOC), lab02_text, REQUIRED_LAB02_END_TO_END_TERMS))
+
+    lab02_runner_text = read(repo_root, LAB02_LIVE_RUNNER)
+    failures.extend(validate_text_contains(str(LAB02_LIVE_RUNNER), lab02_runner_text, REQUIRED_LAB02_RUNNER_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures

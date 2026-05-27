@@ -916,6 +916,31 @@ Use these prompts:
 16. Why does this lab not claim production security validation?
 ```
 
+## Slice 2.5 automated end-to-end evidence runner
+
+Slice 2.5 adds a one-command Lab 02 end-to-end live evidence runner:
+
+```text
+tools/run_workshop_lab_02_live_evidence.py
+```
+
+The runner closes the manual evidence gap for Lab 02. It generates or reuses the visible text, hidden DOM, and metadata fixtures, starts a temporary loopback-only fixture server, verifies the weak target on `127.0.0.1:11435`, verifies local Ollama on `127.0.0.1:11434` only when `live-local-text` mode is selected, captures direct fixture responses with `curl`, captures proxied fixture responses through `mitmdump`, captures browser source, DOM, visible text, and screenshot evidence for each fixture, records OWASP ZAP passive status or a clear unavailable-tool exception, records marker provenance review artifacts, records model-bound context review artifacts, compares evidence classes, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes mitmproxy CA private material before archive creation, and creates the final `.tar.gz` evidence archive and `.tar.gz.sha256` checksum file.
+
+Required execution pattern:
+
+```bash
+cd /home/foo/Workspace/ai-browser-security-test-suite
+. .venv/bin/activate
+python tools/run_workshop_lab_02_live_evidence.py \
+  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
+  --target-url http://127.0.0.1:11435 \
+  --ollama-url http://127.0.0.1:11434 \
+  --model-mode deterministic-placeholder \
+  --out-dir "$HOME/browser-safe-ai-workshop/lab-02/lab02-live-evidence-$(date -u +%Y%m%d-%H%M%S)"
+```
+
+The runner must fail closed if a required artifact is missing, if a required synthetic evidence path lacks `SYNTHETIC-LAB-MARKER`, if generated mitmproxy CA material remains in the evidence directory, or if any non-loopback target appears in evidence. The resulting archive is a local-only, synthetic-only, authorized-only reviewer package. It makes no production security validation claim.
+
 ## Artifact checklist
 
 A successful Lab 02 submission includes:

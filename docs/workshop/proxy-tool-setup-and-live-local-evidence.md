@@ -108,6 +108,8 @@ After the tools are installed and `ollama` is reachable on `127.0.0.1:11434`, ru
 
 The helper starts the local weak target, verifies loopback binding, captures direct local HTTP responses, captures the same local workflow through `mitmdump`, generates Lab 01, Lab 02, and Lab 06 proxy evidence packages, writes SHA256 manifests, removes mitmproxy generated CA private material from the archive set, stops the target, and writes an evidence archive.
 
+Slice 2.5 adds `tools/run_workshop_lab_02_live_evidence.py` for a Lab 02-specific end-to-end run. That runner captures the visible text, hidden DOM, and metadata fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+
 ## Required live evidence proof
 
 A successful Slice 2.2 evidence run must show:
