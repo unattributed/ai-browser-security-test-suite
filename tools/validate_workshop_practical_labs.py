@@ -28,10 +28,13 @@ README_DOC = Path("docs/workshop/README.md")
 CASES_FILE = Path("payloads/workshop_proxy_evidence_cases.yaml")
 LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md")
 LAB02_DOC = Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md")
+LAB03_DOC = Path("docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md")
 LAB02_LIVE_RUNNER = Path("tools/run_workshop_lab_02_live_evidence.py")
+LAB03_LIVE_RUNNER = Path("tools/run_workshop_lab_03_hidden_dom_live_evidence.py")
 LAB_DOCS = [
     LAB01_DOC,
     LAB02_DOC,
+    LAB03_DOC,
     Path("docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md"),
 ]
 
@@ -74,6 +77,33 @@ REQUIRED_LAB02_END_TO_END_TERMS = [
     "SHA256SUMS.txt",
     "mitmproxy CA private material",
     "no production security validation",
+]
+
+
+REQUIRED_LAB03_END_TO_END_TERMS = [
+    "tools/run_workshop_lab_03_hidden_dom_live_evidence.py",
+    "one-command Lab 03 hidden DOM end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, computed style, and screenshot evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "mitmproxy CA private material",
+    "no production security validation",
+]
+
+REQUIRED_LAB03_RUNNER_TERMS = [
+    "SCHEMA_VERSION",
+    "SYNTHETIC-LAB-MARKER",
+    "FIXTURE_FILENAMES",
+    "REQUIRED_ARTIFACTS",
+    "ensure_weak_target_running",
+    "capture_browser_evidence",
+    "browser-computed-style.json",
+    "record_zap_status",
+    "remove_mitmproxy_private_material",
+    "write_artifact_manifest",
+    "write_sha256_manifest",
+    "find_non_loopback_urls",
 ]
 
 REQUIRED_LAB02_RUNNER_TERMS = [
@@ -126,6 +156,7 @@ FORBIDDEN_REQUIRED_TERMS = [
 REQUIRED_CASE_IDS = {
     "lab01_baseline_proxy_capture",
     "lab02_indirect_prompt_proxy_capture",
+    "lab03_hidden_dom_proxy_capture",
     "lab06_iframe_frame_tree_proxy_capture",
 }
 
@@ -207,6 +238,12 @@ def validate_all(repo_root: Path) -> list[str]:
 
     lab02_runner_text = read(repo_root, LAB02_LIVE_RUNNER)
     failures.extend(validate_text_contains(str(LAB02_LIVE_RUNNER), lab02_runner_text, REQUIRED_LAB02_RUNNER_TERMS))
+
+    lab03_text = read(repo_root, LAB03_DOC)
+    failures.extend(validate_text_contains(str(LAB03_DOC), lab03_text, REQUIRED_LAB03_END_TO_END_TERMS))
+
+    lab03_runner_text = read(repo_root, LAB03_LIVE_RUNNER)
+    failures.extend(validate_text_contains(str(LAB03_LIVE_RUNNER), lab03_runner_text, REQUIRED_LAB03_RUNNER_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures

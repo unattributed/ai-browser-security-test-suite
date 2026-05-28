@@ -93,6 +93,18 @@ LAB02_END_TO_END_EVIDENCE_TERMS = [
     "no production security validation",
 ]
 
+
+LAB03_END_TO_END_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_03_hidden_dom_live_evidence.py",
+    "one-command Lab 03 hidden DOM end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, computed style, and screenshot evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -141,6 +153,7 @@ SYNTHETIC_MARKER_FILES = [
     "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md",
     "tools/generate_lab_02_indirect_prompt_fixtures.py",
     "tools/generate_lab_03_hidden_dom_fixtures.py",
+    "tools/run_workshop_lab_03_hidden_dom_live_evidence.py",
     "tools/generate_lab_04_dom_render_mismatch_fixtures.py",
     "tools/generate_lab_05_screenshot_visual_deception_fixtures.py",
     "tools/generate_lab_07_delayed_content_state_transition_fixtures.py",
@@ -422,6 +435,33 @@ def check_lab02_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
         failures,
     )
 
+
+
+def check_lab03_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 03 end-to-end hidden DOM evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md",
+        "docs/workshop/proxy-tool-setup-and-live-local-evidence.md",
+        "docs/lab-track-coverage-matrix.md",
+        "payloads/workshop_proxy_evidence_cases.yaml",
+        "tools/run_workshop_lab_03_hidden_dom_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 03 end-to-end evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(f"Lab 03 end-to-end hidden DOM evidence runner missing term: {term}" for term in LAB03_END_TO_END_EVIDENCE_TERMS if term not in combined)
+    return make_check(
+        "Lab 03 end-to-end hidden DOM evidence runner",
+        "Lab 03 has an automated local-only synthetic hidden DOM evidence runner and release-gated evidence standard",
+        evidence_paths,
+        failures,
+    )
 
 def check_acceptance_document(repo_root: Path) -> GateCheck:
     path = "docs/workshop/release-candidate-acceptance-gate.md"
@@ -777,6 +817,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_safety_boundary(repo_root),
         check_synthetic_markers(repo_root),
         check_lab02_end_to_end_evidence_standard(repo_root),
+        check_lab03_end_to_end_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]
