@@ -126,14 +126,17 @@ LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md"
 LAB02_DOC = Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md")
 LAB03_DOC = Path("docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md")
 LAB04_DOC = Path("docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md")
+LAB05_DOC = Path("docs/workshop/labs/05-screenshot-and-visual-deception.md")
 LAB02_LIVE_RUNNER = Path("tools/run_workshop_lab_02_live_evidence.py")
 LAB03_LIVE_RUNNER = Path("tools/run_workshop_lab_03_hidden_dom_live_evidence.py")
 LAB04_LIVE_RUNNER = Path("tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py")
+LAB05_LIVE_RUNNER = Path("tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py")
 LAB_DOCS = [
     LAB01_DOC,
     LAB02_DOC,
     LAB03_DOC,
     LAB04_DOC,
+    LAB05_DOC,
     Path("docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md"),
 ]
 
@@ -220,6 +223,38 @@ REQUIRED_LAB04_RUNNER_TERMS = [
     "weak_target_intentionally_weak",
 ]
 
+
+REQUIRED_LAB05_END_TO_END_TERMS = [
+    "tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py",
+    "one-command Lab 05 screenshot and visual deception end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, visual observation, screenshot evidence, and optional local OCR evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "mitmproxy CA private material",
+    "intentionally weak target must remain vulnerable",
+    "no production security validation",
+]
+
+
+REQUIRED_LAB05_RUNNER_TERMS = [
+    "SCHEMA_VERSION",
+    "SYNTHETIC-LAB-MARKER",
+    "FIXTURE_FILENAMES",
+    "REQUIRED_ARTIFACTS",
+    "ensure_weak_target_running",
+    "capture_browser_evidence",
+    "browser-visual-observation.json",
+    "visual-deception-review.md",
+    "ocr-status.json",
+    "record_zap_status",
+    "remove_mitmproxy_private_material",
+    "write_artifact_manifest",
+    "write_sha256_manifest",
+    "find_non_loopback_urls",
+    "weak_target_intentionally_weak",
+]
+
 REQUIRED_LAB03_RUNNER_TERMS = [
     "SCHEMA_VERSION",
     "SYNTHETIC-LAB-MARKER",
@@ -287,6 +322,7 @@ REQUIRED_CASE_IDS = {
     "lab02_indirect_prompt_proxy_capture",
     "lab03_hidden_dom_proxy_capture",
     "lab04_dom_render_mismatch_proxy_capture",
+    "lab05_screenshot_visual_deception_proxy_capture",
     "lab06_iframe_frame_tree_proxy_capture",
 }
 
@@ -380,6 +416,13 @@ def validate_all(repo_root: Path) -> list[str]:
 
     lab04_runner_text = read(repo_root, LAB04_LIVE_RUNNER)
     failures.extend(validate_text_contains(str(LAB04_LIVE_RUNNER), lab04_runner_text, REQUIRED_LAB04_RUNNER_TERMS))
+
+
+    lab05_text = read(repo_root, LAB05_DOC)
+    failures.extend(validate_text_contains(str(LAB05_DOC), lab05_text, REQUIRED_LAB05_END_TO_END_TERMS))
+
+    lab05_runner_text = read(repo_root, LAB05_LIVE_RUNNER)
+    failures.extend(validate_text_contains(str(LAB05_LIVE_RUNNER), lab05_runner_text, REQUIRED_LAB05_RUNNER_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures
