@@ -33,7 +33,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 04 | DOM Versus Rendered-Page Mismatch | End-to-end live evidence runner |
 | Lab 05 | Screenshot and Visual Deception | Initial working lab |
 | Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |
-| Lab 07 | Delayed Content and State Transition Risk | Initial working fixture lab |
+| Lab 07; `SYNTHETIC-LAB-MARKER` marker provenance; no production security validation claim | Delayed Content and State Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | Initial working fixture lab |
 | Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
 | Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
@@ -68,3 +68,11 @@ The intended target is the deliberately weak local `ollama-webui` lab applicatio
 ## Slice 2.2 live proxy evidence
 
 Slice 2.2 records the verified local proxy tool setup and live local evidence workflow in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`. The workflow keeps ZAP and mitmproxy evidence local-only, synthetic-only, authorized-only, and does not claim production security validation.
+## Slice 2.10 Lab 07 live evidence runner status
+
+| Lab | Guide | Runner | Safety boundary |
+| --- | --- | --- | --- |
+| Lab 07 | Delayed Content and State Transition Risk | End-to-end live evidence runner | `docs/workshop/labs/07-delayed-content-and-state-transition-risk.md` | `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps delayed-content evidence local-only, synthetic-only, authorized-only, with no production security validation. |
+
+
+Lab 07 delayed content and state transition risk is covered by `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` using `SYNTHETIC-LAB-MARKER` fixtures and no production security validation.
