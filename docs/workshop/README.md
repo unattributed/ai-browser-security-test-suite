@@ -32,7 +32,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 03 | Hidden DOM and Low-Visibility Content | Initial working lab |
 | Lab 04 | DOM Versus Rendered-Page Mismatch | End-to-end live evidence runner |
 | Lab 05 | Screenshot and Visual Deception | Initial working lab |
-| Lab 06 | iframe and Frame-Tree Source Confusion | Initial working guided lab |
+| Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |
 | Lab 07 | Delayed Content and State Transition Risk | Initial working fixture lab |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | Initial working fixture lab |
 | Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
