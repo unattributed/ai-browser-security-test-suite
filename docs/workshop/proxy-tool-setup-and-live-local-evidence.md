@@ -183,3 +183,8 @@ no NVIDIA, CUDA, DKMS, linux-image, or linux-headers change was made
 mitmproxy CA private material was not retained in the final evidence archive
 release-candidate acceptance gate includes this document
 ```
+## Slice 2.6 Lab 03 hidden DOM end-to-end evidence SOP
+
+Slice 2.6 adds `tools/run_workshop_lab_03_hidden_dom_live_evidence.py` for a Lab 03-specific end-to-end run. That runner captures display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, computed style, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+
+The standard operating procedure for live lab verification is to check `http://127.0.0.1:11435/health` first, start the local `/home/foo/Workspace/ollama-webui/scripts/pull_model.py` weak target only when that check fails, verify loopback-only exposure, record startup evidence, and stop the weak target only if the runner started it. This keeps the intentionally weak target available for the lab without installing packages or hardening the weak target behavior.

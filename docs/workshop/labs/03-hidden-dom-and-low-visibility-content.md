@@ -326,3 +326,62 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to hidden page content or to a model response.
+## Slice 2.6 one-command hidden DOM live evidence runner
+
+Slice 2.6 closes Lab 03 to the same standard as Lab 01 and Lab 02 with `tools/run_workshop_lab_03_hidden_dom_live_evidence.py`, a one-command Lab 03 hidden DOM end-to-end live evidence runner.
+
+The runner generates local synthetic display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixtures. It starts a temporary loopback-only fixture server, ensures the intentionally weak local `ollama-webui` target is available on `127.0.0.1:11435`, verifies local Ollama on `127.0.0.1:11434` only when `live-local-text` mode is selected, captures direct local HTTP responses with proxied local HTTP responses, captures browser source, DOM, visible text, computed style, and screenshot evidence, records OWASP ZAP passive status or a clear unavailable-tool exception, records marker provenance review artifacts, records model-bound context review artifacts, compares visible text with hidden DOM and low-visibility content, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes mitmproxy CA private material before archive creation, and creates the final `.tar.gz` evidence archive and `.tar.gz.sha256` checksum file.
+
+This local synthetic exercise makes no production security validation claim and must be reviewed as authorized training evidence only.
+
+### weak target startup SOP
+
+Lab verification must not assume `ollama-webui` is already running. The standard operating procedure is:
+
+1. Check `http://127.0.0.1:11435/health` before evidence capture.
+2. If unavailable, start `/home/foo/Workspace/ollama-webui/scripts/pull_model.py` from the local weak target repository only.
+3. Verify the listener remains bound to loopback only.
+4. Record `service-exposure/weak-target-sop.json`, `service-exposure/weak-target-health.http`, startup logs, socket evidence, and listener snapshots.
+5. Stop the weak target only if the runner started it.
+6. Do not install packages or modify system packages.
+7. Do not harden `ollama-webui`, because it remains intentionally weak by design for the authorized lab target.
+
+### Evidence command
+
+```bash
+python tools/run_workshop_lab_03_hidden_dom_live_evidence.py \
+  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
+  --weak-target-repo /home/foo/Workspace/ollama-webui \
+  --target-url http://127.0.0.1:11435 \
+  --model-mode deterministic-placeholder
+```
+
+### Required reviewer evidence
+
+```text
+fixtures/fixture-manifest.json
+http-replay/direct/display-none-hidden-dom-response.http
+http-replay/proxied/display-none-hidden-dom-response.http
+browser-evidence/display_none/browser-source.html
+browser-evidence/display_none/browser-dom.html
+browser-evidence/display_none/browser-visible-text.txt
+browser-evidence/display_none/browser-computed-style.json
+browser-evidence/display_none/browser-screenshot.png
+comparisons/visibility-boundary-review.md
+comparisons/marker-provenance-review.md
+model-bound-context/model-bound-context-review.md
+proxy-evidence/zap-passive/zap-passive-status.json
+proxy-evidence/mitmproxy-private-material-removal.json
+artifact-manifest.json
+SHA256SUMS.txt
+```
+
+### Instructor grading notes
+
+Students must explain which evidence source proves that the `SYNTHETIC-LAB-MARKER` was present in raw source, present in the parsed DOM, absent or low-salience in visible user review, observed by proxy tooling, and included or excluded from model-bound context. A correct answer must distinguish visible text from hidden DOM content and must state that this local synthetic exercise is not production security validation.
+
+### Practical proxy evidence exercise cross-reference
+
+Practical proxy evidence exercise coverage for Lab 03 is now provided by the Slice 2.6 hidden DOM end-to-end live evidence runner and must be reviewed alongside `docs/workshop/local-proxy-evidence-workflow.md`.
+
+This cross-reference keeps Lab 03 aligned with the practical adversarial lab standard: direct HTTP capture, proxied HTTP capture, browser source, parsed DOM, visible text, screenshot, marker provenance, model-bound context review, manifest, checksums, and reviewer archive output are required before the lab can be treated as closed for workshop release-candidate purposes.
