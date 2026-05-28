@@ -210,8 +210,8 @@ cases:
     lab: Lab 06
     lab_document: docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md
     target_path: /browser-safe/iframe-frame-tree
-    technique: iframe and frame-source provenance preserved through proxy and browser evidence
-    student_action: capture frame-related requests, compare frame URLs to frame-tree evidence, and explain provenance risk
+    technique: iframe and frame-source provenance preserved through proxy, browser, screenshot, and model-bound context evidence
+    student_action: run the one-command Lab 06 evidence runner against same-origin iframe, sandboxed iframe, srcdoc hidden context, and nested frame-chain variants, ensure the intentionally weak target is available through the weak target startup SOP, preserve that the intentionally weak target must remain vulnerable, capture browser source, DOM, visible text, frame-tree, frame URL list, child-frame DOM snapshots, screenshots, direct HTTP, proxied HTTP, marker provenance, and model-bound context, then compare what the top page exposes, what child frames expose, what the proxy observes, and what enters model-bound context without making a production security validation claim
     synthetic_marker: SYNTHETIC-LAB-MARKER
     required_evidence:
       - proxy-evidence-plan.json
@@ -219,10 +219,37 @@ cases:
       - zap-passive-command.txt
       - mitmproxy-capture-command.txt
       - curl-replay-command.txt
+      - nmap-loopback-command.txt
       - proxy-evidence-report.md
       - proxy-artifact-manifest.json
       - SHA256SUMS.txt
+      - weak-target-sop.json
+      - frame-tree.json
+      - frame-url-list.txt
+      - top-page-dom-snapshot.html
+      - frame-dom-snapshots
+      - sandbox-findings.json
+      - srcdoc-findings.json
+      - browser-source.html
+      - browser-dom.html
+      - browser-visible-text.txt
+      - browser-frame-tree.json
+      - browser-screenshot.png
+      - direct-vs-proxied-review.md
+      - frame-provenance-review.md
+      - marker-provenance-review.md
+      - model-bound-context-review.md
     reviewer_questions:
+      - Which artifact proves browser-observed frame ancestry?
       - Which frame URL or response carried the synthetic marker?
-      - Which browser artifact proves top-frame versus child-frame provenance?
+      - Which artifact proves top-page DOM provenance?
+      - Which artifact proves child-frame DOM provenance?
+      - Which artifact proves sandbox attributes?
+      - Which artifact proves srcdoc findings?
+      - Which screenshot supports the visual review conclusion?
+      - Which direct HTTP response carried the marker?
+      - Which proxied HTTP response carried the marker?
+      - Which mitmdump artifact captured the local frame-related traffic?
       - Did the analyst preserve source provenance before forming a model-bound context?
+      - Which artifact proves the intentionally weak target remained a vulnerable workshop target rather than being hardened?
+      - Which limitation prevents a production security validation claim?

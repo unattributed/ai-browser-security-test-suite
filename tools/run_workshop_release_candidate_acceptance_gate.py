@@ -132,6 +132,21 @@ LAB05_END_TO_END_EVIDENCE_TERMS = [
     "no production security validation",
 ]
 
+
+LAB06_END_TO_END_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py",
+    "Lab 06 iframe frame-tree end-to-end live evidence runner",
+    "one-command Lab 06 iframe frame-tree end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, frame-tree, frame URL list, child-frame DOM snapshots, and screenshot evidence",
+    "direct local HTTP responses with proxied local HTTP responses",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "intentionally weak target must remain vulnerable",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -185,6 +200,7 @@ SYNTHETIC_MARKER_FILES = [
     "tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py",
     "tools/generate_lab_05_screenshot_visual_deception_fixtures.py",
     "tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py",
+    "tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py",
     "tools/generate_lab_07_delayed_content_state_transition_fixtures.py",
     "tools/generate_lab_08_qr_handoff_fixtures.py",
     "tools/generate_lab_09_synthetic_sensitive_data_fixtures.py",
@@ -547,6 +563,34 @@ def check_lab05_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
         failures,
     )
 
+
+
+def check_lab06_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 06 end-to-end iframe frame-tree evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md",
+        "docs/workshop/proxy-tool-setup-and-live-local-evidence.md",
+        "docs/lab-track-coverage-matrix.md",
+        "payloads/workshop_proxy_evidence_cases.yaml",
+        "tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 06 end-to-end evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(f"Lab 06 iframe frame-tree end-to-end live evidence runner missing term: {term}" for term in LAB06_END_TO_END_EVIDENCE_TERMS if term not in combined)
+    return make_check(
+        "Lab 06 iframe frame-tree end-to-end live evidence runner",
+        "Lab 06 has an automated local-only synthetic iframe frame-tree evidence runner and release-gated evidence standard",
+        evidence_paths,
+        failures,
+    )
+
 def check_acceptance_document(repo_root: Path) -> GateCheck:
     path = "docs/workshop/release-candidate-acceptance-gate.md"
     text = read_text(repo_root, path)
@@ -904,6 +948,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_lab03_end_to_end_evidence_standard(repo_root),
         check_lab04_end_to_end_evidence_standard(repo_root),
         check_lab05_end_to_end_evidence_standard(repo_root),
+        check_lab06_end_to_end_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]

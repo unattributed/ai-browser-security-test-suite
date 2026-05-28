@@ -474,3 +474,17 @@ docs/workshop/local-proxy-evidence-workflow.md
 ```
 
 This exercise remains local-only, synthetic-only, and authorized-only. It does not test public sites, third-party browser-AI products, or production controls.
+
+## Slice 2.9 end-to-end live evidence runner
+
+Slice 2.9 adds `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` as the one-command Lab 06 iframe frame-tree end-to-end live evidence runner.
+
+The runner uses the existing `tools/run_iframe_frame_tree_lab.py` helper for the baseline, sandboxed frame, srcdoc hidden context, and nested frame-chain variants, then wraps those outputs in the same reviewer-grade live evidence standard used by Labs 02 through 05.
+
+The runner captures browser source, DOM, visible text, frame-tree, frame URL list, child-frame DOM snapshots, and screenshot evidence. It also captures direct local HTTP responses with proxied local HTTP responses, records ZAP passive status or an unavailable-tool exception, records marker provenance review, records model-bound context review, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes mitmproxy CA private material, and creates a `.tar.gz` reviewer archive.
+
+The weak target startup SOP remains unchanged: check `http://127.0.0.1:11435/health`, start the local weak target only if needed, verify loopback-only exposure, record startup evidence, and stop the weak target only if the runner started it.
+
+The intentionally weak target must remain vulnerable. This runner records evidence only. It must not harden `ollama-webui`, install packages, modify browser packages, modify Playwright, modify ZAP, modify mitmproxy, modify NVIDIA drivers, modify CUDA, modify DKMS, modify linux-image, or modify linux-headers.
+
+This lab remains local-only, synthetic-only, and authorized-only. It does not test third-party systems and makes no production security validation claim.
