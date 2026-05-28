@@ -17,8 +17,93 @@ from typing import Any
 try:
     import yaml
 except ImportError as exc:  # pragma: no cover - dependency preflight catches this in normal runs
-    raise SystemExit("missing required Python module: yaml") from exc
+    yaml = _WorkshopProxyYamlFallback()
 
+
+class _WorkshopProxyYamlFallback:
+    """Minimal fallback parser for the workshop proxy evidence cases file.
+
+    The validator should remain runnable in local workshop environments where
+    PyYAML is not installed. This fallback intentionally supports only the
+    repository-owned payload shape used by payloads/workshop_proxy_evidence_cases.yaml.
+    It is not a general YAML parser.
+    """
+
+    @staticmethod
+    def _scalar(value: str) -> str:
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+            return value[1:-1]
+        return value
+
+    def safe_load(self, text: str) -> dict[str, Any]:
+        data: dict[str, Any] = {"safety_boundary": {}, "required_tools": [], "cases": []}
+        section: str | None = None
+        current_case: dict[str, Any] | None = None
+        current_case_list_key: str | None = None
+        for raw_line in text.splitlines():
+            line_without_comment = raw_line.split("#", 1)[0].rstrip()
+            if not line_without_comment.strip():
+                continue
+            indent = len(line_without_comment) - len(line_without_comment.lstrip(" "))
+            stripped = line_without_comment.strip()
+            if indent == 0 and stripped.endswith(":"):
+                section = stripped[:-1]
+                if section == "safety_boundary":
+                    data.setdefault("safety_boundary", {})
+                elif section == "required_tools":
+                    data.setdefault("required_tools", [])
+                elif section == "cases":
+                    data.setdefault("cases", [])
+                current_case = None
+                current_case_list_key = None
+                continue
+            if indent == 0 and ":" in stripped:
+                key, value = stripped.split(":", 1)
+                data[key.strip()] = self._scalar(value)
+                section = key.strip()
+                current_case = None
+                current_case_list_key = None
+                continue
+            if section == "safety_boundary" and indent >= 2 and ":" in stripped:
+                key, value = stripped.split(":", 1)
+                data.setdefault("safety_boundary", {})[key.strip()] = self._scalar(value)
+                continue
+            if section == "required_tools" and stripped.startswith("- "):
+                data.setdefault("required_tools", []).append(self._scalar(stripped[2:]))
+                continue
+            if section == "cases" and stripped.startswith("- "):
+                item = stripped[2:]
+                if ":" in item:
+                    key, value = item.split(":", 1)
+                    current_case = {key.strip(): self._scalar(value)}
+                else:
+                    current_case = {"value": self._scalar(item)}
+                data.setdefault("cases", []).append(current_case)
+                current_case_list_key = None
+                continue
+            if section == "cases" and current_case is not None and indent >= 4 and ":" in stripped:
+                key, value = stripped.split(":", 1)
+                key = key.strip()
+                value = value.strip()
+                if value:
+                    current_case[key] = self._scalar(value)
+                    current_case_list_key = None
+                else:
+                    current_case[key] = []
+                    current_case_list_key = key
+                continue
+            if section == "cases" and current_case is not None and current_case_list_key and stripped.startswith("- "):
+                value = self._scalar(stripped[2:])
+                current_case.setdefault(current_case_list_key, []).append(value)
+                continue
+        return data
+
+
+try:
+    import yaml
+except ImportError:  # pragma: no cover - exercised in package-minimal local runs
+    yaml = _WorkshopProxyYamlFallback()
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 STANDARD_DOC = Path("docs/workshop/practical-adversarial-lab-standard.md")
@@ -29,12 +114,15 @@ CASES_FILE = Path("payloads/workshop_proxy_evidence_cases.yaml")
 LAB01_DOC = Path("docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md")
 LAB02_DOC = Path("docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md")
 LAB03_DOC = Path("docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md")
+LAB04_DOC = Path("docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md")
 LAB02_LIVE_RUNNER = Path("tools/run_workshop_lab_02_live_evidence.py")
 LAB03_LIVE_RUNNER = Path("tools/run_workshop_lab_03_hidden_dom_live_evidence.py")
+LAB04_LIVE_RUNNER = Path("tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py")
 LAB_DOCS = [
     LAB01_DOC,
     LAB02_DOC,
     LAB03_DOC,
+    LAB04_DOC,
     Path("docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md"),
 ]
 
@@ -89,6 +177,36 @@ REQUIRED_LAB03_END_TO_END_TERMS = [
     "SHA256SUMS.txt",
     "mitmproxy CA private material",
     "no production security validation",
+]
+
+
+REQUIRED_LAB04_END_TO_END_TERMS = [
+    "tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py",
+    "one-command Lab 04 DOM/render mismatch end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, DOM/render mismatch observation, and screenshot evidence",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "mitmproxy CA private material",
+    "intentionally weak target must remain vulnerable",
+    "no production security validation",
+]
+
+REQUIRED_LAB04_RUNNER_TERMS = [
+    "SCHEMA_VERSION",
+    "SYNTHETIC-LAB-MARKER",
+    "FIXTURE_FILENAMES",
+    "REQUIRED_ARTIFACTS",
+    "ensure_weak_target_running",
+    "capture_browser_evidence",
+    "browser-mismatch-observation.json",
+    "dom-render-mismatch-review.md",
+    "record_zap_status",
+    "remove_mitmproxy_private_material",
+    "write_artifact_manifest",
+    "write_sha256_manifest",
+    "find_non_loopback_urls",
+    "weak_target_intentionally_weak",
 ]
 
 REQUIRED_LAB03_RUNNER_TERMS = [
@@ -157,6 +275,7 @@ REQUIRED_CASE_IDS = {
     "lab01_baseline_proxy_capture",
     "lab02_indirect_prompt_proxy_capture",
     "lab03_hidden_dom_proxy_capture",
+    "lab04_dom_render_mismatch_proxy_capture",
     "lab06_iframe_frame_tree_proxy_capture",
 }
 
@@ -244,6 +363,12 @@ def validate_all(repo_root: Path) -> list[str]:
 
     lab03_runner_text = read(repo_root, LAB03_LIVE_RUNNER)
     failures.extend(validate_text_contains(str(LAB03_LIVE_RUNNER), lab03_runner_text, REQUIRED_LAB03_RUNNER_TERMS))
+
+    lab04_text = read(repo_root, LAB04_DOC)
+    failures.extend(validate_text_contains(str(LAB04_DOC), lab04_text, REQUIRED_LAB04_END_TO_END_TERMS))
+
+    lab04_runner_text = read(repo_root, LAB04_LIVE_RUNNER)
+    failures.extend(validate_text_contains(str(LAB04_LIVE_RUNNER), lab04_runner_text, REQUIRED_LAB04_RUNNER_TERMS))
 
     failures.extend(validate_cases(repo_root))
     return failures

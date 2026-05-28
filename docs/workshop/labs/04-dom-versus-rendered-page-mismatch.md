@@ -333,3 +333,26 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to page content or to a model response.
+
+## Slice 2.7 automated end-to-end evidence runner
+
+Slice 2.7 adds `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`, a one-command Lab 04 DOM/render mismatch end-to-end live evidence runner.
+
+The runner generates local synthetic DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixtures. It uses the weak target startup SOP only to verify that the intentionally weak local `ollama-webui` target is available for lab verification. The intentionally weak target must remain vulnerable for this workshop. The runner must not harden `ollama-webui`, must not patch the weak target, and must not convert the training target into a non-vulnerable application.
+
+The runner captures browser source, DOM, visible text, DOM/render mismatch observation, and screenshot evidence. It also captures direct local HTTP responses with proxied local HTTP responses, records ZAP passive status or unavailable-tool exception, records marker provenance and model-bound context review artifacts, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and produces a reviewer-grade `.tar.gz` archive with a matching checksum file.
+
+The exercise remains local-only, synthetic-only, authorized-only, and marked with `SYNTHETIC-LAB-MARKER`. It does not collect real credentials, real customer data, real tokens, real cookies, or production browser storage. It does not prove production security validation.
+
+## Slice 2.7 Lab 04 end-to-end evidence runner preservation
+
+This section preserves exact reviewer and validator language for the Slice 2.7 Lab 04 end-to-end evidence standard.
+
+- no production security validation
+
+## Slice 2.7 validator recovery terms
+
+This section preserves exact reviewer and validator language for the Slice 2.7 Lab 04 end-to-end evidence standard.
+
+- Practical proxy evidence exercise
+- docs/workshop/local-proxy-evidence-workflow.md

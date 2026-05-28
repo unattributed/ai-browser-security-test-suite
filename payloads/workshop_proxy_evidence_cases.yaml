@@ -124,6 +124,46 @@ cases:
       - Which ZAP passive review artifact or unavailable-tool exception was recorded?
       - Did the marker enter model-bound context, and was concealment provenance preserved?
       - Which limitation prevents a production security validation claim?
+  - case_id: lab04_dom_render_mismatch_proxy_capture
+    lab: Lab 04
+    lab_document: docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md
+    target_path: /dom-text-vs-rendered-text.html
+    technique: DOM versus rendered-page mismatch testing through local browser, proxy, screenshot, and model-bound context evidence
+    student_action: generate local synthetic DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixtures, ensure the intentionally weak target is available through the weak target startup SOP, preserve that the intentionally weak target must remain vulnerable, serve fixtures from a loopback-only fixture server, capture browser source, DOM, visible text, DOM/render mismatch observation, screenshots, direct HTTP, proxied HTTP, marker provenance, and model-bound context, then compare what the page source contains, what the DOM exposes, what the browser renders, what the proxy observes, and what enters model-bound context without making a production security validation claim
+    synthetic_marker: SYNTHETIC-LAB-MARKER
+    required_evidence:
+      - proxy-evidence-plan.json
+      - proxy-tool-readiness.json
+      - zap-passive-command.txt
+      - mitmproxy-capture-command.txt
+      - curl-replay-command.txt
+      - nmap-loopback-command.txt
+      - proxy-evidence-report.md
+      - proxy-artifact-manifest.json
+      - SHA256SUMS.txt
+      - fixture-manifest.json
+      - weak-target-sop.json
+      - browser-source.html
+      - browser-dom.html
+      - browser-visible-text.txt
+      - browser-mismatch-observation.json
+      - browser-screenshot.png
+      - direct-vs-proxied-review.md
+      - dom-render-mismatch-review.md
+      - marker-provenance-review.md
+      - model-bound-context-review.md
+    reviewer_questions:
+      - Which artifact proves the marker was present in raw source?
+      - Which artifact proves the marker was present in the parsed DOM?
+      - Which artifact proves whether the marker appeared in browser-visible text, template content, noscript content, shadow DOM, CSS generated content, or collapsed duplicate content?
+      - Which screenshot supports the visual review conclusion?
+      - Which direct HTTP response carried the marker?
+      - Which proxied HTTP response carried the marker?
+      - Which mitmdump artifact captured the local fixture traffic?
+      - Which ZAP passive review artifact or unavailable-tool exception was recorded?
+      - Did the marker enter model-bound context, and was DOM/render provenance preserved?
+      - Which artifact proves the intentionally weak target remained a vulnerable workshop target rather than being hardened?
+      - Which limitation prevents a production security validation claim?
   - case_id: lab06_iframe_frame_tree_proxy_capture
     lab: Lab 06
     lab_document: docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md

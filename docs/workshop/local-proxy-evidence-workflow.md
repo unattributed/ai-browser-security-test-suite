@@ -149,3 +149,9 @@ A live run should start `ollama-webui` on `127.0.0.1:11435`, verify loopback-onl
 Slice 2.5 adds `tools/run_workshop_lab_02_live_evidence.py` as the Lab 02 one-command evidence runner. The runner automates the local fixture server, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, and screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
 
 The runner keeps the Lab 02 scope local-only, synthetic-only, and authorized-only. It fails closed on non-loopback targets, missing required artifacts, missing `SYNTHETIC-LAB-MARKER` in required synthetic evidence paths, and retained mitmproxy CA private material. It does not prove production security validation.
+
+## Slice 2.7 Lab 04 DOM/render mismatch end-to-end live evidence runner
+
+Slice 2.7 adds `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` as the Lab 04 one-command evidence runner. The runner automates local synthetic DOM/render mismatch fixtures, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, DOM/render mismatch observation, screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
+
+The runner keeps the Lab 04 scope local-only, synthetic-only, and authorized-only. It fails closed on non-loopback targets, missing required artifacts, missing `SYNTHETIC-LAB-MARKER` in required synthetic evidence paths, and retained mitmproxy CA private material. It does not prove production security validation. It also preserves the training model that the local `ollama-webui` target is intentionally weak by design and must remain vulnerable for the workshop.
