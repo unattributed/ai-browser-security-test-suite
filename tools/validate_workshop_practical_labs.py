@@ -14,11 +14,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-try:
-    import yaml
-except ImportError as exc:  # pragma: no cover - dependency preflight catches this in normal runs
-    yaml = _WorkshopProxyYamlFallback()
-
 
 class _WorkshopProxyYamlFallback:
     """Minimal fallback parser for the workshop proxy evidence cases file.
@@ -30,10 +25,17 @@ class _WorkshopProxyYamlFallback:
     """
 
     @staticmethod
-    def _scalar(value: str) -> str:
+    def _scalar(value: str) -> Any:
         value = value.strip()
         if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
             return value[1:-1]
+        lowered = value.lower()
+        if lowered == "true":
+            return True
+        if lowered == "false":
+            return False
+        if lowered in {"null", "none", "~"}:
+            return None
         return value
 
     def safe_load(self, text: str) -> dict[str, Any]:
@@ -41,38 +43,43 @@ class _WorkshopProxyYamlFallback:
         section: str | None = None
         current_case: dict[str, Any] | None = None
         current_case_list_key: str | None = None
+
         for raw_line in text.splitlines():
             line_without_comment = raw_line.split("#", 1)[0].rstrip()
             if not line_without_comment.strip():
                 continue
+
             indent = len(line_without_comment) - len(line_without_comment.lstrip(" "))
             stripped = line_without_comment.strip()
+
             if indent == 0 and stripped.endswith(":"):
                 section = stripped[:-1]
-                if section == "safety_boundary":
-                    data.setdefault("safety_boundary", {})
-                elif section == "required_tools":
-                    data.setdefault("required_tools", [])
-                elif section == "cases":
-                    data.setdefault("cases", [])
+                data.setdefault(section, [] if section in {"required_tools", "cases"} else {})
                 current_case = None
                 current_case_list_key = None
                 continue
+
             if indent == 0 and ":" in stripped:
                 key, value = stripped.split(":", 1)
-                data[key.strip()] = self._scalar(value)
                 section = key.strip()
+                data[section] = self._scalar(value)
                 current_case = None
                 current_case_list_key = None
                 continue
+
             if section == "safety_boundary" and indent >= 2 and ":" in stripped:
                 key, value = stripped.split(":", 1)
                 data.setdefault("safety_boundary", {})[key.strip()] = self._scalar(value)
                 continue
-            if section == "required_tools" and stripped.startswith("- "):
+
+            if section == "required_tools" and indent >= 2 and stripped.startswith("- "):
                 data.setdefault("required_tools", []).append(self._scalar(stripped[2:]))
                 continue
-            if section == "cases" and stripped.startswith("- "):
+
+            if section != "cases":
+                continue
+
+            if indent == 2 and stripped.startswith("- "):
                 item = stripped[2:]
                 if ":" in item:
                     key, value = item.split(":", 1)
@@ -82,7 +89,15 @@ class _WorkshopProxyYamlFallback:
                 data.setdefault("cases", []).append(current_case)
                 current_case_list_key = None
                 continue
-            if section == "cases" and current_case is not None and indent >= 4 and ":" in stripped:
+
+            if current_case is None or indent < 4:
+                continue
+
+            if stripped.startswith("- ") and current_case_list_key:
+                current_case.setdefault(current_case_list_key, []).append(self._scalar(stripped[2:]))
+                continue
+
+            if ":" in stripped:
                 key, value = stripped.split(":", 1)
                 key = key.strip()
                 value = value.strip()
@@ -92,11 +107,7 @@ class _WorkshopProxyYamlFallback:
                 else:
                     current_case[key] = []
                     current_case_list_key = key
-                continue
-            if section == "cases" and current_case is not None and current_case_list_key and stripped.startswith("- "):
-                value = self._scalar(stripped[2:])
-                current_case.setdefault(current_case_list_key, []).append(value)
-                continue
+
         return data
 
 
