@@ -383,3 +383,40 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to page content, OCR text, vision-model output, or a model response.
+
+## Slice 2.8 end-to-end live evidence runner
+
+Slice 2.8 adds `tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py` as the one-command Lab 05 screenshot and visual deception end-to-end live evidence runner.
+
+This runner turns the original manual fixture workflow into a reviewer-grade local evidence workflow. It generates the Lab 05 synthetic fixtures, follows the weak target startup SOP, serves fixtures from a temporary loopback-only fixture server, records direct local HTTP responses with proxied local HTTP responses, captures browser source, DOM, visible text, visual observation, screenshot evidence, and optional local OCR evidence, records marker provenance, records model-bound context review, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, creates a `.tar.gz` reviewer archive, and writes a relative `.tar.gz.sha256` checksum file.
+
+Practical proxy evidence exercise requirements remain in scope for this lab:
+
+```text
+docs/workshop/local-proxy-evidence-workflow.md
+OWASP ZAP passive local HTTP history review
+mitmdump live capture
+browser source, DOM, visible text, visual observation, screenshot evidence, and optional local OCR evidence
+direct local HTTP responses with proxied local HTTP responses
+comparisons/marker-provenance-review.md
+comparisons/model-bound-context-review.md
+comparisons/visual-deception-review.md
+artifact-manifest.json
+SHA256SUMS.txt
+```
+
+The runner records ZAP status as passive readiness only. It never runs active scans. It removes mitmproxy CA private material before the evidence package is finalized. The intentionally weak target must remain vulnerable because it is the authorized workshop target. The runner does not harden `ollama-webui`, does not install packages, and makes no production security validation claim.
+
+Required reviewer checks:
+
+```text
+confirm the target and fixture server are loopback-only
+confirm SYNTHETIC-LAB-MARKER is present only in local synthetic fixtures
+compare screenshot evidence against DOM evidence
+compare image alt text against screenshot-visible image text
+review OCR output, when present, only as derived evidence
+confirm model-bound context preserves visual provenance
+confirm mitmproxy CA private material was removed
+confirm the intentionally weak target must remain vulnerable
+confirm no production security validation is claimed
+```
