@@ -333,6 +333,57 @@ Answer these questions in `analyst-review-notes.md`:
 12. What should a reviewer require before accepting a model claim about QR handoff risk?
 ```
 
+
+## One-command live evidence runner
+
+Slice 2.11 closes the Lab 08 fixture-only gap with a one-command Lab 08 QR handoff and off-browser transition end-to-end live evidence runner:
+
+```bash
+cd /home/foo/Workspace/ai-browser-security-test-suite
+. .venv/bin/activate
+python tools/run_workshop_lab_08_qr_handoff_live_evidence.py
+```
+
+The runner preserves the Lab 08 safety boundary:
+
+```text
+local-only
+synthetic-only
+authorized-only
+SYNTHETIC-LAB-MARKER
+no real credentials
+no real customer data
+no public callback endpoints
+no public URL payloads
+no third-party QR decoders
+no third-party AI products
+no production QR decoder claim
+no production security validation
+intentionally weak target must remain vulnerable
+```
+
+Expected live evidence classes:
+
+```text
+weak target startup SOP
+QR-style SVG artifacts
+decoded-destinations.json
+loopback URL inventory
+browser source, DOM, visible text, QR handoff observation, and screenshot evidence
+direct local HTTP responses with proxied local HTTP responses
+mitmdump flow evidence or unavailable-tool exception
+OWASP ZAP passive review status or unavailable-tool exception
+decoded destination provenance
+handoff provenance review
+marker provenance review
+model-bound context review
+artifact-manifest.json
+SHA256SUMS.txt
+reviewer archive
+```
+
+The runner uses the existing local synthetic fixture generator. It does not claim production QR decoder validation. Production QR decoder integration remains a later local-only target contract task.
+
 ## Expected result
 
 A successful run produces:
