@@ -186,6 +186,24 @@ LAB09_END_TO_END_EVIDENCE_TERMS = [
     "no production security validation",
 ]
 
+
+LAB10_END_TO_END_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py",
+    "Lab 10 model verdict manipulation and policy simulator end-to-end live evidence runner",
+    "one-command Lab 10 model verdict manipulation and policy simulator end-to-end live evidence runner",
+    "Playwright model-response capture integration",
+    "target-backed policy gate",
+    "model response is evidence, not policy",
+    "direct local HTTP responses with proxied local HTTP responses",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "intentionally weak target must remain vulnerable",
+    "no production policy engine claim",
+    "no production enforcement engine claim",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -685,6 +703,35 @@ def check_lab09_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
     )
 
 
+
+
+def check_lab10_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 10 model verdict policy live evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md",
+        "docs/workshop/README.md",
+        "docs/lab-track-coverage-matrix.md",
+        "tools/generate_lab_10_model_verdict_policy_fixtures.py",
+        "tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 10 end-to-end evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(f"Lab 10 model verdict policy end-to-end live evidence runner missing term: {term}" for term in LAB10_END_TO_END_EVIDENCE_TERMS if term not in combined)
+    return make_check(
+        "Lab 10 model verdict policy end-to-end live evidence runner",
+        "Lab 10 has an automated local-only model verdict manipulation evidence runner with Playwright model-response capture integration and a deterministic target-backed policy gate",
+        evidence_paths,
+        failures,
+    )
+
+
 def check_acceptance_document(repo_root: Path) -> GateCheck:
     path = "docs/workshop/release-candidate-acceptance-gate.md"
     text = read_text(repo_root, path)
@@ -1045,6 +1092,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_lab06_end_to_end_evidence_standard(repo_root),
         check_lab08_end_to_end_evidence_standard(repo_root),
         check_lab09_end_to_end_evidence_standard(repo_root),
+        check_lab10_end_to_end_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]

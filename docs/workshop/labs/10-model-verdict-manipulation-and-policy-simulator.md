@@ -422,3 +422,61 @@ whether analyst review is required
 The policy should not be delegated to page content, DOM content, screenshots, OCR text, browser storage, local project files, tool output, model-bound context, or the model response.
 
 The model may help summarize evidence, but a deterministic control must decide how evidence, uncertainty, output schema validity, and policy rules are handled.
+
+
+## Slice 2.13 live evidence runner
+
+Lab 10 is now covered by the one-command live evidence runner:
+
+```bash
+python tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py
+```
+
+The runner produces a reviewer-grade local evidence archive with:
+
+```text
+fixtures/fixture-manifest.json
+fixtures/policy-scenarios.json
+fixtures/policy-simulation-results.json
+fixtures/policy-decisions.jsonl
+fixtures/verdict-mismatch-report.json
+fixtures/model-responses/*.txt
+http-replay/captured-url-index.json
+proxy-evidence/mitmdump-status.json
+proxy-evidence/mitmproxy-private-material-removal.json
+browser-evidence/browser-capture-index.json
+browser-evidence/model-response-capture.json
+browser-evidence/browser-source.html
+browser-evidence/browser-dom.html
+browser-evidence/browser-visible-text.txt
+browser-evidence/browser-screenshot.png
+policy-gate/target-backed-policy-gate.json
+policy-gate/target-backed-policy-gate-review.md
+model-response-capture/model-response-capture-review.md
+verdict-boundary/verdict-boundary-review.md
+artifact-manifest.json
+SHA256SUMS.txt
+lab10-live-evidence-summary.md
+```
+
+The live runner adds Playwright model-response capture integration by serving the generated local model-response fixtures on loopback, loading them in Chromium, and recording browser-observed source, DOM, visible text, screenshot, and structured model-response capture artifacts.
+
+The target-backed policy gate is deterministic and local. It records local `ollama-webui` target-contract readiness, keeps model response as evidence, and refuses to treat model output as policy. If target readiness is unavailable, the gate routes allow-capable decisions to review instead of silently allowing. This is a workshop policy-gate artifact, not a production policy engine.
+
+Safety boundary:
+
+```text
+local-only
+synthetic-only
+authorized-only
+SYNTHETIC-LAB-MARKER
+model response is evidence, not policy
+intentionally weak target must remain vulnerable
+no real credentials
+no real customer data
+no public callback endpoints
+no third-party targets
+no production policy engine claim
+no production enforcement engine claim
+no production security validation claim
+```
