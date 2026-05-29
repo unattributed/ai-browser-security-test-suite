@@ -203,3 +203,6 @@ test: tests/test_workshop_proxy_tool_setup.py
 The slice records ZAP and mitmproxy readiness, starts the local weak target on `127.0.0.1:11435`, captures direct and mitmdump-proxied local requests, and regenerates Lab 01, Lab 02, and Lab 06 proxy evidence packages with `overall_decision` set to `ready` when tools are present.
 
 The slice does not install, reinstall, upgrade, remove, or configure NVIDIA drivers, CUDA packages, DKMS packages, linux-image packages, or linux-headers packages.
+## Slice 2.15 Lab 11 live evidence runner note
+
+Lab 11 now has a guarded live evidence runner for fail-open pressure and exception abuse workflow evidence. The runner is local-only, synthetic-only, target-backed, Playwright-integrated, marker-provenance checked, and archive-producing. Release-candidate coverage is updated only after local focused tests and target-backed evidence pass.
