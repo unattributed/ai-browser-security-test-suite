@@ -147,6 +147,23 @@ LAB06_END_TO_END_EVIDENCE_TERMS = [
     "no production security validation",
 ]
 
+LAB08_END_TO_END_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_08_qr_handoff_live_evidence.py",
+    "Lab 08 QR handoff and off-browser transition end-to-end live evidence runner",
+    "one-command Lab 08 QR handoff and off-browser transition end-to-end live evidence runner",
+    "weak target startup SOP",
+    "browser source, DOM, visible text, QR handoff observation, and screenshot evidence",
+    "direct local HTTP responses with proxied local HTTP responses",
+    "decoded destination provenance",
+    "handoff provenance review",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "intentionally weak target must remain vulnerable",
+    "no production QR decoder claim",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -203,6 +220,7 @@ SYNTHETIC_MARKER_FILES = [
     "tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py",
     "tools/generate_lab_07_delayed_content_state_transition_fixtures.py",
     "tools/generate_lab_08_qr_handoff_fixtures.py",
+    "tools/run_workshop_lab_08_qr_handoff_live_evidence.py",
     "tools/generate_lab_09_synthetic_sensitive_data_fixtures.py",
     "tools/generate_lab_10_model_verdict_policy_fixtures.py",
     "tools/generate_lab_11_fail_open_exception_fixtures.py",
@@ -591,6 +609,32 @@ def check_lab06_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
         failures,
     )
 
+
+def check_lab08_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 08 QR handoff evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md",
+        "docs/workshop/README.md",
+        "docs/lab-track-coverage-matrix.md",
+        "tools/run_workshop_lab_08_qr_handoff_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 08 end-to-end evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(f"Lab 08 QR handoff and off-browser transition end-to-end live evidence runner missing term: {term}" for term in LAB08_END_TO_END_EVIDENCE_TERMS if term not in combined)
+    return make_check(
+        "Lab 08 QR handoff and off-browser transition end-to-end live evidence runner",
+        "Lab 08 has an automated local-only synthetic QR handoff evidence runner and release-gated decoded destination provenance standard",
+        evidence_paths,
+        failures,
+    )
+
 def check_acceptance_document(repo_root: Path) -> GateCheck:
     path = "docs/workshop/release-candidate-acceptance-gate.md"
     text = read_text(repo_root, path)
@@ -949,6 +993,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_lab04_end_to_end_evidence_standard(repo_root),
         check_lab05_end_to_end_evidence_standard(repo_root),
         check_lab06_end_to_end_evidence_standard(repo_root),
+        check_lab08_end_to_end_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]

@@ -342,3 +342,9 @@ The reviewer should mark this gate `pass` only when `docs/workshop/proxy-tool-se
 A live local proxy evidence run is a release-hardening input. It proves that the local weak target can be reached on `127.0.0.1:11435`, that direct and proxied loopback requests can be captured, and that Lab 01, Lab 02, and Lab 06 proxy evidence packages can move from `needs-tools` to `ready` when required tools are present.
 
 This gate must not require NVIDIA driver installation, CUDA installation, DKMS changes, kernel image changes, kernel header changes, public callback endpoints, third-party target testing, or production security validation claims.
+
+## Slice 2.11 Lab 08 evidence runner gate
+
+The release-candidate gate records the Lab 08 QR handoff and off-browser transition end-to-end live evidence runner as a local-only, synthetic-only, authorized-only evidence standard.
+
+Required Lab 08 evidence terms include `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, decoded destination provenance, handoff provenance review, browser source, DOM, visible text, QR handoff observation, screenshot evidence, direct local HTTP responses with proxied local HTTP responses, `artifact-manifest.json`, `SHA256SUMS.txt`, `SYNTHETIC-LAB-MARKER`, no production QR decoder claim, and no production security validation.

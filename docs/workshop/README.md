@@ -34,7 +34,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 05 | Screenshot and Visual Deception | Initial working lab |
 | Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |
 | Lab 07; `SYNTHETIC-LAB-MARKER` marker provenance; no production security validation claim | Delayed Content and State Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` |
-| Lab 08 | QR Handoff and Off-Browser Transition Risk | Initial working fixture lab |
+| Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` |
 | Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
 | Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
@@ -76,3 +76,11 @@ Slice 2.2 records the verified local proxy tool setup and live local evidence wo
 
 
 Lab 07 delayed content and state transition risk is covered by `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` using `SYNTHETIC-LAB-MARKER` fixtures and no production security validation.
+
+## Slice 2.11 Lab 08 live evidence runner status
+
+| Lab | Guide | Status | Runner | Safety boundary |
+| --- | --- | --- | --- | --- |
+| Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner | `docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md`, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps QR handoff evidence local-only, synthetic-only, authorized-only, with no production QR decoder claim and no production security validation. |
+
+Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` using local-only decoded destination provenance, QR-style visual artifact evidence, browser source, DOM, visible text, QR handoff observation, screenshot evidence, direct and proxied local HTTP responses, marker provenance review, model-bound context review, and no production security validation.
