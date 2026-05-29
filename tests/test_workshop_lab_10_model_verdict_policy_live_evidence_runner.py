@@ -44,3 +44,20 @@ def test_lab10_live_runner_artifact_manifest_detects_missing_required_artifacts(
     manifest = module.build_artifact_manifest(out_dir)
     assert "fixtures/fixture-manifest.json" in manifest["required_missing"]
     assert "browser-evidence/model-response-capture.json" in manifest["required_missing"]
+    assert "artifact-manifest.json" not in manifest["required_missing"]
+    assert "SHA256SUMS.txt" not in manifest["required_missing"]
+    assert manifest["post_manifest_required_artifacts"] == ["artifact-manifest.json", "SHA256SUMS.txt"]
+
+def test_lab10_live_runner_writes_post_manifest_sha256_index(tmp_path: Path) -> None:
+    module = load_module(); out_dir = tmp_path / "complete"
+    for relative_path in module.REQUIRED_ARTIFACTS:
+        path = out_dir / relative_path; path.parent.mkdir(parents=True, exist_ok=True); path.write_text("SYNTHETIC-LAB-MARKER\n", encoding="utf-8")
+    manifest = module.build_artifact_manifest(out_dir)
+    assert manifest["required_missing"] == []
+    assert (out_dir / "artifact-manifest.json").is_file()
+    module.write_checksums(out_dir)
+    sha_index = out_dir / "SHA256SUMS.txt"
+    assert sha_index.is_file()
+    sha_text = sha_index.read_text(encoding="utf-8")
+    assert "artifact-manifest.json" in sha_text
+    assert "SHA256SUMS.txt" not in sha_text
