@@ -410,3 +410,32 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to page content, delayed content, browser-held state, model-bound text, or a model response.
+
+## Slice 2.10 end-to-end live evidence runner
+
+Runner: `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py`
+
+The one-command Lab 07 runner generates local synthetic delayed-content and state-transition fixtures, verifies the intentionally weak local `ollama-webui` target through the weak target startup SOP, serves fixtures from loopback only, captures direct and proxied local HTTP responses, captures browser source, DOM, visible text, initial state, after state, Playwright timeline observations, and screenshots, records OWASP ZAP passive-readiness status or an unavailable-tool exception, removes mitmproxy CA private material, records marker provenance, records state-transition review evidence, records model-bound context review evidence, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and creates a reviewer archive.
+
+### Practical proxy evidence exercise
+
+Use `docs/workshop/local-proxy-evidence-workflow.md` to compare direct local responses with proxied responses. Required reviewer artifacts include:
+
+```text
+proxy-evidence/mitmdump-live/mitmproxy-flows.mitm
+http-replay/direct/timed-dom-mutation-response.http
+http-replay/proxied/timed-dom-mutation-response.http
+browser-evidence/timed_dom_mutation/initial/browser-state-observation.json
+browser-evidence/timed_dom_mutation/after/browser-state-observation.json
+browser-evidence/timed_dom_mutation/timeline-observations.json
+comparisons/state-transition-review.md
+comparisons/timeline-provenance-review.md
+comparisons/marker-provenance-review.md
+model-bound-context/model-bound-context-review.md
+artifact-manifest.json
+SHA256SUMS.txt
+```
+
+### Instructor grading notes
+
+Passing evidence must prove which artifact first exposes `SYNTHETIC-LAB-MARKER`, whether the marker was present in initial state, after state, DOM text, visible text, route state, storage state, or timeline observations, and whether model-bound context preserved transition provenance. Do not accept a single flattened page summary as sufficient evidence. The intentionally weak target must remain vulnerable, and the lab makes no production security validation claim.
