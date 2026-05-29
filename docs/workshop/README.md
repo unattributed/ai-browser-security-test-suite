@@ -93,3 +93,6 @@ Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_works
 | Lab 10 | End-to-end live evidence runner | `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md` | `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER`, Playwright model-response capture integration, a deterministic target-backed policy gate artifact, local synthetic fixtures, and no production policy engine, production enforcement engine, or production security validation claim. |
 
 Lab 10 model verdict manipulation and policy simulator is covered by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`. The runner captures local model-response fixtures through Playwright, preserves direct and proxied loopback HTTP evidence, records target-contract readiness for the intentionally weak local `ollama-webui` target, and writes a deterministic target-backed policy gate review. Model response is evidence, not policy.
+## Slice 2.15 Lab 11 live evidence runner
+
+Lab 11 fail-open pressure and exception abuse is supported by a local-only, synthetic-only, target-backed live evidence runner. Use `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py` after confirming the intentionally weak target is running on a loopback URL.

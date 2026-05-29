@@ -713,6 +713,7 @@ def check_lab10_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
         "docs/lab-track-coverage-matrix.md",
         "tools/generate_lab_10_model_verdict_policy_fixtures.py",
         "tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py",
+        "tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py",
     ]
     failures: list[str] = []
     combined_parts: list[str] = []
