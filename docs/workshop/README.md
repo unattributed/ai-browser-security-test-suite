@@ -35,7 +35,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |
 | Lab 07; `SYNTHETIC-LAB-MARKER` marker provenance; no production security validation claim | Delayed Content and State Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` |
-| Lab 09 | Synthetic Sensitive-Data Handling | Initial working fixture lab |
+| Lab 09 | Synthetic Sensitive-Data Handling | End-to-end live evidence runner, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py` |
 | Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
 | Lab 12 | Capstone Attack Chain | Initial working capstone lab |

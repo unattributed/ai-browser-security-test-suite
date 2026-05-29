@@ -388,3 +388,64 @@ which policy decided whether data could enter model-bound context
 ```
 
 The policy should not be delegated to uploaded content, browser storage, local project files, local tool output, redacted preview text, model-bound text, or a model response.
+
+## One-command live evidence runner
+
+Slice 2.12 closes the Lab 09 live-evidence gap with:
+
+```text
+tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py
+```
+
+The runner is local-only, synthetic-only, and authorized-only. It generates the existing Lab 09 synthetic fixtures, starts or reuses the intentionally weak local `ollama-webui` target using the weak-target SOP, serves the fixtures from loopback only, performs Playwright upload integration through a local upload review harness, captures browser source, DOM, visible text, uploaded-file observation, and screenshot evidence, captures direct local HTTP responses with proxied local HTTP responses when mitmdump is available, records OWASP ZAP passive-review availability without fabricating findings, and builds a local target-backed redaction tracker.
+
+The live runner writes reviewer-grade artifacts including:
+
+```text
+fixtures/fixture-manifest.json
+fixtures/seeded-marker-inventory.json
+fixtures/leak-check-report.json
+fixtures/model-bound-context-safe.txt
+fixtures/upload-review-harness.html
+browser-evidence/browser-source.html
+browser-evidence/browser-dom.html
+browser-evidence/browser-visible-text.txt
+browser-evidence/browser-screenshot.png
+browser-evidence/upload-observation.json
+redaction-tracker/upload-redaction-tracker.json
+redaction-tracker/upload-redaction-tracker.md
+seeded-marker-provenance/seeded-marker-provenance-review.md
+redaction-boundary/redaction-boundary-review.md
+model-bound-context/model-bound-context-review.md
+comparisons/raw-redacted-model-context-comparison.md
+http-replay/captured-url-index.json
+proxy-evidence/mitmdump-status.json
+zap-passive-review/zap-status.json
+artifact-manifest.json
+SHA256SUMS.txt
+```
+
+Run from the repository root:
+
+```bash
+/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python   tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py
+```
+
+Safety and claim boundaries:
+
+```text
+SYNTHETIC-LAB-MARKER
+local-only
+synthetic-only
+authorized-only
+no real credentials
+no real customer data
+no public callback endpoints
+no third-party targets
+no package installation
+no production DLP scanner claim
+no production secret detector claim
+no production security validation claim
+```
+
+This runner does not prove production DLP, production secret detection, tenant isolation, real credential protection, real customer-data protection, or production browser-AI security. It teaches evidence handling boundaries using seeded local synthetic markers and preserves the intentionally weak target behavior needed for the workshop.
