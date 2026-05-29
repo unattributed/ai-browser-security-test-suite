@@ -36,7 +36,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 07; `SYNTHETIC-LAB-MARKER` marker provenance; no production security validation claim | Delayed Content and State Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` |
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` |
 | Lab 09 | Synthetic Sensitive-Data Handling | End-to-end live evidence runner, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py` |
-| Lab 10 | Model Verdict Manipulation | Initial working policy simulator lab |
+| Lab 10 | Model Verdict Manipulation | End-to-end live evidence runner, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
 | Lab 12 | Capstone Attack Chain | Initial working capstone lab |
 
@@ -84,3 +84,12 @@ Lab 07 delayed content and state transition risk is covered by `tools/run_worksh
 | Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner | `docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md`, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps QR handoff evidence local-only, synthetic-only, authorized-only, with no production QR decoder claim and no production security validation. |
 
 Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` using local-only decoded destination provenance, QR-style visual artifact evidence, browser source, DOM, visible text, QR handoff observation, screenshot evidence, direct and proxied local HTTP responses, marker provenance review, model-bound context review, and no production security validation.
+
+
+## Slice 2.13 Lab 10 live evidence runner status
+
+| Lab | Status | Guide | Runner | Safety boundary |
+| --- | --- | --- | --- | --- |
+| Lab 10 | End-to-end live evidence runner | `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md` | `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER`, Playwright model-response capture integration, a deterministic target-backed policy gate artifact, local synthetic fixtures, and no production policy engine, production enforcement engine, or production security validation claim. |
+
+Lab 10 model verdict manipulation and policy simulator is covered by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`. The runner captures local model-response fixtures through Playwright, preserves direct and proxied loopback HTTP evidence, records target-contract readiness for the intentionally weak local `ollama-webui` target, and writes a deterministic target-backed policy gate review. Model response is evidence, not policy.
