@@ -395,6 +395,52 @@ sed -n '1,220p' "${LAB12_RUN}/capstone-package/reviewer-checklist.md"
 
 Answer every checklist item before submitting the capstone package.
 
+
+## Target-backed live evidence runner
+
+Slice 2.18 selects the evidence-backed Lab 12 target as a target-backed capstone live evidence runner, not as a new weak-target behavior.
+
+Lab 12 already has a deterministic capstone package generator. The narrow Slice 2.18 goal is to wrap that capstone package in live local target evidence by using:
+
+```text
+tools/run_workshop_lab_12_capstone_live_evidence.py
+```
+
+The target-backed Lab 12 capstone live evidence runner verifies the intentionally weak local `ollama-webui` target, captures the target contract, captures direct local HTTP evidence, captures Playwright browser source, DOM, visible text, and screenshot evidence, generates the existing capstone package, verifies source coverage for Labs 01 through 11, writes reviewer artifacts, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and creates a reviewer archive plus checksum.
+
+This does not add runtime protections, does not harden `ollama-webui`, does not test a third-party system, and does not claim production security validation.
+
+Expected command:
+
+```bash
+.venv/bin/python tools/run_workshop_lab_12_capstone_live_evidence.py \
+  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
+  --weak-target-repo /home/foo/Workspace/ollama-webui \
+  --target-url http://127.0.0.1:11435 \
+  --ollama-url http://127.0.0.1:11434
+```
+
+Expected target-backed evidence includes:
+
+```text
+service-exposure/weak-target-health.http
+target-contract/target-contract-readiness.json
+target-contract/target-scenario-contract-v0.2.json
+http-replay/direct/target-root-response.http
+http-replay/direct/target-health-response.http
+browser-evidence/target-root/browser-source.html
+browser-evidence/target-root/browser-dom.html
+browser-evidence/target-root/browser-visible-text.txt
+browser-evidence/target-root/browser-screenshot.png
+capstone-package/fixture-manifest.json
+comparisons/source-lab-coverage-review.md
+comparisons/marker-provenance-review.md
+comparisons/model-bound-context-review.md
+comparisons/target-backed-capstone-review.md
+artifact-manifest.json
+SHA256SUMS.txt
+```
+
 ## Expected result
 
 A successful run produces:
@@ -490,3 +536,41 @@ which checksums prove artifact integrity
 The policy should not be delegated to page content, DOM content, screenshots, OCR text, QR text, decoded destinations, browser storage, local project files, tool output, model-bound context, model response, user feedback, or exception request text.
 
 A real assessment would add live authorized target evidence, named reviewer identity, customer scope, environment details, timestamps, tool versions, chain-of-custody notes, remediation validation, and post-fix regression evidence. This lab only creates local synthetic capstone evidence for teaching and review.
+
+
+## Slice 2.18 target-backed capstone live evidence runner
+
+Lab 12 is supported by `tools/run_workshop_lab_12_capstone_live_evidence.py` as a local-only, synthetic-only, authorized-only, target-backed capstone live evidence runner.
+
+The runner verifies the intentionally weak local `ollama-webui` target on loopback, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, screenshot evidence, records `SYNTHETIC-LAB-MARKER` provenance, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and creates a reviewer archive.
+
+It does not harden the weak target and makes no production security validation claim.
+
+## Slice 2.18 target-backed capstone live evidence runner artifact contract
+
+`tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
+
+It verifies the intentionally weak local `ollama-webui` target, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, and screenshot evidence under the target-root browser evidence directory, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, writes `lab12-live-evidence-summary.json`, and creates a reviewer archive.
+
+The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
+
+## Slice 2.18 Lab 12 release-gate phrase catalog
+
+This section exists so the release-candidate gate can verify the Lab 12 target-backed evidence contract without inferring intent from prose.
+
+Required release-gate phrases:
+
+```text
+tools/run_workshop_lab_12_capstone_live_evidence.py
+Lab 12 target-backed capstone live evidence runner
+target-backed
+target-contract readiness
+browser source, DOM, visible text, and screenshot evidence
+artifact-manifest.json
+SHA256SUMS.txt
+SYNTHETIC-LAB-MARKER
+intentionally weak target must remain vulnerable
+no production security validation
+```
+
+The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.

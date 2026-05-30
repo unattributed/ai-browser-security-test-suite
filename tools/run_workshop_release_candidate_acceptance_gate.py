@@ -204,6 +204,25 @@ LAB10_END_TO_END_EVIDENCE_TERMS = [
     "no production security validation",
 ]
 
+
+LAB12_TARGET_BACKED_EVIDENCE_TERMS = [
+    "tools/run_workshop_lab_12_capstone_live_evidence.py",
+    "Lab 12 target-backed capstone live evidence runner",
+    "target-backed Lab 12 capstone live evidence runner",
+    "Lab 12 already has a deterministic capstone package",
+    "intentionally weak local `ollama-webui` target",
+    "target-contract readiness",
+    "browser source, DOM, visible text, and screenshot evidence",
+    "Labs 01 through 11 source coverage",
+    "artifact-manifest.json",
+    "SHA256SUMS.txt",
+    "SYNTHETIC-LAB-MARKER",
+    "BAI_EXECUTED_CAPSTONE_12",
+    "intentionally weak target must remain vulnerable",
+    "does not harden the weak target",
+    "no production security validation",
+]
+
 RUBRIC_TERMS = [
     "evidence quality",
     "Safety boundary",
@@ -733,6 +752,38 @@ def check_lab10_end_to_end_evidence_standard(repo_root: Path) -> GateCheck:
     )
 
 
+
+def check_lab12_target_backed_evidence_standard(repo_root: Path) -> GateCheck:
+    """Check that the Lab 12 target-backed capstone live evidence runner remains release-gated."""
+    evidence_paths = [
+        "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md",
+        "docs/workshop/README.md",
+        "docs/lab-track-coverage-matrix.md",
+        "tools/generate_lab_12_capstone_evidence_package.py",
+        "tools/run_workshop_lab_12_capstone_live_evidence.py",
+    ]
+    failures: list[str] = []
+    combined_parts: list[str] = []
+    for relative_path in evidence_paths:
+        path = repo_root / relative_path
+        if not path.is_file():
+            failures.append(f"missing Lab 12 target-backed evidence artifact: {relative_path}")
+            continue
+        combined_parts.append(path.read_text(encoding="utf-8"))
+    combined = "\n".join(combined_parts)
+    failures.extend(
+        f"Lab 12 target-backed capstone live evidence runner missing term: {term}"
+        for term in LAB12_TARGET_BACKED_EVIDENCE_TERMS
+        if term not in combined
+    )
+    return make_check(
+        "Lab 12 target-backed capstone live evidence runner",
+        "Lab 12 has a local-only target-backed capstone live evidence runner with target-contract readiness, browser evidence, artifact manifest, SHA256 index, and archive standard",
+        evidence_paths,
+        failures,
+    )
+
+
 def check_acceptance_document(repo_root: Path) -> GateCheck:
     path = "docs/workshop/release-candidate-acceptance-gate.md"
     text = read_text(repo_root, path)
@@ -1094,6 +1145,7 @@ def collect_checks(repo_root: Path, rehearsal_dir: Path | None) -> list[GateChec
         check_lab08_end_to_end_evidence_standard(repo_root),
         check_lab09_end_to_end_evidence_standard(repo_root),
         check_lab10_end_to_end_evidence_standard(repo_root),
+        check_lab12_target_backed_evidence_standard(repo_root),
         check_acceptance_document(repo_root),
         check_offline_bundle_documentation(repo_root),
     ]
