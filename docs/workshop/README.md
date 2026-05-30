@@ -38,7 +38,7 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 | Lab 09 | Synthetic Sensitive-Data Handling | End-to-end live evidence runner, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py` |
 | Lab 10 | Model Verdict Manipulation | End-to-end live evidence runner, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` |
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
-| Lab 12 | Capstone Attack Chain | Initial working capstone lab |
+| Lab 12 | Capstone Attack Chain | Target-backed capstone live evidence runner |
 
 ## Closure and reviewer materials
 
@@ -93,6 +93,44 @@ Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_works
 | Lab 10 | End-to-end live evidence runner | `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md` | `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER`, Playwright model-response capture integration, a deterministic target-backed policy gate artifact, local synthetic fixtures, and no production policy engine, production enforcement engine, or production security validation claim. |
 
 Lab 10 model verdict manipulation and policy simulator is covered by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`. The runner captures local model-response fixtures through Playwright, preserves direct and proxied loopback HTTP evidence, records target-contract readiness for the intentionally weak local `ollama-webui` target, and writes a deterministic target-backed policy gate review. Model response is evidence, not policy.
+
 ## Slice 2.15 Lab 11 live evidence runner
 
 Lab 11 fail-open pressure and exception abuse is supported by a local-only, synthetic-only, target-backed live evidence runner. Use `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py` after confirming the intentionally weak target is running on a loopback URL.
+
+## Slice 2.18 Lab 12 target-backed capstone live evidence runner
+
+Lab 12 now has a target-backed Lab 12 capstone live evidence runner at `tools/run_workshop_lab_12_capstone_live_evidence.py`.
+
+Lab 12 already has a deterministic capstone package. Slice 2.18 selects the narrow next target as a live local wrapper that verifies the intentionally weak `ollama-webui` target, captures target contract and browser evidence, generates the capstone package, confirms Labs 01 through 11 source coverage, and writes reviewer-grade archive evidence.
+
+The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and does not claim production security validation.
+
+## Slice 2.18 target-backed capstone live evidence runner artifact contract
+
+`tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
+
+It verifies the intentionally weak local `ollama-webui` target, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, and screenshot evidence under the target-root browser evidence directory, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, writes `lab12-live-evidence-summary.json`, and creates a reviewer archive.
+
+The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
+
+## Slice 2.18 Lab 12 release-gate phrase catalog
+
+This section exists so the release-candidate gate can verify the Lab 12 target-backed evidence contract without inferring intent from prose.
+
+Required release-gate phrases:
+
+```text
+tools/run_workshop_lab_12_capstone_live_evidence.py
+Lab 12 target-backed capstone live evidence runner
+target-backed
+target-contract readiness
+browser source, DOM, visible text, and screenshot evidence
+artifact-manifest.json
+SHA256SUMS.txt
+SYNTHETIC-LAB-MARKER
+intentionally weak target must remain vulnerable
+no production security validation
+```
+
+The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.

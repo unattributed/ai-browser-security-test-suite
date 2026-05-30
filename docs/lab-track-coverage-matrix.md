@@ -70,7 +70,7 @@ The specific model is a dependency, not the thing being tested. Every evidence p
 | Lab 09, synthetic sensitive-data handling | end-to-end live evidence runner | local synthetic sensitive-data fixtures with seeded marker inventory, redacted previews, safe model-bound context, leak checks, negative control, Playwright upload integration, and local target-backed redaction tracker | Python, Playwright, browser DevTools, curl, jq or Python JSON review, rg or grep, ss, nmap, mitmdump or mitmproxy, OWASP ZAP passive review, sha256sum, seeded marker tracker | `live-local-text` or `deterministic-placeholder` | raw fixtures, redacted previews, seeded marker inventory, leak-check report, safe model-bound context, upload review harness, browser source, DOM, visible text, uploaded-file observation, screenshot evidence, upload redaction tracker, seeded marker provenance review, redaction boundary review, model-bound context review, direct local HTTP responses with proxied local HTTP responses, artifact manifest, SHA256 index, reviewer archive | closed by `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py`: one-command Lab 09 synthetic sensitive-data handling end-to-end live evidence runner with Playwright upload integration, local target-backed redaction tracker, weak target vulnerability preservation, artifact manifest, SHA256 manifest, and archive, with `SYNTHETIC-LAB-MARKER` marker provenance; no production DLP scanner claim; no production secret detector claim; no production security validation claim |
 | Lab 10, model verdict manipulation | end-to-end live evidence runner | local synthetic verdict-pressure, output-contract-pressure, evidence-override, incomplete-evidence, compliant-block, and clean negative-control scenarios with Playwright model-response capture integration and a deterministic target-backed policy gate artifact | Python, Playwright, browser DevTools, curl, jq or Python JSON review, rg or grep, ss, mitmdump or mitmproxy, OWASP ZAP passive review, sha256sum | `live-local-text` or `deterministic-placeholder` | model response fixtures, browser-captured model responses, policy simulation results, policy decision JSONL, verdict mismatch report, target-contract readiness, target-backed policy gate, model-response capture review, verdict boundary review, fixture manifest, artifact manifest, SHA256 index, reviewer archive | closed by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`: one-command Lab 10 model verdict manipulation and policy simulator end-to-end live evidence runner with Playwright model-response capture integration, deterministic target-backed policy gate artifact, direct local HTTP responses with proxied local HTTP responses, weak target vulnerability preservation, artifact manifest, SHA256 manifest, and archive, with `SYNTHETIC-LAB-MARKER` marker provenance; model response is evidence, not policy; no production policy engine claim; no production enforcement engine claim; no production security validation claim |
 | Lab 11, fail-open pressure and exception abuse | initial working exception workflow lab | local synthetic missing-evidence, network-timeout, permanent-exception, business-pressure, scoped-temporary-exception, and clean negative-control scenarios | Python, exception workflow simulator, reviewer worksheet, jq, sha256sum | `live-local-text` or `deterministic-placeholder` | request fixtures, exception policy results, exception decisions JSONL, exception abuse report, reviewer worksheet, fixture manifest, SHA256 index, analyst notes | needs Playwright evidence capture integration and future target-backed exception workflow gate |
-| Lab 12, capstone attack chain | initial working capstone lab | combined local synthetic scenarios from Labs 01 through 11 with stage artifacts, findings, validation report, reviewer checklist, and student submission template | Python, capstone package generator, prior lab artifacts, jq, sha256sum, browser DevTools, Playwright where available | declared by student and recorded in the package | attack-chain JSON, evidence package index, capstone findings JSON, finding report, validation report, reviewer checklist, student submission template, SHA256 index | needs live classroom capstone timing validation and instructor grading rubric |
+| Lab 12, capstone attack chain | target-backed capstone live evidence runner | combined local synthetic scenarios from Labs 01 through 11 with live local target verification, target contract capture, browser evidence, stage artifacts, findings, validation report, reviewer checklist, and student submission template | Python, Playwright, capstone package generator, target contract capture, jq, sha256sum, browser DevTools | declared by student and recorded in the package | target health, target contract readiness, browser source, DOM, visible text, screenshot evidence, attack-chain JSON, evidence package index, capstone findings JSON, finding report, validation report, reviewer checklist, student submission template, artifact manifest, SHA256 index, reviewer archive | closed by `tools/run_workshop_lab_12_capstone_live_evidence.py`: target-backed Lab 12 capstone live evidence runner that verifies the intentionally weak local `ollama-webui` target, captures target contract and browser evidence, generates the existing capstone package, confirms Labs 01 through 11 source coverage, preserves `SYNTHETIC-LAB-MARKER` and `BAI_EXECUTED_CAPSTONE_12`, does not harden the target, and does not claim production security validation. Lab 12 already has a deterministic capstone package; this runner raises maturity with target-backed evidence. |
 
 ## Synthetic adversarial fixture functionality needed
 
@@ -206,3 +206,37 @@ The slice does not install, reinstall, upgrade, remove, or configure NVIDIA driv
 ## Slice 2.15 Lab 11 live evidence runner note
 
 Lab 11 now has a guarded live evidence runner for fail-open pressure and exception abuse workflow evidence. The runner is local-only, synthetic-only, target-backed, Playwright-integrated, marker-provenance checked, and archive-producing. Release-candidate coverage is updated only after local focused tests and target-backed evidence pass.
+
+
+### Slice 2.18 Lab 12 target-backed capstone live evidence runner
+
+`tools/run_workshop_lab_12_capstone_live_evidence.py` provides a target-backed Lab 12 capstone live evidence runner. It verifies local-only weak-target readiness, records target-contract readiness, generates the capstone package, captures browser source, DOM, visible text, screenshot evidence, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and makes no production security validation claim.
+
+## Slice 2.18 target-backed capstone live evidence runner artifact contract
+
+`tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
+
+It verifies the intentionally weak local `ollama-webui` target, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, and screenshot evidence under the target-root browser evidence directory, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, writes `lab12-live-evidence-summary.json`, and creates a reviewer archive.
+
+The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
+
+## Slice 2.18 Lab 12 release-gate phrase catalog
+
+This section exists so the release-candidate gate can verify the Lab 12 target-backed evidence contract without inferring intent from prose.
+
+Required release-gate phrases:
+
+```text
+tools/run_workshop_lab_12_capstone_live_evidence.py
+Lab 12 target-backed capstone live evidence runner
+target-backed
+target-contract readiness
+browser source, DOM, visible text, and screenshot evidence
+artifact-manifest.json
+SHA256SUMS.txt
+SYNTHETIC-LAB-MARKER
+intentionally weak target must remain vulnerable
+no production security validation
+```
+
+The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
