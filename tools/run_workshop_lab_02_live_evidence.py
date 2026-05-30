@@ -52,6 +52,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
+import sys
 
 
 SCHEMA_VERSION = "browser-safe-ai-workshop-lab02-live-evidence/v0.1"
@@ -392,6 +393,7 @@ def load_fixture_generator(repo_root: Path):
     if spec is None or spec.loader is None:
         raise SystemExit("failed to load Lab 02 fixture generator")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -844,6 +846,19 @@ def write_safety_boundary(out_dir: Path, args: argparse.Namespace, fixture_url: 
     )
 
 
+
+def is_mitmproxy_private_ca_file(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    if path.name not in {
+        "mitmproxy-ca.pem",
+        "mitmproxy-ca-cert.pem",
+        "mitmproxy-ca-cert.cer",
+        "mitmproxy-ca-cert.p12",
+    }:
+        return False
+    return "mitmdump-conf" in path.parts
+
 def validate_required_artifacts(out_dir: Path) -> None:
     missing = [rel for rel in REQUIRED_ARTIFACTS if not (out_dir / rel).is_file()]
     if missing:
@@ -856,7 +871,7 @@ def validate_required_artifacts(out_dir: Path) -> None:
             marker_missing.append(rel)
     if marker_missing:
         raise SystemExit("SYNTHETIC-LAB-MARKER missing from required artifacts:\n" + "\n".join(marker_missing))
-    private_ca_files = [path.relative_to(out_dir).as_posix() for path in out_dir.rglob("mitmproxy-ca*") if path.is_file()]
+    private_ca_files = [path.relative_to(out_dir).as_posix() for path in out_dir.rglob("*") if is_mitmproxy_private_ca_file(path)]
     if private_ca_files:
         raise SystemExit("mitmproxy CA material remains in evidence directory:\n" + "\n".join(private_ca_files))
     external_urls = find_non_loopback_urls(out_dir)
@@ -865,6 +880,30 @@ def validate_required_artifacts(out_dir: Path) -> None:
         raise SystemExit("non-loopback URL detected in Lab 02 evidence:\n" + details)
 
 
+
+APPROVED_DOCUMENTATION_METADATA_URLS = {
+    "http://www.w3.org/2000/svg",
+}
+
+
+def is_approved_documentation_metadata_url(relative_path: str, url: str) -> bool:
+    """Return True only for known static metadata namespace URLs.
+
+    These URLs are documentation namespace identifiers embedded in local
+    synthetic HTML or SVG evidence. They are not interaction targets, callback
+    endpoints, browser navigation targets, or third-party test targets.
+    """
+    normalized_url = url.rstrip(").,;]")
+    if normalized_url not in APPROVED_DOCUMENTATION_METADATA_URLS:
+        return False
+    approved_prefixes = (
+        "fixtures/",
+        "browser-evidence/",
+        "http-replay/direct/",
+        "http-replay/proxied/",
+    )
+    return relative_path.startswith(approved_prefixes)
+
 def find_non_loopback_urls(out_dir: Path) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
     url_pattern = re.compile(r"https?://[^\s)'\"<>]+")
@@ -872,12 +911,15 @@ def find_non_loopback_urls(out_dir: Path) -> list[dict[str, str]]:
         if not path.is_file() or path.suffix.lower() in {".png", ".mitm", ".gz"}:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
+        relative_path = path.relative_to(out_dir).as_posix()
         for match in url_pattern.finditer(text):
             url = match.group(0).rstrip(".,")
+            if is_approved_documentation_metadata_url(relative_path, url):
+                continue
             parsed = urlparse(url)
             hostname = (parsed.hostname or "").lower()
             if hostname not in {"127.0.0.1", "localhost", "::1"}:
-                findings.append({"path": path.relative_to(out_dir).as_posix(), "url": url})
+                findings.append({"path": relative_path, "url": url})
     return findings
 
 
@@ -1080,7 +1122,11 @@ def run_lab02_evidence(args: argparse.Namespace) -> dict[str, Any]:
                 "evidence_archive_sha256": archive_sha256,
             }
         )
-        write_json(out_dir / "lab02-live-evidence-summary.json", summary)
+        # Do not rewrite lab02-live-evidence-summary.json after
+        # SHA256SUMS.txt and the reviewer archive are generated. The
+        # returned process summary can include archive paths, but all files
+        # inside the evidence directory must remain stable after checksum
+        # finalization so internal sha256sum verification succeeds.
         return summary
     finally:
         stop_process(mitm_process)

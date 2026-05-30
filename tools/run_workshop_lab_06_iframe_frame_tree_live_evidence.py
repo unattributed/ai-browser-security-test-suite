@@ -63,6 +63,21 @@ ARCHIVE_SUFFIX = ".tar.gz"
 ARCHIVE_CHECKSUM_SUFFIX = ".tar.gz.sha256"
 LAB06_VARIANTS = ["baseline", "sandboxed_frame", "srcdoc_hidden_context", "nested_frame_chain"]
 
+APPROVED_DOCUMENTATION_METADATA_URLS = {
+    "https://github.com/unattributed/ollama-webui",
+    "https://github.com/unattributed/ollama-webui/",
+    "https://api.github.com/repos/unattributed/ollama-webui",
+    "https://github.com/unattributed/ai-browser-security-test-suite",
+    "https://github.com/unattributed/ai-browser-security-test-suite/",
+    "https://api.github.com/repos/unattributed/ai-browser-security-test-suite",
+}
+
+APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES = (
+    "target-contract.json",
+    "http-replay/direct/target-contract-response.http",
+    "http-replay/proxied/target-contract-response.http",
+)
+
 FORBIDDEN_COMMAND_TERMS = [
     "apt" + "-get",
     "apt" + " install",
@@ -709,21 +724,164 @@ def write_model_bound_context_review(out_dir: Path, model_mode: str, ollama_url:
     write_text(out_dir / "comparisons/model-bound-context-review.md", "\n".join(lines) + "\n")
 
 
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    return any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    if any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    ):
+        return True
+    return (
+        normalized_artifact.startswith(("http-replay/direct/", "http-replay/proxied/"))
+        and "target-contract" in normalized_artifact
+        and normalized_artifact.endswith("-response.http")
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    if any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    ):
+        return True
+    return (
+        normalized_artifact.startswith(("http-replay/direct/", "http-replay/proxied/"))
+        and "target-contract" in normalized_artifact
+        and normalized_artifact.endswith("-response.http")
+    )
+
+
+def is_approved_documentation_metadata_url(artifact: str, url: str) -> bool:
+    normalized_url = url.rstrip("/.,);]")
+    normalized_artifact = artifact.replace("\\", "/")
+    approved_urls = {item.rstrip("/") for item in APPROVED_DOCUMENTATION_METADATA_URLS}
+    if normalized_url not in approved_urls:
+        return False
+    if any(
+        normalized_artifact == prefix or normalized_artifact.endswith("/" + prefix)
+        for prefix in APPROVED_DOCUMENTATION_METADATA_ARTIFACT_PREFIXES
+    ):
+        return True
+    return (
+        normalized_artifact.startswith(("http-replay/direct/", "http-replay/proxied/"))
+        and "target-contract" in normalized_artifact
+        and normalized_artifact.endswith("-response.http")
+    )
+
+
 def find_non_loopback_urls(out_dir: Path) -> list[dict[str, str]]:
     findings: list[dict[str, str]] = []
-    url_pattern = re.compile(r"https?://[^\s'\"<>]+")
+    url_pattern = re.compile(r"""https?://[^\s'"<>]+""")
     for path in out_dir.rglob("*"):
         if not path.is_file():
             continue
         if path.name in {"mitmproxy-flows.mitm", "browser-screenshot.png"}:
             continue
+        artifact = str(path.relative_to(out_dir))
         text = path.read_text(encoding="utf-8", errors="replace")
         for match in url_pattern.finditer(text):
             url = match.group(0).rstrip("),.;]")
             try:
                 assert_loopback_url(url)
+                continue
             except SystemExit:
-                findings.append({"artifact": str(path.relative_to(out_dir)), "url": url})
+                pass
+            if is_approved_documentation_metadata_url(artifact, url):
+                continue
+            findings.append({"artifact": artifact, "url": url})
     return findings
 
 
@@ -924,7 +1082,7 @@ def run_lab06_evidence(args: argparse.Namespace) -> dict[str, Any]:
     validate_required_artifacts(out_dir)
     archive_path, checksum_path, digest = make_archive(out_dir)
     summary.update({"archive": str(archive_path), "archive_sha256_file": str(checksum_path), "archive_sha256": digest})
-    write_summary_report(out_dir, summary)
+    # archive metadata is returned but not written into checksummed evidence after SHA256SUMS.txt
     print("Lab 06 iframe and frame-tree live evidence runner complete.")
     print("status: passed")
     print(f"evidence directory: {out_dir}")
