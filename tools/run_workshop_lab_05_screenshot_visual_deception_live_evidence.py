@@ -189,6 +189,9 @@ REQUIRED_ARTIFACTS = [
     "comparisons/visual-deception-review.json",
     "comparisons/visual-deception-review.md",
     "comparisons/browser-proxy-model-context-comparison.md",
+]
+
+FINAL_GENERATED_ARTIFACTS = [
     "artifact-manifest.json",
     "SHA256SUMS.txt",
 ]
@@ -999,7 +1002,7 @@ def write_comparisons(out_dir: Path, fixture_dir: Path) -> None:
     write_json(out_dir / "comparisons/marker-provenance-review.json", {"rows": marker_rows})
     write_json(out_dir / "comparisons/visual-deception-review.json", {"rows": visual_rows})
 
-    marker_lines = ["# Marker Provenance Review", ""]
+    marker_lines = ["# Marker Provenance Review", "", f"Safety marker: `{SAFETY_MARKER}`", ""]
     for row in marker_rows:
         marker_lines.extend(
             [
@@ -1018,7 +1021,7 @@ def write_comparisons(out_dir: Path, fixture_dir: Path) -> None:
         )
     write_text(out_dir / "comparisons/marker-provenance-review.md", "\n".join(marker_lines))
 
-    visual_lines = ["# Visual Deception Review", "", "Screenshot evidence, DOM text, image alt text, OCR output, and model-bound context are distinct evidence classes.", ""]
+    visual_lines = ["# Visual Deception Review", "", f"Safety marker: `{SAFETY_MARKER}`", "", "Screenshot evidence, DOM text, image alt text, OCR output, and model-bound context are distinct evidence classes.", ""]
     for row in visual_rows:
         visual_lines.extend(
             [
@@ -1088,6 +1091,7 @@ def write_artifact_manifest(out_dir: Path) -> Path:
         "created_utc": utc_now(),
         "artifact_count": len(artifacts),
         "required_artifacts": REQUIRED_ARTIFACTS,
+        "final_generated_artifacts": FINAL_GENERATED_ARTIFACTS,
         "missing_required_artifacts": missing,
         "marker_required_artifacts": MARKER_REQUIRED_ARTIFACTS,
         "marker_missing_artifacts": marker_missing,
@@ -1112,6 +1116,16 @@ def write_sha256_manifest(out_dir: Path) -> Path:
     write_text(checksum_path, "\n".join(lines) + "\n")
     return checksum_path
 
+
+
+def validate_final_generated_artifacts(out_dir: Path) -> None:
+    missing = [relative for relative in FINAL_GENERATED_ARTIFACTS if not (out_dir / relative).is_file()]
+    if missing:
+        raise SystemExit(f"missing final generated Lab 05 evidence artifacts: {missing}")
+    checksum_path = out_dir / "SHA256SUMS.txt"
+    checksum_text = checksum_path.read_text(encoding="utf-8", errors="replace")
+    if "artifact-manifest.json" not in checksum_text:
+        raise SystemExit("Lab 05 SHA256SUMS.txt does not include artifact-manifest.json")
 
 def create_archive(out_dir: Path) -> tuple[Path, Path, str]:
     archive_path = Path(str(out_dir) + ARCHIVE_SUFFIX)
@@ -1191,10 +1205,12 @@ def run_lab05_evidence(args: argparse.Namespace) -> dict[str, str]:
         write_comparisons(out_dir, out_dir / "fixtures")
         write_artifact_manifest(out_dir)
         write_sha256_manifest(out_dir)
+        validate_final_generated_artifacts(out_dir)
         archive_path, sha_path, digest = create_archive(out_dir)
         write_run_summary(out_dir, archive_path, sha_path, digest)
         write_artifact_manifest(out_dir)
         write_sha256_manifest(out_dir)
+        validate_final_generated_artifacts(out_dir)
         archive_path, sha_path, digest = create_archive(out_dir)
         return {
             "out_dir": str(out_dir),
