@@ -3,8 +3,8 @@
 
 This validator is intentionally non-mutating. It inspects repository documentation,
 records evidence about Lab 00 readiness, and writes a manifest and SHA256 index.
-It does not install packages, start services, modify drivers, harden targets, or
-contact third-party systems.
+It does not install packages, start services, modify drivers, change targets, or
+contact non-workshop systems.
 """
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
 
 REQUIRED_PHRASES = {
     "assessment_method": "Assessment method taught",
@@ -32,10 +31,13 @@ REQUIRED_PHRASES = {
     "completion_criteria": "Completion criteria",
 }
 
-SAFETY_PHRASES = [
+WORKSHOP_BOUNDARY_PHRASES = [
+    "workshop operating boundary",
     "local-only",
     "synthetic-only",
     "authorized-only",
+    "ollama-webui",
+    "127.0.0.1:11435",
     "Do not install packages",
     "do not claim production security validation",
 ]
@@ -79,7 +81,7 @@ def inspect_lab00(repo: Path) -> dict[str, object]:
         "matrix_doc_exists": matrix_doc.exists(),
         "preflight_runner_exists": preflight.exists(),
         "required_phrase_results": {},
-        "safety_phrase_results": {},
+        "workshop_boundary_phrase_results": {},
         "overall_decision": "fail",
         "failed_checks": [],
         "notes": [],
@@ -93,16 +95,16 @@ def inspect_lab00(repo: Path) -> dict[str, object]:
 
     content = lab_doc.read_text(encoding="utf-8")
     phrase_results = {name: phrase in content for name, phrase in REQUIRED_PHRASES.items()}
-    safety_results = {phrase: phrase in content for phrase in SAFETY_PHRASES}
+    boundary_results = {phrase: phrase in content for phrase in WORKSHOP_BOUNDARY_PHRASES}
     result["required_phrase_results"] = phrase_results
-    result["safety_phrase_results"] = safety_results
+    result["workshop_boundary_phrase_results"] = boundary_results
 
     for name, ok in phrase_results.items():
         if not ok:
             failed_checks.append(f"missing_required_section:{name}")
-    for phrase, ok in safety_results.items():
+    for phrase, ok in boundary_results.items():
         if not ok:
-            failed_checks.append(f"missing_safety_phrase:{phrase}")
+            failed_checks.append(f"missing_workshop_boundary_phrase:{phrase}")
     if not matrix_doc.exists():
         failed_checks.append("missing_lab_track_coverage_matrix")
     if not preflight.exists():
@@ -113,6 +115,7 @@ def inspect_lab00(repo: Path) -> dict[str, object]:
     result["notes"] = [
         "Lab 00 readiness validation checks documentation completeness only.",
         "This validator does not perform package installation or system modification.",
+        "The workshop boundary is expressed through the local target, local services, and evidence workflow.",
         "Standards mapping remains reporting taxonomy only after evidence exists.",
     ]
     return result
@@ -128,7 +131,7 @@ def main() -> int:
     if args.evidence_dir:
         evidence_dir = Path(args.evidence_dir).expanduser().resolve()
     else:
-        evidence_dir = Path.home() / "browser-safe-ai-workshop-development-evidence" / "slice-2.19-lab-00-method-poc-reporting-readiness" / datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+        evidence_dir = Path.home() / "browser-safe-ai-workshop-development-evidence" / "slice-2.20-lab-00-practical-workshop-initialization" / datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     evidence_dir.mkdir(parents=True, exist_ok=True)
 
     result = inspect_lab00(repo)
@@ -136,7 +139,7 @@ def main() -> int:
 
     manifest = {
         "created_at": utc_now(),
-        "slice_id": "slice-2.19-lab-00-method-poc-reporting-readiness",
+        "slice_id": "slice-2.20-lab-00-practical-workshop-initialization",
         "repo": str(repo),
         "validator": "tools/run_workshop_lab_00_method_poc_reporting_readiness.py",
         "safety": {
@@ -150,8 +153,8 @@ def main() -> int:
             "modifies_dkms": False,
             "modifies_kernel": False,
             "modifies_system_services": False,
-            "hardens_target": False,
-            "contacts_third_party_targets": False,
+            "changes_target_behavior": False,
+            "contacts_non_workshop_systems": False,
         },
         "overall_decision": result["overall_decision"],
         "failed_checks": result["failed_checks"],

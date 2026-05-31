@@ -21,7 +21,7 @@ def test_lab00_method_poc_reporting_readiness_passes():
     assert result["failed_checks"] == []
 
 
-def test_lab00_document_requires_student_authored_poc_and_reporting():
+def test_lab00_document_preserves_practical_poc_and_reporting_contract():
     content = Path("docs/workshop/labs/lab-00-environment-and-target-setup.md").read_text(encoding="utf-8")
     required = [
         "Student proof-of-concept requirement",
@@ -32,19 +32,24 @@ def test_lab00_document_requires_student_authored_poc_and_reporting():
         "Engineering remediation guidance",
         "Regression test recommendation",
         "Professional transfer guidance",
+        "Full-workshop tooling readiness gate",
     ]
     missing = [phrase for phrase in required if phrase not in content]
     assert missing == []
 
 
-def test_lab00_document_preserves_safety_boundary():
+def test_lab00_document_preserves_workshop_boundary_without_phrase_dependency():
     content = Path("docs/workshop/labs/lab-00-environment-and-target-setup.md").read_text(encoding="utf-8")
     required = [
+        "workshop operating boundary",
         "local-only",
         "synthetic-only",
         "authorized-only",
+        "ollama-webui",
+        "127.0.0.1:11435",
         "Do not install packages",
         "do not claim production security validation",
     ]
     missing = [phrase for phrase in required if phrase not in content]
     assert missing == []
+    assert "Do not test third-party" not in content
