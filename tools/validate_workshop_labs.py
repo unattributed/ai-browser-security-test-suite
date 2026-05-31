@@ -21,6 +21,18 @@ REQUIRED_SECTIONS = [
 LAB_DIR = Path("docs/workshop/labs")
 
 
+REQUIRED_WORKSHOP_BOUNDARY_TERMS = [
+    "workshop operating boundary",
+    "local-only",
+    "synthetic-only",
+    "authorized-only",
+    "ollama-webui",
+    "127.0.0.1:11435",
+    "do not claim production security validation",
+]
+
+
+
 def validate_lab(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -31,6 +43,10 @@ def validate_lab(path: Path) -> list[str]:
             errors.append(f"{path}: missing section {section!r}")
     if "Evidence" not in text and "evidence" not in text:
         errors.append(f"{path}: lab should mention evidence expectations")
+    if path.name == "lab-00-environment-and-target-setup.md":
+        for term in REQUIRED_WORKSHOP_BOUNDARY_TERMS:
+            if term not in text:
+                errors.append(f"{path}: missing workshop boundary term {term!r}")
     return errors
 
 

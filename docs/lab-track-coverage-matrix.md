@@ -263,3 +263,14 @@ per-lab student interactive action summary
 full-course evidence readiness
 ```
 <!-- slice-2.21:end -->
+
+
+<!-- slice-2.22:start -->
+## Slice 2.22 Lab 00 practical environment readiness runner coverage
+
+| Workshop lab | Status | Runner | Evidence expectation | Current gap |
+|---|---|---|---|---|
+| Lab 00, environment and target setup | practical environment readiness runner | `tools/run_workshop_lab_00_practical_environment_readiness.py` | system summary, tool readiness, courseware readiness, Lab 01 through Lab 12 runner availability, target acquisition, service topology, loopback listeners, target health, model mode, browser readiness, proxy tool readiness, packet tool readiness, media authoring readiness, evidence directory readiness, `artifact-manifest.json`, `SHA256SUMS.txt`, and `student-readiness-finding-report.md` declaring `ready for Lab 01: yes` or `ready for Lab 01: no` | classroom timing validation remains a later release-readiness activity |
+
+The Lab 00 practical environment readiness runner implements the Slice 2.20 Lab 00 environment initialization contract and the Slice 2.21 full-course tooling readiness contract while preserving the free and open-source primary tooling path and optional Burp Suite manual proxy path.
+<!-- slice-2.22:end -->

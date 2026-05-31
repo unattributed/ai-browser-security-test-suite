@@ -703,3 +703,18 @@ Lab 00 is complete when:
 17. checksums verify successfully,
 18. the readiness report is generated,
 19. readiness for Lab 01 is declared.
+
+
+<!-- slice-2.22:start -->
+## Slice 2.22 Lab 00 practical environment readiness runner
+
+Lab 00 is implemented by the practical readiness runner:
+
+```text
+tools/run_workshop_lab_00_practical_environment_readiness.py
+```
+
+The Lab 00 practical environment readiness runner initializes a reviewer-grade evidence directory under `$HOME/browser-safe-ai-workshop-development-evidence/`, records system and tool readiness, verifies the toolkit repository, records Lab 01 through Lab 12 runner availability, records the vulnerable local `ollama-webui` target path and target health on `http://127.0.0.1:11435/`, records live Ollama or deterministic-placeholder model mode, captures Playwright Chromium browser evidence when available, verifies the free and open-source proxy path through OWASP ZAP plus mitmproxy or mitmdump, records Burp Suite only as an optional manual proxy path, records packet tooling readiness, generates and decodes a loopback QR payload when tools are available, generates a synthetic image artifact, records optional OCR extraction when Tesseract is available, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and writes `student-readiness-finding-report.md` declaring `ready for Lab 01: yes` or `ready for Lab 01: no` with blocking readiness items and planned remediation.
+
+The runner preserves the Lab 00 safety boundary. It records readiness only. It does not perform package-manager mutation, driver changes, kernel package changes, system service changes, target hardening, or production security validation.
+<!-- slice-2.22:end -->
