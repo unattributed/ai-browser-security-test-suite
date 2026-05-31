@@ -240,3 +240,26 @@ no production security validation
 ```
 
 The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
+
+<!-- slice-2.21:start -->
+## Slice 2.21 student course synopsis and tooling readiness
+
+Slice 2.21 adds the student-facing course synopsis at:
+
+```text
+docs/workshop/student-course-synopsis.md
+```
+
+The synopsis maps each lab to its required tooling, expected evidence, and student interactive action. It is intended for students evaluating or preparing for the workshop.
+
+Lab 00 is expanded as the readiness gate for the complete workshop. It should verify the open-source primary path and record optional Burp Suite manual proxy readiness when a student already has Burp Suite available.
+
+Required readiness additions:
+
+```text
+media and QR authoring readiness
+optional Burp Suite manual proxy path
+per-lab student interactive action summary
+full-course evidence readiness
+```
+<!-- slice-2.21:end -->

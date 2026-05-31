@@ -178,3 +178,38 @@ This slice does not define a workshop VM image.
 This slice does not change runtime code.
 
 This slice only documents the provisioning model that later slices must satisfy.
+
+<!-- slice-2.21:start -->
+## Slice 2.21 student course readiness provisioning contract
+
+The provisioning contract for students is:
+
+```text
+Option 2:
+  self-hosted Debian-family Linux laptop
+
+Option 3:
+  prepared VirtualBox workshop VM
+```
+
+Lab 00 must verify that the selected path supports the full workshop sequence. The readiness gate includes the toolkit repository, `ollama-webui`, browser evidence capture, proxy evidence capture, media and QR authoring readiness, model mode selection, evidence directories, artifact manifests, and SHA256 checksums.
+
+Required readiness capabilities:
+
+```text
+run the local target
+capture browser evidence
+capture proxy evidence through open-source tools
+generate or modify QR payload artifacts
+decode QR payload artifacts
+generate image-borne instruction artifacts
+OCR image artifacts when available
+inspect JSON and markers
+verify local services
+run first-party lab runners
+produce manifests and checksums
+write a readiness report
+```
+
+The open-source path is the course baseline. Burp Suite may be used as an optional manual comparison proxy when already available, but it is not required for completion.
+<!-- slice-2.21:end -->

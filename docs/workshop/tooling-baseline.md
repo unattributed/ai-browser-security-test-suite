@@ -167,3 +167,72 @@ The verified local setup and live evidence workflow are documented in `docs/work
 Slice 2.2 verified OWASP ZAP 2.17.0 and mitmproxy 12.2.3 through standalone tool paths without using APT during repository validation. The workflow explicitly avoids NVIDIA, CUDA, DKMS, linux-image, and linux-headers changes. Core workshop correctness must not depend on GPU driver modification.
 
 Automation must use `zap.sh -cmd -version` for ZAP version checks so the GUI is not launched during validation.
+
+<!-- slice-2.21:start -->
+## Slice 2.21 full-course student readiness tools
+
+Lab 00 must verify the full workshop tool baseline, not only the narrow Lab 00 preflight tools. The readiness gate should confirm that students can complete Labs 01 through 12 with the open-source primary path and can optionally use Burp Suite as a manual comparison proxy when they already have access to it.
+
+Required core tools:
+
+```text
+python3
+python3-venv
+python3-pip
+pip
+setuptools
+wheel
+git
+curl
+jq
+rg or grep
+sha256sum
+tar
+gzip
+nmap
+ss
+```
+
+Required browser evidence tools:
+
+```text
+Playwright
+Playwright Chromium
+Chromium or Firefox for manual review
+browser DevTools
+```
+
+Required proxy and HTTP evidence tools:
+
+```text
+OWASP ZAP
+mitmproxy
+mitmdump
+curl
+jq
+nmap
+ss
+sha256sum
+rg or grep
+```
+
+Optional manual comparison proxy:
+
+```text
+Burp Suite Community or licensed Burp Suite edition
+```
+
+Burp Suite remains optional. It is an optional Burp Suite manual proxy path for students who already use it, not a required workshop dependency.
+
+Media and QR authoring readiness tools:
+
+```text
+qrencode
+zbarimg or zbar-tools
+ImageMagick
+Pillow
+Tesseract OCR
+```
+
+Lab 00 should generate readiness evidence for these tools where present and record unavailable optional tools without blocking unrelated labs.
+<!-- slice-2.21:end -->
