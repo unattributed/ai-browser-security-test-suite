@@ -213,3 +213,18 @@ write a readiness report
 
 The open-source path is the course baseline. Burp Suite may be used as an optional manual comparison proxy when already available, but it is not required for completion.
 <!-- slice-2.21:end -->
+
+
+<!-- slice-2.22:start -->
+## Slice 2.22 Lab 00 practical environment readiness runner provisioning gate
+
+The provisioning gate for Lab 00 is now executable through:
+
+```text
+tools/run_workshop_lab_00_practical_environment_readiness.py
+```
+
+The runner verifies the supported self-hosted Debian-family Linux laptop path and the prepared VirtualBox workshop VM path by using `$HOME/Workspace/ai-browser-security-test-suite`, `$HOME/Workspace/ollama-webui`, `http://127.0.0.1:11435/`, local model mode, browser evidence capture, free and open-source proxy readiness, QR and media authoring readiness, `artifact-manifest.json`, `SHA256SUMS.txt`, and `student-readiness-finding-report.md`.
+
+The runner records readiness and declares `ready for Lab 01: yes` or `ready for Lab 01: no`. It does not perform package-manager mutation, driver changes, kernel package changes, system service changes, target hardening, or production security validation.
+<!-- slice-2.22:end -->

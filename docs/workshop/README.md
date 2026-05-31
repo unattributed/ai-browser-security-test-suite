@@ -148,3 +148,14 @@ That synopsis explains the course audience, expected local environment, required
 
 The required proxy evidence path remains free and open source through OWASP ZAP, mitmproxy, and mitmdump. Students who already have Burp Suite Community or a licensed Burp Suite edition may use Burp as an optional Burp Suite manual proxy path for local comparison, but Burp is not a required evidence gate.
 <!-- slice-2.21:end -->
+
+
+<!-- slice-2.22:start -->
+## Slice 2.22 Lab 00 practical environment readiness runner
+
+Lab 00 now has a practical environment readiness runner at `tools/run_workshop_lab_00_practical_environment_readiness.py`.
+
+The runner verifies the student workstation or prepared VM, toolkit repository, local `ollama-webui` target, model mode, browser evidence path, free and open-source proxy readiness, optional Burp Suite manual proxy path, packet tooling, QR and media tooling, Lab 01 through Lab 12 runner availability, `artifact-manifest.json`, `SHA256SUMS.txt`, and `student-readiness-finding-report.md`.
+
+The Lab 00 practical environment readiness runner produces evidence under `$HOME/browser-safe-ai-workshop-development-evidence/` and declares `ready for Lab 01: yes` or `ready for Lab 01: no` with blocking readiness items and planned remediation.
+<!-- slice-2.22:end -->

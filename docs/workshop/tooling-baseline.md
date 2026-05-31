@@ -236,3 +236,18 @@ Tesseract OCR
 
 Lab 00 should generate readiness evidence for these tools where present and record unavailable optional tools without blocking unrelated labs.
 <!-- slice-2.21:end -->
+
+
+<!-- slice-2.22:start -->
+## Slice 2.22 Lab 00 practical environment readiness runner tooling contract
+
+The Lab 00 practical environment readiness runner is maintained at:
+
+```text
+tools/run_workshop_lab_00_practical_environment_readiness.py
+```
+
+The runner records the full-course tooling baseline without installing tools. It verifies Python 3.9 or newer, `python3 -m venv`, `python3 -m pip`, git, curl, jq, rg or grep, sha256sum, tar, gzip, nmap, ss, Playwright Chromium browser evidence when available, OWASP ZAP, mitmproxy, mitmdump, optional Burp Suite manual proxy path, tcpdump, tshark, qrencode, zbarimg or zbar-tools, ImageMagick, Pillow, and Tesseract OCR.
+
+The required proxy evidence path remains free and open source. Burp Suite remains optional and is not a required evidence gate. The runner writes `artifact-manifest.json`, `SHA256SUMS.txt`, and a `student-readiness-finding-report.md` that declares `ready for Lab 01: yes` or `ready for Lab 01: no`.
+<!-- slice-2.22:end -->
