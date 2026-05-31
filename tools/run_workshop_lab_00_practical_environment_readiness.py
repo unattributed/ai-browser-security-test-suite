@@ -147,6 +147,10 @@ def stamp() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
 
 
+def evidence_run_name() -> str:
+    return f"{SLICE_ID}-{stamp()}"
+
+
 def write_text(path: Path, content: str, mode: int | None = None) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -834,9 +838,13 @@ def write_sha256_manifest(evidence_dir: Path) -> Path:
 
 
 def create_archive(evidence_dir: Path) -> tuple[Path, Path]:
-    archive = evidence_dir.parent / f"{evidence_dir.name}{ARCHIVE_SUFFIX}"
+    if evidence_dir.name.startswith(f"{SLICE_ID}-"):
+        archive_stem = evidence_dir.name
+    else:
+        archive_stem = f"{SLICE_ID}-{evidence_dir.name}"
+    archive = evidence_dir.parent / f"{archive_stem}{ARCHIVE_SUFFIX}"
     with tarfile.open(archive, "w:gz") as tar:
-        tar.add(evidence_dir, arcname=evidence_dir.name)
+        tar.add(evidence_dir, arcname=archive_stem)
     checksum = archive.with_name(archive.name + ".sha256")
     write_text(checksum, f"{sha256_file(archive)}  {archive.name}\n")
     return archive, checksum
@@ -868,7 +876,7 @@ def main() -> int:
     assert_loopback_url(ollama_url)
 
     evidence_root = Path(args.evidence_root).expanduser().resolve()
-    evidence_dir = evidence_root / SLICE_ID / stamp()
+    evidence_dir = evidence_root / SLICE_ID / evidence_run_name()
     evidence_dir.mkdir(parents=True, exist_ok=True)
 
     system_summary = {

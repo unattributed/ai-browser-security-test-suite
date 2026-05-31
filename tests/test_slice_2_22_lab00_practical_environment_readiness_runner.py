@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import tarfile
 import os
 import shutil
 import sys
@@ -90,6 +91,25 @@ def test_runner_records_qr_media_manifest_and_checksum_contracts() -> None:
     ]
     for term in required_terms:
         assert term in text
+
+
+def test_archive_names_preserve_project_slice_prefix(tmp_path) -> None:
+    module = import_runner()
+    evidence_dir = tmp_path / f"{module.SLICE_ID}-20260531-164705"
+    if evidence_dir.exists():
+        shutil.rmtree(evidence_dir)
+    evidence_dir.mkdir(parents=True)
+    (evidence_dir / "artifact.txt").write_text("synthetic evidence\n", encoding="utf-8")
+
+    archive, checksum = module.create_archive(evidence_dir)
+
+    assert archive.name == f"{module.SLICE_ID}-20260531-164705.tar.gz"
+    assert checksum.name == f"{module.SLICE_ID}-20260531-164705.tar.gz.sha256"
+    assert checksum.read_text(encoding="utf-8").strip().endswith(f"  {archive.name}")
+    with tarfile.open(archive, "r:gz") as tar:
+        names = tar.getnames()
+    assert names[0] == f"{module.SLICE_ID}-20260531-164705"
+    assert f"{module.SLICE_ID}-20260531-164705/artifact.txt" in names
 
 
 def test_runner_executes_in_controlled_temporary_directory(tmp_path, monkeypatch) -> None:
@@ -198,4 +218,5 @@ if __name__ == "__main__":
     test_runner_records_foss_first_tooling_and_optional_burp_only()
     test_runner_records_qr_media_manifest_and_checksum_contracts()
     test_docs_discover_the_practical_runner()
+    test_archive_names_preserve_project_slice_prefix(Path(os.environ.get("TMPDIR", "/tmp")) / "slice-2-22-archive-name-selftest")
     print("[ok] Slice 2.22 Lab 00 practical environment readiness runner validated")
