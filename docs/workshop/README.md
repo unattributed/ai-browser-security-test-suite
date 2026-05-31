@@ -134,3 +134,17 @@ no production security validation
 ```
 
 The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
+
+<!-- slice-2.21:start -->
+## Student-facing course synopsis
+
+The student-facing workshop synopsis is maintained at:
+
+```text
+docs/workshop/student-course-synopsis.md
+```
+
+That synopsis explains the course audience, expected local environment, required evidence workflow, per-lab tools, evidence outputs, and student interactive actions for Labs 00 through 12.
+
+The required proxy evidence path remains free and open source through OWASP ZAP, mitmproxy, and mitmdump. Students who already have Burp Suite Community or a licensed Burp Suite edition may use Burp as an optional Burp Suite manual proxy path for local comparison, but Burp is not a required evidence gate.
+<!-- slice-2.21:end -->

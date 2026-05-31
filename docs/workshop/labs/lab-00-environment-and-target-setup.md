@@ -226,3 +226,60 @@ Lab 00 is complete only when the student has:
 6. preserved evidence artifacts with checksums,
 7. documented cleanup and rollback,
 8. confirmed that no production security validation claim is made.
+
+<!-- slice-2.21:start -->
+## Full-workshop tooling readiness gate
+
+Lab 00 is the readiness gate for the complete workshop, not only a narrow local preflight. It must prove that the environment can support Labs 01 through 12.
+
+The Lab 00 readiness package should verify or record:
+
+```text
+core command-line tools
+Python virtual environment support
+toolkit repository readiness
+ollama-webui target readiness
+model mode readiness
+browser evidence readiness
+proxy tooling readiness
+media and QR authoring readiness
+courseware completeness
+runner availability
+artifact manifest creation
+SHA256 checksum verification
+ready for Lab 01 decision
+```
+
+The primary proxy path is free and open source:
+
+```text
+OWASP ZAP
+mitmproxy
+mitmdump
+```
+
+Students who already have Burp Suite Community or a licensed Burp Suite edition may use Burp as an optional Burp Suite manual proxy path for local traffic inspection and comparison. Burp is not required, and no required evidence gate depends on Burp.
+
+Media and QR readiness should include:
+
+```text
+qrencode
+zbarimg or zbar-tools
+ImageMagick
+Pillow
+Tesseract OCR
+```
+
+Expected additional Lab 00 evidence:
+
+```text
+media-authoring-readiness.json
+lab-00-media-check/qr-payload.txt
+lab-00-media-check/qr-local-payload.png
+lab-00-media-check/qr-decoded.txt
+lab-00-media-check/synthetic-image-instruction.png
+lab-00-media-check/synthetic-image-instruction-ocr.txt
+```
+
+These checks prove that students can generate, modify, decode, and validate local synthetic QR and image artifacts before reaching the labs that require those skills.
+<!-- slice-2.21:end -->
