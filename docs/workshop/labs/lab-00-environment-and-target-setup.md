@@ -1,236 +1,633 @@
-# Lab 00, environment and target setup
+# Lab 00, initialize the workshop environment
 
 ## Estimated time
 
-30 to 45 minutes for a prepared local workshop environment. Add more time when a student must troubleshoot a missing local browser, missing local model dependency, unavailable optional proxy tool, or stopped loopback-only target.
+60 to 90 minutes for a self-hosted Debian-family Linux laptop or the prepared workshop VM.
+
+Lab 00 is complete when the workstation runs the local `ollama-webui` target, captures browser evidence, records proxy and media tooling readiness, writes a manifest, verifies checksums, and declares readiness for Lab 01.
 
 ## Purpose
 
-Lab 00 prepares the student workstation, intentionally vulnerable local target, local model runtime, browser evidence tooling, proxy workflow, and reporting workflow used by the Browser-Safe AI Systems workshop.
+This lab initializes the environment used throughout the Browser-Safe AI Systems workshop.
 
-This lab is not only a preflight. It teaches the assessment contract used by every later lab: define the objective, construct a proof of concept, execute it against an in-scope target, capture evidence, explain the weak behavior, identify root cause or remediable programmatic error, recommend engineering remediation, recommend regression coverage, and produce a reviewer-ready finding report.
+The lab sets up the required workspace, prepares the toolkit repository, prepares the intentionally vulnerable `ollama-webui` workshop target, verifies Python and browser support, confirms model runtime mode, starts the local target, captures browser evidence, verifies proxy readiness, verifies media and QR authoring readiness, and produces an evidence package proving that the environment is ready for the rest of the workshop.
+
+The value of this workshop is practical instruction. Students learn to construct, modify, execute, and defend browser-based AI Proof of Concept tests against a controlled vulnerable LLM application, then preserve evidence that proves what happened.
 
 ## Learning objectives
 
-By the end of Lab 00, the student should be able to:
+By the end of Lab 00, the student will be able to:
 
-1. identify the local workshop target and authorization boundary,
-2. confirm the local browser, model, proxy, and evidence paths needed by later labs,
-3. construct a student-authored readiness proof of concept,
-4. execute the readiness proof of concept without changing system configuration,
-5. capture evidence and checksums that prove the environment state,
-6. distinguish readiness gaps from production security findings,
-7. document expected versus observed behavior,
-8. write a Lab 00 finding report that later labs can reuse as a reporting pattern.
+1. initialize the standard workshop directory layout,
+2. choose the self-hosted Linux laptop path or the prepared VirtualBox workshop VM path,
+3. prepare the toolkit repository and Python virtual environment,
+4. obtain or verify the approved `ollama-webui` target,
+5. start the target on `127.0.0.1:11435`,
+6. verify live local Ollama or deterministic-placeholder model mode,
+7. capture browser evidence from the local target,
+8. verify OWASP ZAP, mitmproxy, and mitmdump as the primary free and open-source proxy path,
+9. record Burp Suite as an optional manual proxy path when the student already has it available,
+10. verify QR, image, and OCR authoring tools needed by later labs,
+11. generate manifest and SHA256 evidence,
+12. produce a readiness report that determines whether the environment is ready for Lab 01.
 
 ## Attack vector
 
-Lab 00 does not exploit a vulnerability. The assessment vector is environment readiness for later Browser-Based AI proof-of-concept attack paths. The student verifies that the local target, browser evidence workflow, proxy evidence workflow, model mode, artifact manifest, checksum workflow, cleanup plan, and report template are ready before conducting later attack-path labs.
+Lab 00 prepares the controlled attack and evidence environment used by the workshop.
 
-The practical adversary lesson is preparation. Realistic Browser-Based AI assessments require a tester to know what is in scope, how evidence is captured, how local tooling changes the observation path, how missing dependencies are reported, and how an observed weakness will be reproduced and reviewed.
+The target application is the vulnerable local `ollama-webui` training target. Later labs use this target to demonstrate browser-based AI tactics, techniques, and procedures through practical Proof of Concept exercises. Lab 00 establishes the platform, tools, local services, target version, evidence path, and checksum workflow required to run those exercises reliably.
 
 ## Risk and impact
 
-If Lab 00 is skipped or treated as a passive setup checklist, later findings may be unreproducible, lack proof of authorization boundary, omit model or browser context, lose proxy evidence, confuse optional-tool failures with target behavior, or produce reports that engineering teams cannot act on.
+If Lab 00 is incomplete, later labs may fail for platform reasons instead of security-relevant reasons. Missing Python components, missing browser automation, unavailable proxy tools, missing QR or image tooling, wrong repository paths, stopped loopback services, or missing evidence directories can prevent students from completing the course exercises.
 
-The impact of a Lab 00 failure is workflow risk, not a production vulnerability claim. A readiness gap can block later labs, weaken evidence quality, or make a student report non-reviewable.
+A complete Lab 00 environment reduces workshop interruption, improves evidence quality, and lets students focus on the tradecraft being taught rather than basic platform troubleshooting.
 
 ## Safety boundary
 
-All activity in this lab remains local-only, synthetic-only, and authorized-only. The intentionally vulnerable workshop environment is the target. It includes the local `ollama-webui` deployment, the local Ollama service, supporting workshop infrastructure, fixture services started by lab runners, and the workshop host VM.
+All workshop activity for this lab is local-only, synthetic-only, and authorized-only.
 
-Do not test third-party systems, third-party accounts, public callback infrastructure, production accounts, real credentials, real customer data, malware, persistence mechanisms, destructive actions, or uncontrolled external services. Do not use third-party targets. Do not install packages, run `apt`, modify NVIDIA, modify CUDA, modify DKMS, modify kernel packages, modify system services, or harden the intentionally weak `ollama-webui` target as part of this lab.
+The workshop operating boundary is:
 
-The student must record this boundary exactly: do not claim production security validation from Lab 00 readiness checks.
+```text
+student Debian-family Linux laptop or prepared workshop VM
+$HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ollama-webui
+local Ollama on 127.0.0.1:11434 when live model mode is used
+local ollama-webui target on 127.0.0.1:11435
+local browser, proxy, QR, image, OCR, and evidence tooling
+$HOME/browser-safe-ai-workshop-development-evidence
+```
+
+The lab series is purpose-built to teach practical adversarial testing against the vulnerable local `ollama-webui` application. The target, payloads, markers, screenshots, QR codes, image artifacts, model prompts, and evidence are generated inside this workshop environment.
+
+Do not install packages from Lab 00 validators. Validators inspect, record, and report. They do not run `apt`, change system packages, modify NVIDIA, modify CUDA, modify DKMS, modify kernel packages, modify system services, or change the target behavior. Python dependencies are installed only into repository-local virtual environments during explicit setup steps.
+
+The evidence package should record this scope phrase: do not claim production security validation.
 
 ## Tools used
 
-Required or expected local tools:
+Core command-line tools:
 
-1. Python 3,
-2. existing repository scripts,
-3. local `ollama-webui` target when available,
-4. local Ollama service or documented no-model preflight mode,
-5. Playwright or browser DevTools evidence path,
-6. `curl`, `jq`, `rg` or `grep`, and `sha256sum` where available,
-7. optional OWASP ZAP, mitmproxy, or mitmdump for later proxy evidence paths.
+```text
+python3
+python3 -m venv
+python3 -m pip
+git
+curl
+jq
+rg or grep
+sha256sum
+tar
+gzip
+nmap
+ss
+```
 
-Missing optional tools should be documented as unavailable-tool exceptions, not treated as production security findings.
+Python project dependencies:
+
+```text
+pip
+setuptools
+wheel
+dnspython
+httpx
+playwright
+pyyaml
+rich
+Pillow
+```
+
+Browser evidence tools:
+
+```text
+Playwright
+Playwright Chromium
+Chromium or Firefox for manual review
+browser DevTools
+```
+
+Target and model tools:
+
+```text
+ollama-webui
+Ollama for live-local model mode
+deterministic-placeholder mode when live model output is not required
+```
+
+Primary free and open-source proxy tools:
+
+```text
+OWASP ZAP
+mitmproxy
+mitmdump
+```
+
+Optional manual proxy path:
+
+```text
+Burp Suite Community or licensed Burp Suite, when already available to the student
+```
+
+Burp is optional. It may be used by students who already have it available for local traffic inspection and comparison. The required workshop path remains free and open source.
+
+Media, QR, and OCR authoring tools:
+
+```text
+qrencode
+zbarimg or zbar-tools
+ImageMagick
+Tesseract OCR
+Pillow
+```
+
+Optional advanced packet evidence tools:
+
+```text
+tcpdump
+tshark
+Wireshark
+```
 
 ## Expected result
 
-The expected result is a Lab 00 evidence package showing the local readiness state, target URL or documented unavailable target state, model mode, browser evidence path, proxy evidence path or unavailable-tool exception, artifact manifest, SHA256 manifest, expected versus observed readiness notes, and a completed Lab 00 finding report.
+The expected result is a Lab 00 evidence package under:
 
-The expected student outcome is a clear readiness proof of concept that demonstrates the student can prepare an evidence-producing Browser-Based AI assessment before constructing later attack-path proof of concepts.
+```text
+$HOME/browser-safe-ai-workshop-development-evidence/
+```
+
+The package proves that the student environment can run the target and support later labs.
+
+Expected evidence includes:
+
+```text
+system-summary.json
+tool-readiness.json
+courseware-readiness.json
+target-acquisition.json
+service-topology.json
+loopback-listeners.txt
+target-health.json
+ollama-version.json
+deterministic-placeholder-fallback.json
+browser-readiness.json
+proxy-tool-readiness.json
+media-authoring-readiness.json
+evidence-directory-readiness.json
+artifact-manifest.txt
+SHA256SUMS.txt
+student-readiness-finding-report.md
+lab-00-browser-check/target-homepage.png
+lab-00-browser-check/target-homepage.html
+lab-00-media-check/qr-payload.txt
+lab-00-media-check/qr-local-payload.png
+lab-00-media-check/qr-decoded.txt
+lab-00-media-check/synthetic-image-instruction.png
+lab-00-media-check/synthetic-image-instruction-ocr.txt
+```
 
 ## Failure conditions
 
-Lab 00 fails when any of the following occur:
+Lab 00 fails when one or more of the following conditions remain unresolved:
 
-1. the student cannot identify the in-scope local target or authorization boundary,
-2. evidence paths are not recorded,
-3. optional-tool absence is not documented as an unavailable-tool exception,
-4. expected versus observed behavior is missing,
-5. no artifact manifest or checksum record is produced,
-6. the student claims production security validation,
-7. the student attempts third-party testing,
-8. the student installs packages, runs `apt`, modifies NVIDIA, modifies CUDA, modifies DKMS, modifies kernel packages, modifies system services, or hardens the intentionally weak target as part of this lab,
-9. the finding report lacks root cause or readiness-gap analysis, remediation, regression recommendation, or professional transfer guidance.
+1. the platform path is not selected,
+2. `$HOME/Workspace` is missing or not writable,
+3. `$HOME/browser-safe-ai-workshop-development-evidence` is missing or not writable,
+4. the toolkit repository is missing,
+5. the toolkit virtual environment cannot be prepared,
+6. the `ollama-webui` target is missing,
+7. the target version cannot be recorded,
+8. the target cannot respond on `127.0.0.1:11435`,
+9. browser evidence cannot be captured,
+10. required evidence files cannot be written,
+11. the proxy readiness state is not recorded,
+12. the QR and media authoring readiness state is not recorded,
+13. the artifact manifest is missing,
+14. SHA256 verification fails,
+15. the readiness report does not state whether the environment is ready for Lab 01.
 
 ## Assessment method taught
 
-Lab 00 teaches environment verification as an assessment method. The student verifies that the local browser, target, model, proxy, evidence, and reporting components are ready before attempting any Browser-Based AI proof of concept.
+Lab 00 teaches workshop environment verification as a practical assessment method.
 
-The principle is simple: a finding is not ready for engineering review until the tester can show the target state, evidence collection path, reproduction path, observed behavior, expected behavior, and report structure.
+Before a student can perform browser-AI Proof of Concept exercises, the student must be able to prove:
+
+1. which target is in scope,
+2. which target version is used,
+3. which model mode is used,
+4. which browser evidence path is available,
+5. which proxy evidence path is available,
+6. which media and QR authoring tools are available,
+7. which evidence artifacts were created,
+8. which checksums verify those artifacts,
+9. whether the environment is ready for Lab 01.
 
 ## In-scope target assumptions
 
-The in-scope workshop target is intentionally vulnerable and local. The default target URL is `http://127.0.0.1:11435` unless a later lab explicitly documents another loopback-only endpoint. Optional helper services may use other loopback-only ports, but the lab must record listeners and service exposure after each run.
+The target is the vulnerable local `ollama-webui` workshop application.
 
-The local model is a dependency, not the security boundary. A deterministic placeholder response is acceptable when the lab objective is evidence workflow rather than model quality. Any live model use must record the model name, model mode, prompt, response, and limitations.
+Default target URL:
+
+```text
+http://127.0.0.1:11435/
+```
+
+Default live Ollama endpoint:
+
+```text
+http://127.0.0.1:11434
+```
+
+The target should be obtained through one of these paths:
+
+```text
+Option 2: public Git clone into $HOME/Workspace/ollama-webui
+Option 3: prepared VirtualBox workshop VM with the target already present
+```
+
+The prepared VM uses `/home/foo` as the workshop user. Student-provisioned laptops use the student's own `$HOME`.
 
 ## Student proof-of-concept requirement
 
-The student must create a short Lab 00 readiness proof of concept. This proof of concept does not exploit a vulnerability. It demonstrates that the student can prepare the assessment environment and produce auditable evidence before running attack-path labs.
+The Lab 00 Proof of Concept is the working environment itself.
 
-The student-authored proof of concept must include:
+The student demonstrates readiness by running the local target, capturing browser evidence, validating proxy and media tooling readiness, producing a manifest, verifying checksums, and generating the readiness report.
 
-1. the target URL they will use for the workshop,
-2. the local model mode they will use,
-3. the browser evidence path they will use,
-4. the proxy evidence path they will use or the documented unavailable-tool exception,
-5. the evidence output directory,
-6. the report template location,
-7. the cleanup and rollback statement,
-8. the professional transfer note describing how this readiness method applies to owned or explicitly authorized environments.
+No separate handwritten setup note is required.
 
 ## Proof-of-concept construction guidance
 
-Construct the Lab 00 proof of concept as a plain text or Markdown note under the evidence directory created by the Lab 00 runner. The note should be student-authored, concise, and specific to the machine being used.
+Construct the Lab 00 Proof of Concept from practical evidence.
 
-Minimum construction blocks:
+The minimum construction path is:
 
 ```text
-assessment objective: verify that the local workshop environment can support reproducible Browser-Based AI assessment evidence
-in-scope target: http://127.0.0.1:11435 or documented loopback-only override
-model mode: live-local-text, live-local-vision, ocr-to-text, deterministic-placeholder, or no-model preflight
-browser evidence: Playwright or browser DevTools path
-proxy evidence: OWASP ZAP, mitmproxy, mitmdump, or unavailable-tool exception
-expected behavior: target and tooling readiness can be inspected without changing system configuration
-observed behavior: recorded by the student during execution
-cleanup: stop lab-created helper processes only, preserve evidence artifacts
-reporting output: completed Lab 00 finding report
+create workspace directory
+create evidence directory
+prepare toolkit repository
+prepare or verify ollama-webui
+record target version
+select model mode
+start target
+capture target health
+capture browser screenshot and HTML
+record proxy readiness
+generate local QR artifact
+decode local QR artifact
+generate synthetic image artifact
+OCR synthetic image artifact when available
+write artifact manifest
+write SHA256SUMS.txt
+verify SHA256SUMS.txt
+write readiness report
 ```
 
 ## Proof-of-concept execution guidance
 
-Execute the existing Lab 00 preflight runner and then complete the Lab 00 readiness report.
+Execute Lab 00 using the standard paths.
 
-Recommended local execution path:
+Create directories:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
-python3 tools/run_workshop_lab_00_preflight.py
-python3 tools/run_workshop_lab_00_method_poc_reporting_readiness.py --repo /home/foo/Workspace/ai-browser-security-test-suite
+mkdir -p "$HOME/Workspace"
+mkdir -p "$HOME/browser-safe-ai-workshop-development-evidence"
 ```
 
-The readiness validator is non-mutating. It checks the Lab 00 documentation and writes audit evidence. It does not install packages, start system services, modify drivers, modify CUDA, modify DKMS, modify kernel packages, harden the target, or contact third-party targets.
+Prepare toolkit:
+
+```bash
+cd "$HOME/Workspace"
+test -d "$HOME/Workspace/ai-browser-security-test-suite" || \
+  git clone https://github.com/unattributed/ai-browser-security-test-suite.git \
+  "$HOME/Workspace/ai-browser-security-test-suite"
+
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements.txt
+python -m pip check
+python -m playwright install chromium
+```
+
+Prepare target on a self-hosted laptop:
+
+```bash
+cd "$HOME/Workspace"
+test -d "$HOME/Workspace/ollama-webui" || \
+  git clone https://github.com/unattributed/ollama-webui.git \
+  "$HOME/Workspace/ollama-webui"
+
+cd "$HOME/Workspace/ollama-webui"
+git checkout <approved-workshop-commit-or-tag>
+git rev-parse HEAD
+git status --short
+
+test -d .venv || python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements.txt
+python -m pip check
+```
+
+Verify target inside the prepared VM:
+
+```bash
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+git rev-parse HEAD
+git status --short
+
+cd "$HOME/Workspace/ollama-webui"
+git rev-parse HEAD
+git status --short
+test -f scripts/pull_model.py
+test -f requirements.txt
+```
+
+Start target:
+
+```bash
+cd "$HOME/Workspace/ollama-webui"
+source .venv/bin/activate
+python scripts/pull_model.py
+```
+
+If the browser does not open automatically, open:
+
+```text
+http://127.0.0.1:11435/
+```
+
+Verify target health from another terminal:
+
+```bash
+curl -sS -I http://127.0.0.1:11435/ | head
+```
 
 ## Evidence collection requirements
 
-Lab 00 evidence must include, where available:
+Lab 00 evidence should be generated under:
 
-1. preflight report,
-2. target URL and health observation,
-3. local tool availability or unavailable-tool exception,
-4. browser evidence path readiness,
-5. proxy evidence path readiness or exception,
-6. evidence output path,
-7. artifact manifest,
-8. SHA256 manifest,
-9. expected versus observed readiness notes,
-10. completed finding report.
+```text
+$HOME/browser-safe-ai-workshop-development-evidence/
+```
+
+Collect system and tool readiness:
+
+```bash
+uname -m
+python3 --version
+python3 -m venv --help >/dev/null
+python3 -m pip --version
+git --version
+curl --version
+jq --version
+rg --version || grep --version
+sha256sum --version
+tar --version
+nmap --version
+ss --version
+```
+
+Capture service listeners:
+
+```bash
+ss -ltnp | tee "$HOME/browser-safe-ai-workshop-development-evidence/loopback-listeners.txt"
+```
+
+Capture browser evidence:
+
+```bash
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+. .venv/bin/activate
+
+python - <<'PY'
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+
+out = Path.home() / "browser-safe-ai-workshop-development-evidence" / "lab-00-browser-check"
+out.mkdir(parents=True, exist_ok=True)
+
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page()
+    page.goto("http://127.0.0.1:11435/", wait_until="domcontentloaded")
+    page.screenshot(path=str(out / "target-homepage.png"), full_page=True)
+    (out / "target-homepage.html").write_text(page.content(), encoding="utf-8")
+    browser.close()
+
+print(out)
+PY
+```
+
+Verify proxy readiness:
+
+```bash
+timeout 30s zap.sh -cmd -version || true
+mitmproxy --version || true
+mitmdump --version || true
+command -v burpsuite || command -v burp || true
+```
+
+Verify media and QR readiness:
+
+```bash
+mkdir -p "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check"
+
+printf '%s\n' \
+  'http://127.0.0.1:11435/local-lab/qr-check?marker=SYNTHETIC-LAB-MARKER' \
+  > "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/qr-payload.txt"
+
+qrencode \
+  -o "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/qr-local-payload.png" \
+  < "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/qr-payload.txt"
+
+zbarimg \
+  "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/qr-local-payload.png" \
+  > "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/qr-decoded.txt"
+
+python3 - <<'PY'
+from pathlib import Path
+from PIL import Image, ImageDraw
+
+out = Path.home() / "browser-safe-ai-workshop-development-evidence" / "lab-00-media-check"
+out.mkdir(parents=True, exist_ok=True)
+
+image = Image.new("RGB", (1100, 220), "white")
+draw = ImageDraw.Draw(image)
+draw.text((30, 90), "SYNTHETIC-LAB-MARKER: image text evidence path check", fill="black")
+image.save(out / "synthetic-image-instruction.png")
+print(out / "synthetic-image-instruction.png")
+PY
+
+tesseract \
+  "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/synthetic-image-instruction.png" \
+  "$HOME/browser-safe-ai-workshop-development-evidence/lab-00-media-check/synthetic-image-instruction-ocr" \
+  >/dev/null 2>&1 || true
+```
+
+Create manifest and checksums:
+
+```bash
+EVIDENCE_ROOT="$HOME/browser-safe-ai-workshop-development-evidence"
+
+find "$EVIDENCE_ROOT" -type f | sort > "$EVIDENCE_ROOT/artifact-manifest.txt"
+
+(
+  cd "$EVIDENCE_ROOT"
+  find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum
+) > "$EVIDENCE_ROOT/SHA256SUMS.txt"
+
+cd "$EVIDENCE_ROOT"
+sha256sum -c SHA256SUMS.txt
+```
 
 ## Negative control
 
-The Lab 00 negative control is an unavailable optional tool or intentionally stopped local target check. The student must document that the workshop can distinguish between a ready dependency and a missing dependency without treating the missing optional dependency as a production security result.
+The Lab 00 negative control is an expected missing or alternate dependency state that is recorded correctly.
+
+Examples:
+
+```text
+live Ollama unavailable, deterministic-placeholder mode selected
+OWASP ZAP unavailable, mitmproxy available
+Burp Suite unavailable, primary open-source proxy path available
+Tesseract unavailable, image artifact still generated and recorded
+prepared VM selected instead of self-hosted laptop
+```
+
+The important result is that the environment records the dependency state accurately and still identifies whether the student is ready for Lab 01.
 
 ## Expected versus observed behavior
 
-Expected behavior: the local environment is ready, or the readiness gap is clearly documented with a bounded remediation note.
+Expected behavior:
 
-Observed behavior: the student records the actual target, tool, model, proxy, browser, and evidence state from their workstation.
+```text
+the workstation can run the local target, capture browser evidence, record proxy readiness, generate media and QR artifacts, create manifests, verify checksums, and produce a readiness report
+```
 
-The student must record this boundary exactly: do not claim production security validation from Lab 00 readiness checks.
+Observed behavior:
+
+```text
+the evidence package records the actual platform, target, model mode, browser, proxy, media tooling, service listener, artifact, and checksum state
+```
 
 ## Root cause or remediable programmatic error class
 
-Lab 00 does not assign vulnerability root cause for a target weakness. Instead, it teaches the reporting field that later labs must complete. For Lab 00 readiness gaps, root cause should describe an environment or workflow issue, such as missing browser automation support, missing local model dependency, unreachable loopback target, missing proxy capture path, or incomplete evidence directory permissions.
+For Lab 00, root cause means readiness-gap cause.
+
+Examples:
+
+```text
+missing Python virtual environment support
+missing Playwright Chromium
+unavailable target repository
+target not responding on 127.0.0.1:11435
+Ollama unavailable when live model mode is required
+proxy tool unavailable
+QR generator unavailable
+QR decoder unavailable
+Pillow unavailable
+Tesseract unavailable
+evidence directory not writable
+SHA256 verification failed
+```
 
 ## Engineering remediation guidance
 
-For readiness gaps, remediation should be operational and bounded. Examples include installing approved workshop dependencies through the documented setup path, starting the local target through the approved runbook, selecting deterministic placeholder mode when a live model is unavailable, or documenting an unavailable optional proxy tool exception.
+Use bounded remediation that prepares the workshop environment without weakening the evidence workflow.
 
-Do not remediate by weakening the evidence standard, bypassing the safety boundary, hardening the intentionally vulnerable target, or using third-party infrastructure.
+Examples:
+
+```text
+install approved prerequisites through the course setup path
+create the repository-local virtual environment
+install Python dependencies into the repository-local virtual environment
+restore the approved target version
+start the target through scripts/pull_model.py
+select deterministic-placeholder mode when live model output is not required
+use the prepared workshop VM when the self-hosted laptop path is not practical
+rerun the failing readiness check
+regenerate manifest and checksums
+```
 
 ## Regression test recommendation
 
-Every environment readiness issue should have a repeatable check. The minimum regression recommendation is to rerun Lab 00 preflight and the Lab 00 readiness validator before continuing to Lab 01.
+After remediation, rerun the relevant readiness check and regenerate checksums.
+
+Minimum regression path:
+
+```bash
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+. .venv/bin/activate
+python3 tools/run_workshop_lab_00_preflight.py
+python3 tools/run_workshop_lab_00_method_poc_reporting_readiness.py \
+  --repo "$HOME/Workspace/ai-browser-security-test-suite"
+
+cd "$HOME/browser-safe-ai-workshop-development-evidence"
+sha256sum -c SHA256SUMS.txt
+```
 
 ## Finding report template
 
-Students must produce a Lab 00 finding report with these fields:
+Create:
+
+```text
+student-readiness-finding-report.md
+```
+
+Use this structure:
 
 ```text
 title:
 lab id: Lab 00
+student environment:
+platform path: self-hosted laptop or prepared VM
 assessment objective:
-in-scope target:
-authorization boundary:
-proof-of-concept construction summary:
-proof-of-concept execution summary:
-expected behavior:
-observed behavior:
+workshop operating boundary:
+toolkit path:
+toolkit observed commit:
+target acquisition method:
+target path:
+target observed commit or VM image version:
+target url:
+model mode:
+browser evidence summary:
+proxy evidence summary:
+media and QR readiness summary:
+service topology summary:
+courseware readiness summary:
 evidence artifacts:
-affected trust boundary:
-root cause or readiness gap:
-engineering remediation:
-regression test recommendation:
-standards mapping readiness: not mapped unless evidence exists
-professional transfer guidance:
-cleanup and rollback:
-student reviewer notes:
+readiness gaps:
+remediation performed:
+regression check:
+cleanup performed:
+ready for Lab 01: yes or no
+scope phrase: do not claim production security validation
 ```
 
 ## Standards mapping readiness
 
-Standards mapping is not performed in Lab 00 unless the student has reproduction steps, observed behavior, expected behavior, evidence artifacts, affected trust boundary, root cause hypothesis, engineering remediation, regression recommendation, mapping rationale, and mapping confidence.
+Standards mapping is not performed in Lab 00 unless there is enough evidence to justify it.
 
-For Lab 00, the usual result is `standards mapping readiness: not ready, environment readiness only`.
+For Lab 00, use:
+
+```text
+standards mapping readiness: not ready, environment readiness only
+```
 
 ## Professional transfer guidance
 
-In an owned environment, product-security review, red-team engagement, penetration test, due-diligence review, or contracted assessment, the same readiness method becomes the pre-engagement evidence setup. The tester confirms scope, target inventory, authorization, approved tooling, evidence handling, rollback, reporting fields, and regression expectations before constructing attack-path proof of concepts.
+In a client engagement, red-team assessment, product-security review, due-diligence review, or internal security validation program, the same readiness method becomes pre-engagement evidence setup.
 
-The transferable skill is not the exact local port. The transferable skill is preparing a controlled assessment environment where every later proof of concept can be reproduced, evidenced, explained, remediated, and reviewed.
+The transferable skill is preparing a controlled assessment environment where each later Proof of Concept can be reproduced, evidenced, explained, remediated, and reviewed.
 
-## Completion criteria
-
-Lab 00 is complete only when the student has:
-
-1. verified the local repository and workshop target path,
-2. executed the preflight or documented why a dependency is unavailable,
-3. executed the Lab 00 readiness validator,
-4. created a student-authored Lab 00 readiness proof of concept note,
-5. produced a completed Lab 00 finding report,
-6. preserved evidence artifacts with checksums,
-7. documented cleanup and rollback,
-8. confirmed that no production security validation claim is made.
-
-<!-- slice-2.21:start -->
 ## Full-workshop tooling readiness gate
 
-Lab 00 is the readiness gate for the complete workshop, not only a narrow local preflight. It must prove that the environment can support Labs 01 through 12.
+Lab 00 is the readiness gate for the complete workshop, not only a narrow local preflight.
+
+It must prove that the environment can support Labs 01 through 12.
 
 The Lab 00 readiness package should verify or record:
 
@@ -282,4 +679,27 @@ lab-00-media-check/synthetic-image-instruction-ocr.txt
 ```
 
 These checks prove that students can generate, modify, decode, and validate local synthetic QR and image artifacts before reaching the labs that require those skills.
-<!-- slice-2.21:end -->
+
+## Completion criteria
+
+Lab 00 is complete when:
+
+1. the platform path is selected,
+2. `$HOME/Workspace` exists,
+3. `$HOME/browser-safe-ai-workshop-development-evidence` exists,
+4. required tools are verified,
+5. the toolkit repository is prepared,
+6. the `ollama-webui` target is prepared or verified,
+7. the target version is recorded,
+8. model mode is selected,
+9. the target responds on `127.0.0.1:11435`,
+10. local service listeners are captured,
+11. browser evidence is captured from the target,
+12. proxy readiness is recorded,
+13. media and QR authoring readiness is recorded,
+14. Lab 00 preflight is executed,
+15. Lab 00 readiness validation is executed,
+16. the evidence package is created,
+17. checksums verify successfully,
+18. the readiness report is generated,
+19. readiness for Lab 01 is declared.

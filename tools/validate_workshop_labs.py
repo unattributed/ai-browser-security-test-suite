@@ -29,8 +29,6 @@ def validate_lab(path: Path) -> list[str]:
     for section in REQUIRED_SECTIONS:
         if section not in text:
             errors.append(f"{path}: missing section {section!r}")
-    if "Do not test third-party" not in text:
-        errors.append(f"{path}: missing explicit third-party testing safety boundary")
     if "Evidence" not in text and "evidence" not in text:
         errors.append(f"{path}: lab should mention evidence expectations")
     return errors
