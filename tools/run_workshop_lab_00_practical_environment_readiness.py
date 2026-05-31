@@ -102,6 +102,14 @@ LAB_RUNNER_CANDIDATES: dict[str, list[str]] = {
     "Lab 12": ["tools/run_workshop_lab_12_capstone_live_evidence.py"],
 }
 
+LAB01_BASELINE_HELPERS = [
+    "tools/run_redirect_chain_lab.py",
+    "tools/run_dom_render_lab.py",
+    "tools/run_iframe_frame_tree_lab.py",
+    "tools/run_storage_state_boundary_lab.py",
+    "tools/run_workshop_proxy_evidence_lab.py",
+]
+
 CORE_TOOL_CHECKS = [
     {"id": "python3", "commands": [["python3", "--version"]], "required_for_lab01": True},
     {"id": "python3_venv", "commands": [["python3", "-m", "venv", "--help"]], "required_for_lab01": True},
@@ -377,7 +385,32 @@ def inspect_runner_availability(repo: Path) -> dict[str, Any]:
             exists = (repo / rel).is_file()
             candidate_states.append({"path": rel, "exists": exists})
             found = found or exists
-        labs[lab] = {"available": found, "candidates": candidate_states}
+
+        lab_record: dict[str, Any] = {
+            "available": found,
+            "candidates": candidate_states,
+            "implementation_model": "one-command runner candidate",
+        }
+
+        if lab == "Lab 01":
+            helper_states = []
+            helpers_available = True
+            for rel in LAB01_BASELINE_HELPERS:
+                exists = (repo / rel).is_file()
+                helper_states.append({"path": rel, "exists": exists})
+                helpers_available = helpers_available and exists
+            if helpers_available:
+                found = True
+                lab_record["available"] = True
+                lab_record["implementation_model"] = "documented Lab 01 baseline helper set"
+            elif found:
+                lab_record["implementation_model"] = "one-command runner candidate"
+            else:
+                lab_record["implementation_model"] = "missing one-command runner and incomplete helper set"
+            lab_record["documented_helper_set"] = helper_states
+            lab_record["documented_helper_set_available"] = helpers_available
+
+        labs[lab] = lab_record
         if not found:
             missing.append(lab)
     return {"labs": labs, "missing_labs": missing}

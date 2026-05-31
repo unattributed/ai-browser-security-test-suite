@@ -112,6 +112,22 @@ def test_archive_names_preserve_project_slice_prefix(tmp_path) -> None:
     assert f"{module.SLICE_ID}-20260531-164705/artifact.txt" in names
 
 
+def test_lab01_availability_uses_documented_helper_set() -> None:
+    text = read(RUNNER)
+    required_terms = [
+        "LAB01_BASELINE_HELPERS",
+        "tools/run_redirect_chain_lab.py",
+        "tools/run_dom_render_lab.py",
+        "tools/run_iframe_frame_tree_lab.py",
+        "tools/run_storage_state_boundary_lab.py",
+        "tools/run_workshop_proxy_evidence_lab.py",
+        "documented Lab 01 baseline helper set",
+        "documented_helper_set_available",
+    ]
+    for term in required_terms:
+        assert term in text, f"runner missing Lab 01 helper convention term: {term!r}"
+
+
 def test_runner_executes_in_controlled_temporary_directory(tmp_path, monkeypatch) -> None:
     repo = tmp_path / "repo"
     target = tmp_path / "target"
@@ -132,7 +148,11 @@ def test_runner_executes_in_controlled_temporary_directory(tmp_path, monkeypatch
         "tools/validate_workshop_labs.py",
         "tools/validate_workshop_practical_labs.py",
         "tools/run_workshop_lab_00_practical_environment_readiness.py",
-        "tools/run_workshop_lab_01_live_proxy_exercise.py",
+        "tools/run_redirect_chain_lab.py",
+        "tools/run_dom_render_lab.py",
+        "tools/run_iframe_frame_tree_lab.py",
+        "tools/run_storage_state_boundary_lab.py",
+        "tools/run_workshop_proxy_evidence_lab.py",
     ]:
         path = repo / relative
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -192,8 +212,14 @@ def test_runner_executes_in_controlled_temporary_directory(tmp_path, monkeypatch
         "SHA256SUMS.txt",
     ]:
         assert (evidence_dir / relative).is_file(), f"missing evidence artifact: {relative}"
+    runner_availability = json.loads((evidence_dir / "runner-availability.json").read_text(encoding="utf-8"))
+    assert runner_availability["labs"]["Lab 01"]["available"] is True
+    assert runner_availability["labs"]["Lab 01"]["implementation_model"] == "documented Lab 01 baseline helper set"
+    assert runner_availability["labs"]["Lab 01"]["documented_helper_set_available"] is True
+    assert "Lab 01" not in runner_availability["missing_labs"]
     readiness = json.loads((evidence_dir / "student-readiness-finding-report.json").read_text(encoding="utf-8"))
     assert readiness["ready_for_lab_01"] is False
+    assert "missing_lab01_runner" not in readiness["lab01_blocking_readiness_items"]
     report = (evidence_dir / "student-readiness-finding-report.md").read_text(encoding="utf-8")
     assert "ready for Lab 01: no" in report
 
@@ -217,6 +243,7 @@ if __name__ == "__main__":
     test_runner_does_not_require_package_manager_mutation()
     test_runner_records_foss_first_tooling_and_optional_burp_only()
     test_runner_records_qr_media_manifest_and_checksum_contracts()
+    test_lab01_availability_uses_documented_helper_set()
     test_docs_discover_the_practical_runner()
     test_archive_names_preserve_project_slice_prefix(Path(os.environ.get("TMPDIR", "/tmp")) / "slice-2-22-archive-name-selftest")
     print("[ok] Slice 2.22 Lab 00 practical environment readiness runner validated")
