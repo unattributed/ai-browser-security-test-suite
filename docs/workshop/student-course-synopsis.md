@@ -77,6 +77,16 @@ temporary local proxy port
   Burp Suite, optional manual proxy path when a student already uses it
 ```
 
+## Lab 00 readiness gate
+
+Before starting Lab 01, students run the Lab 00 practical environment readiness runner:
+
+```text
+tools/run_workshop_lab_00_practical_environment_readiness.py
+```
+
+The Lab 00 practical environment readiness runner records whether the workstation is ready for Lab 01, writes `artifact-manifest.json` and `SHA256SUMS.txt`, and records explicit remediation findings when the local target, browser capture, FOSS proxy path, QR tooling, image tooling, or other required readiness items are unavailable.
+
 ## Tooling model
 
 The workshop is designed around a free and open-source primary path:
