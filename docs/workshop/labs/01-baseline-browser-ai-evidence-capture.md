@@ -734,6 +734,17 @@ The final Lab 01 evidence package should contain these local artifacts:
 8. A short reviewer note comparing direct local responses with proxied responses.
 9. A short reviewer note comparing browser evidence and model-bound context evidence.
 
+The concrete runner-backed proxy evidence paths expected by the workshop validation suite are:
+
+```text
+proxy-evidence/lab01-baseline-proxy-package/proxy-tool-readiness.json
+proxy-evidence/mitmdump-live/mitmproxy-flows.mitm
+comparisons/direct-vs-proxied-review.md
+comparisons/browser-proxy-model-context-comparison.md
+```
+
+These paths are listed explicitly so students and reviewers can map the courseware checklist to the generated Lab 01 evidence package. The first file records local proxy tool readiness, the second preserves the mitmdump flow capture, and the two comparison notes explain how direct local responses, proxied responses, browser evidence, and model-bound context evidence are correlated.
+
 Follow `docs/workshop/local-proxy-evidence-workflow.md` when reviewing whether the proxy evidence is complete enough for the workshop standard.
 
 ## Evidence collection checklist
