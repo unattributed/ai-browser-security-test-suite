@@ -52,6 +52,10 @@ The risk demonstrated by this lab is unsupported conclusion-making.
 
 ## Safety boundary
 
+This section defines the rules of engagement for the lab environment. The workshop teaches practical adversarial browser and AI security testing methods, but every exercise must remain inside the intentionally vulnerable local target so the evidence is reproducible, reviewable, and safe for a hands-on training setting.
+
+These restrictions are not meant to reduce the realism of the exercise. They define the authorized range where students may execute the method, modify the method, and collect evidence without involving systems, users, credentials, or services outside the workshop.
+
 This lab must remain local and synthetic.
 
 Do not test third-party systems.
@@ -70,27 +74,25 @@ Do not treat model output as a security decision.
 
 Do not install, reinstall, upgrade, or modify NVIDIA drivers.
 
+Out-of-scope activity for this lab includes:
+
+* Third-party targeting
+* Public callback infrastructure
+* Real credential collection
+* Token theft
+* Malware behavior
+* Persistence
+* Destructive behavior
+* Production SaaS testing
+* NVIDIA driver installation
+
 ## Safety and authorization boundary
 
 All activity in this lab must stay inside the authorized local workshop target and the local student workstation or workshop-provided VM.
 
-Allowed:
+This boundary functions as the lab rules of engagement. It tells students what they are authorized to test, what evidence they are expected to collect, and where the exercise stops. Students may construct and execute the local proof-of-concept method, create their own synthetic variation, and document the result as a security finding only inside the provided local lab scope.
 
-1. Local browser access to `http://127.0.0.1:11435`.
-2. Local proxy capture on `127.0.0.1`.
-3. Synthetic prompts using `SYNTHETIC-LAB-MARKER`.
-4. Local screenshots, local notes, local manifests, and local checksums.
-5. Local-only evidence review.
-
-Not allowed:
-
-1. Testing public systems.
-2. Sending prompts to production SaaS AI products.
-3. Capturing real credentials, real tokens, or real private data.
-4. Creating public callback infrastructure.
-5. Installing malware, persistence, destructive payloads, or credential theft workflows.
-6. Hardening the intentionally vulnerable target during the lab.
-7. Treating this baseline lab as production security validation.
+The two safety headings are both retained intentionally. The short safety boundary gives students a plain-language checklist before they begin the exercise. The authorization boundary explains why the checklist exists and how it applies to practical adversarial testing in a training environment.
 
 ## Lab topology
 
