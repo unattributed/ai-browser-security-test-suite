@@ -115,6 +115,7 @@ MITMPROXY_PRIVATE_CA_FILENAMES = {
     "mitmproxy-ca-cert.pem",
     "mitmproxy-ca-cert.cer",
     "mitmproxy-ca-cert.p12",
+    "mitmproxy-ca.p12",
 }
 
 REQUIRED_ARTIFACTS = [
@@ -312,6 +313,130 @@ def record_health(url: str, path: Path) -> tuple[int | None, str]:
         return None, content
 
 
+def python_imports_module(python_bin: Path, module_name: str, cwd: Path) -> bool:
+    if not python_bin.is_file() or not os.access(python_bin, os.X_OK):
+        return False
+    result = run_command([str(python_bin), "-c", f"import {module_name}"], timeout=20, cwd=cwd)
+    return result.returncode == 0
+
+
+def weak_target_python_candidates(weak_target_repo: Path) -> list[Path]:
+    candidates = [
+        weak_target_repo / ".venv" / "bin" / "python",
+        weak_target_repo / "venv" / "bin" / "python",
+        weak_target_repo / ".env" / "bin" / "python",
+        Path(sys.executable),
+    ]
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key not in seen:
+            unique.append(candidate)
+            seen.add(key)
+    return unique
+
+
+def server_like_python_files(weak_target_repo: Path) -> list[Path]:
+    preferred = [
+        weak_target_repo / "scripts" / "pull_model.py",
+        weak_target_repo / "scripts" / "deploy_full_ollama_ui.py",
+        weak_target_repo / "app.py",
+        weak_target_repo / "main.py",
+        weak_target_repo / "server.py",
+        weak_target_repo / "run.py",
+        weak_target_repo / "webui.py",
+        weak_target_repo / "ollama_webui.py",
+        weak_target_repo / "src" / "app.py",
+        weak_target_repo / "src" / "main.py",
+        weak_target_repo / "backend" / "app.py",
+        weak_target_repo / "backend" / "main.py",
+    ]
+    found: list[Path] = []
+    server_tokens = [
+        "Flask(", "FastAPI(", "app.run", "uvicorn.run", "@app.route",
+        "route('/health'", 'route("/health"', "aiohttp", "ThreadingHTTPServer",
+    ]
+    for candidate in preferred:
+        if candidate.is_file():
+            found.append(candidate)
+    for candidate in sorted(weak_target_repo.rglob("*.py")):
+        relative = candidate.relative_to(weak_target_repo)
+        lowered = relative.as_posix().lower()
+        if any(part.startswith(".") for part in relative.parts):
+            continue
+        if "__pycache__" in lowered or lowered.startswith("tests/") or "/tests/" in lowered:
+            continue
+        if "install" in lowered or "setup" in lowered:
+            continue
+        try:
+            text = candidate.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if any(token in text for token in server_tokens):
+            found.append(candidate)
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for candidate in found:
+        key = str(candidate)
+        if key not in seen:
+            unique.append(candidate)
+            seen.add(key)
+    return unique
+
+
+def module_name_for_python_file(weak_target_repo: Path, path: Path) -> str:
+    relative = path.relative_to(weak_target_repo).with_suffix("")
+    parts = list(relative.parts)
+    if parts and parts[0] == "src":
+        parts = parts[1:]
+    return ".".join(parts)
+
+
+def build_weak_target_startup_candidates(weak_target_repo: Path, port: str) -> list[list[str]]:
+    commands: list[list[str]] = []
+    python_candidates = [candidate for candidate in weak_target_python_candidates(weak_target_repo) if candidate.is_file() and os.access(candidate, os.X_OK)]
+    server_files = server_like_python_files(weak_target_repo)
+    for python_bin in python_candidates:
+        for server_file in server_files:
+            relative = server_file.relative_to(weak_target_repo).as_posix()
+            if relative == "scripts/pull_model.py" and not python_imports_module(python_bin, "requests", weak_target_repo):
+                continue
+            commands.append([str(python_bin), relative])
+            commands.append([str(python_bin), relative, "--host", "127.0.0.1", "--port", port])
+        if python_imports_module(python_bin, "uvicorn", weak_target_repo):
+            module_names = [module_name_for_python_file(weak_target_repo, path) for path in server_files]
+            module_names.extend(["app", "main", "server", "src.app", "src.main", "backend.app", "backend.main"])
+            for module_name in sorted(set(module_names)):
+                if module_name:
+                    commands.append([str(python_bin), "-m", "uvicorn", f"{module_name}:app", "--host", "127.0.0.1", "--port", port])
+        if python_imports_module(python_bin, "flask", weak_target_repo):
+            module_names = [module_name_for_python_file(weak_target_repo, path) for path in server_files]
+            module_names.extend(["app", "main", "server"])
+            for module_name in sorted(set(module_names)):
+                if module_name:
+                    commands.append([str(python_bin), "-m", "flask", "--app", module_name, "run", "--host", "127.0.0.1", "--port", port])
+    unique: list[list[str]] = []
+    seen: set[tuple[str, ...]] = set()
+    for command in commands:
+        key = tuple(command)
+        if key not in seen:
+            unique.append(command)
+            seen.add(key)
+    return unique
+
+
+def terminate_candidate(process: subprocess.Popen[str] | None) -> None:
+    if process is None or process.poll() is not None:
+        return
+    process.send_signal(signal.SIGTERM)
+    try:
+        process.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=5)
+
+
 def ensure_weak_target_running(out_dir: Path, weak_target_repo: Path, target_url: str) -> tuple[bool, subprocess.Popen[str] | None]:
     status_path = out_dir / "service-exposure/weak-target-sop.json"
     health_path = out_dir / "service-exposure/weak-target-health.http"
@@ -331,62 +456,69 @@ def ensure_weak_target_running(out_dir: Path, weak_target_repo: Path, target_url
         "startup_method": None,
         "health_status_initial": status,
         "health_body_prefix_initial": body[:240],
+        "startup_attempts": [],
     }
     if status is not None:
         sop["final_state"] = "left-running-because-runner-did-not-start-it"
         write_json(status_path, sop)
         return False, None
-
     if not weak_target_repo.is_dir():
         sop["final_state"] = "unavailable"
         sop["error"] = "weak target repository is missing"
         write_json(status_path, sop)
         raise SystemExit(f"weak target repository missing: {weak_target_repo}")
-
-    candidates = [
-        [sys.executable, "scripts/pull_model.py"],
-        [sys.executable, "app.py"],
-        [sys.executable, "main.py"],
-    ]
-    selected: list[str] | None = None
-    for candidate in candidates:
-        if (weak_target_repo / candidate[1]).is_file():
-            selected = candidate
-            break
-    if selected is None:
+    parsed = urlparse(target_url)
+    port = str(parsed.port or 80)
+    commands = build_weak_target_startup_candidates(weak_target_repo, port)
+    write_json(out_dir / "service-exposure/weak-target-startup-candidates.json", {"commands": commands})
+    if not commands:
         sop["final_state"] = "unavailable"
-        sop["error"] = "no known weak target startup script was found"
+        sop["error"] = "no safe weak target server startup candidates were found"
         write_json(status_path, sop)
-        raise SystemExit("weak target unavailable and no known startup script was found")
-
-    log_path = out_dir / "service-exposure/weak-target-start.log"
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    log_handle = log_path.open("w", encoding="utf-8")
+        raise SystemExit("weak target unavailable and no safe server startup candidates were found")
     env = os.environ.copy()
-    env.setdefault("HOST", "127.0.0.1")
-    env.setdefault("PORT", "11435")
-    process = subprocess.Popen(selected, cwd=weak_target_repo, text=True, stdout=log_handle, stderr=subprocess.STDOUT, env=env)
-    sop["startup_attempted"] = True
-    sop["startup_method"] = " ".join(selected)
-    sop["startup_pid"] = process.pid
-    for _ in range(40):
-        status, body = record_health(health_url, health_path)
-        if status is not None:
-            sop["health_status_final"] = status
-            sop["health_body_prefix_final"] = body[:240]
-            sop["final_state"] = "started-by-runner"
-            write_json(status_path, sop)
-            return True, process
-        if process.poll() is not None:
-            sop["final_state"] = "startup-exited"
-            sop["returncode"] = process.returncode
-            write_json(status_path, sop)
-            raise SystemExit(f"weak target startup exited with status {process.returncode}")
-        time.sleep(0.5)
-    sop["final_state"] = "startup-timeout"
+    env.update({
+        "HOST": "127.0.0.1",
+        "PORT": port,
+        "FLASK_RUN_HOST": "127.0.0.1",
+        "FLASK_RUN_PORT": port,
+        "PYTHONPATH": os.pathsep.join([str(weak_target_repo), str(weak_target_repo / "src"), env.get("PYTHONPATH", "")]).strip(os.pathsep),
+    })
+    for index, command in enumerate(commands, start=1):
+        log_path = out_dir / "service-exposure" / f"weak-target-start-{index:02d}.log"
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        attempt: dict[str, Any] = {"index": index, "command": command, "log": str(log_path.relative_to(out_dir))}
+        with log_path.open("w", encoding="utf-8") as log_handle:
+            process = subprocess.Popen(command, cwd=weak_target_repo, text=True, stdout=log_handle, stderr=subprocess.STDOUT, env=env)
+            sop["startup_attempted"] = True
+            sop["startup_method"] = " ".join(command)
+            sop["startup_pid"] = process.pid
+            attempt["pid"] = process.pid
+            for _ in range(60):
+                status, body = record_health(health_url, health_path)
+                if status is not None:
+                    attempt["result"] = "healthy"
+                    attempt["health_status"] = status
+                    sop["startup_attempts"].append(attempt)
+                    sop["health_status_final"] = status
+                    sop["health_body_prefix_final"] = body[:240]
+                    sop["final_state"] = "started-by-runner"
+                    write_json(status_path, sop)
+                    return True, process
+                if process.poll() is not None:
+                    attempt["result"] = "exited"
+                    attempt["returncode"] = process.returncode
+                    break
+                time.sleep(0.5)
+            else:
+                attempt["result"] = "timeout"
+            terminate_candidate(process)
+        sop["startup_attempts"].append(attempt)
+        write_json(status_path, sop)
+    sop["final_state"] = "startup-candidates-failed"
+    sop["error"] = "no weak target startup candidate became healthy on loopback"
     write_json(status_path, sop)
-    raise SystemExit("weak target did not become healthy on loopback")
-
+    raise SystemExit("weak target did not become healthy on loopback after trying safe startup candidates")
 
 def stop_process(process: subprocess.Popen[str] | None) -> None:
     if process is None or process.poll() is not None:
