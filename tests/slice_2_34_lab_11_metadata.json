@@ -1,0 +1,54 @@
+{
+  "allowed_modified_neighboring_labs": [],
+  "canonical_lab11_document_path": "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md",
+  "generated_by": "slice_2_34_lab_11_applicator.py",
+  "lab11_specific_markers_created": [
+    "LAB11-SYNTHETIC-EVIDENCE-REVIEW-MARKER"
+  ],
+  "lab11_title": "Lab 11: Fail-Open Pressure and Exception Abuse",
+  "lab11_topic_inferred_from_content": "Fail-Open Pressure and Exception Abuse; analyst evidence triage; vendor-risk evidence review; model trust-boundary review",
+  "legacy_headings_from_original": [
+    "Estimated time",
+    "Purpose",
+    "Learning objectives",
+    "Safety boundary",
+    "Prerequisites",
+    "Safety and authorization boundary"
+  ],
+  "neighboring_lab_hashes_before": {
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md": "13947198943e0d48c82ce123d55d5fe9f25adc0f1e7b719a2cd69fbe6bc6bb2c",
+    "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md": "294a0c31dc26654c9e85043138f16e536d3ee768104b98eb90ae35c76b383998",
+    "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md": "3534bf4472a61f807b603c6def09336f70e667af67442e67f59bc08b0669cf7b"
+  },
+  "neighboring_lab_titles_before": {
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md": "Lab 09: Synthetic Sensitive-Data Handling",
+    "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md": "Lab 10: Model Verdict Manipulation and Policy Simulator",
+    "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md": "Lab 12: Capstone Attack Chain Evidence Package"
+  },
+  "required_headings": [
+    "Method being taught",
+    "Real-world TTP being emulated",
+    "Local-only PoC payload or controlled test input",
+    "Step-by-step execution",
+    "Required student-authored variation",
+    "Evidence that proves the variation worked",
+    "Expected failure modes",
+    "Defender interpretation",
+    "Reportable finding",
+    "Safety and authorization boundary"
+  ],
+  "slice": "slice-2.34-lab-11-instructional-alignment-and-student-courseware",
+  "synthetic_marker_anchors_from_original": [
+    "LAB11-STUDENT-VARIATION",
+    "LAB11-STUDENT-VARIATION-<initials>-<date>",
+    "LAB11-SYNTHETIC-EVIDENCE-REVIEW-MARKER",
+    "LAB11_ROOT",
+    "LAB11_RUN",
+    "MARKER",
+    "SYNTHETIC-EVIDENCE-REVIEW-MARKER",
+    "SYNTHETIC-LAB-MARKER",
+    "lab-11-controlled-review-input.md",
+    "lab-11-cross-surface-review.md",
+    "lab-11-student-authored-variation.md"
+  ]
+}
