@@ -24,21 +24,27 @@ The workshop uses a VM or bare-metal workstation as the primary student environm
 
 ## Lab track
 
+The table below is the canonical student-facing workshop lab index. The required completion path remains free and open source. Optional Burp Suite use is an equivalent professional proxy workflow only where a lab uses proxy evidence.
+
 | Lab | Title | Status |
 |---|---|---|
-| Lab 00 | Environment and Target Setup | Initial working lab |
-| Lab 01 | Baseline Browser-AI Evidence Capture | Initial working lab |
-| Lab 02 | Indirect Prompt Injection Through Browser Content | Initial working lab |
-| Lab 03 | Hidden DOM and Low-Visibility Content | Initial working lab |
+| Lab 00 | Environment and Target Setup | Student-ready setup and environment readiness runner |
+| Lab 01 | Baseline Browser-AI Evidence Capture | Student-ready baseline evidence lab |
+| Lab 02 | Indirect Prompt Injection Through Browser Content | Student-ready practical lab |
+| Lab 03 | Hidden DOM and Low-Visibility Content | Student-ready practical lab |
 | Lab 04 | DOM Versus Rendered-Page Mismatch | End-to-end live evidence runner |
-| Lab 05 | Screenshot and Visual Deception | Initial working lab |
+| Lab 05 | Screenshot and Visual Deception | End-to-end live evidence runner |
 | Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |
-| Lab 07; `SYNTHETIC-LAB-MARKER` marker provenance; no production security validation claim | Delayed Content and State Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` |
-| Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` |
-| Lab 09 | Synthetic Sensitive-Data Handling | End-to-end live evidence runner, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py` |
-| Lab 10 | Model Verdict Manipulation | End-to-end live evidence runner, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` |
-| Lab 11 | Fail-Open Pressure and Exception Abuse | Initial working exception workflow lab |
-| Lab 12 | Capstone Attack Chain | Target-backed capstone live evidence runner |
+| Lab 07 | Delayed Content and State Transition Risk | End-to-end live evidence runner |
+| Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner |
+| Lab 09 | Synthetic Sensitive-Data Handling | End-to-end live evidence runner |
+| Lab 10 | Model Verdict Manipulation and Policy Simulator | End-to-end live evidence runner |
+| Lab 11 | Fail-Open Pressure and Exception Abuse | Target-backed live evidence runner |
+| Lab 12 | Capstone Attack Chain Evidence Package | Target-backed capstone live evidence runner |
+
+Runner references for student-ready lab execution are maintained in the lab files and workshop status sections below. Current student-facing runner anchors include `tools/run_workshop_lab_00_practical_environment_readiness.py`, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py`, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py`, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`, `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py`, and `tools/run_workshop_lab_12_capstone_live_evidence.py`.
+
+The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, and makes no production security validation claim.
 
 ## Closure and reviewer materials
 
@@ -72,7 +78,7 @@ Slice 2.2 records the verified local proxy tool setup and live local evidence wo
 
 | Lab | Guide | Runner | Safety boundary |
 | --- | --- | --- | --- |
-| Lab 07 | Delayed Content and State Transition Risk | End-to-end live evidence runner | `docs/workshop/labs/07-delayed-content-and-state-transition-risk.md` | `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps delayed-content evidence local-only, synthetic-only, authorized-only, with no production security validation. |
+| Lab 07 | `docs/workshop/labs/07-delayed-content-and-state-transition-risk.md` | `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps delayed-content evidence local-only, synthetic-only, authorized-only, with no production security validation. |
 
 
 Lab 07 delayed content and state transition risk is covered by `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` using `SYNTHETIC-LAB-MARKER` fixtures and no production security validation.
