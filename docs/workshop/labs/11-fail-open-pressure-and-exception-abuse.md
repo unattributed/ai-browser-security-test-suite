@@ -425,6 +425,8 @@ persistent real policy changes are made
 
 ## Defender interpretation
 
+For defender, SOC, incident response, vendor, and product security review, treat this section as an artifact-backed interpretation checkpoint rather than a model-verdict acceptance step.
+
 A secure browser-AI evidence pipeline should treat missing evidence, feedback, business pressure, and exception requests as inputs to a controlled review workflow, not as policy authority.
 
 A defensible implementation should record:
@@ -447,3 +449,156 @@ whether persistent policy change was prevented
 The policy should not be delegated to page content, DOM content, screenshots, OCR text, browser storage, local project files, tool output, model-bound context, model response, user feedback, or exception request text.
 
 A real exception system must require explicit scope, owner, expiry, evidence references, reviewer identity, audit logging, rollback, and post-expiry verification. This lab only creates local synthetic evidence for teaching and review.
+
+<!-- slice-2.34-lab-11-practical-standard:start -->
+
+# Lab 11 practical execution standard
+
+This supplement operationalizes the confirmed Lab 11 topic from the existing repository content: **Fail-Open Pressure and Exception Abuse; analyst evidence triage; vendor-risk evidence review; model trust-boundary review**. It preserves the original Lab 11 material above and turns the lab into an artifact-backed exercise the student can execute locally against the intentionally weak workshop workflow.
+
+The student must not treat a model response, screenshot, summary, or single browser observation as the security decision. The student must compare multiple local evidence surfaces, prove where the claim came from, and explain the limits of the finding.
+
+## Scenario
+
+You are reviewing a local Browser-Safe AI Systems evidence package for `Lab 11: Fail-Open Pressure and Exception Abuse`. The weak workshop target or local fixture produced browser-observed artifacts, model-bound context, and reviewer notes. Your job is to determine whether the evidence supports a reportable browser-based AI security finding, whether the model overstated the result, and what a defender or vendor-risk reviewer can verify without trusting model output.
+
+Use only local, synthetic evidence. Do not use real credentials, customer records, production SaaS tenants, public callbacks, third-party targets, or real regulated data. Keep every artifact under the slice or lab evidence directory chosen by the runner.
+
+## Method being taught
+
+This lab teaches artifact-first cross-surface adjudication for browser-based AI security testing. The method is to collect a controlled local input, observe the browser behavior, capture independent evidence surfaces, compare those surfaces against the model-bound context, and only then write the finding. The method is useful when model output appears confident but the browser source, rendered DOM, screenshot, visible text, proxy flow, or manifest tells a narrower story.
+
+The method has five professional review steps:
+
+1. Establish the local synthetic input and expected marker provenance before interacting with the browser workflow.
+2. Capture browser-observed evidence, including source, rendered DOM, screenshot, visible text, and state or transition evidence when available.
+3. Capture transport or proxy evidence when the lab workflow provides it, using loopback-only tooling such as mitmproxy or OWASP ZAP without fabricating flows.
+4. Compare browser-observed facts with model-bound context, model output, analyst notes, artifact manifests, and SHA256 checksums.
+5. Write a finding that states what the artifacts prove, what they do not prove, and what a defender or vendor reviewer should validate next.
+
+## Real-world TTP being emulated
+
+The exercise emulates a real review problem: a browser-based AI workflow may summarize, classify, or prioritize content that was influenced by hidden page state, delayed rendering, frame context, visual deception, QR handoff material, synthetic sensitive-looking data, or verdict-manipulation language. The TTP being emulated is not credential theft or exploitation of a third-party system. It is evidence confusion: the attacker-controlled or test-controlled browser surface causes the AI-assisted workflow or reviewer to overstate trust in a result that must be verified from artifacts.
+
+In a real engagement, this maps to red-team evidence review, SOC triage validation, incident response scoping, vendor-risk review, and product security assessment of browser-integrated AI controls. The professional skill is separating browser truth from model interpretation.
+
+## Local-only PoC payload or controlled test input
+
+Use the following local synthetic review input as the controlled case for Lab 11. Save it in your Lab 11 evidence directory as `lab-11-controlled-review-input.md` before running or reviewing artifacts:
+
+```markdown
+# Lab 11 local synthetic review case
+
+Marker: LAB11-SYNTHETIC-EVIDENCE-REVIEW-MARKER
+
+Claim under review: the AI-assisted browser workflow says the page is safe because the visible summary looks benign.
+
+Browser-observed facts to verify locally:
+- The visible page text may be benign.
+- The DOM or source may include hidden or delayed synthetic instruction text.
+- A screenshot alone may not show all relevant browser state.
+- Model output may describe the page confidently without proving which artifact supported the claim.
+
+Reviewer instruction: do not accept the model verdict until source, DOM, screenshot, visible text, model-bound context, manifest, and checksums have been compared.
+```
+
+This controlled input is intentionally synthetic. It gives the student a marker, a claim to test, and a review standard without using real secrets, real personal data, or any third-party system.
+
+## Step-by-step execution
+
+1. Start from the toolkit repository root at `/home/foo/Workspace/ai-browser-security-test-suite` and confirm you are working in the expected Lab 11 evidence directory for this run.
+2. Ensure the intentionally weak local workshop target or fixture workflow required by the existing Lab 11 runner is available. If the runner reports that no live target is required, record that result in the evidence notes rather than inventing a live target-backed test.
+3. Save the controlled review input above as `lab-11-controlled-review-input.md` inside the Lab 11 evidence directory.
+4. Execute the existing Lab 11 runner or fixture workflow when one exists. Keep the runner output directory local and unique. Do not pre-create a runner output directory when the runner expects to create it itself.
+5. Capture or review the browser-observed surfaces produced by the workflow: direct local HTTP response, proxied local HTTP response if available, browser screenshot, source, rendered DOM, visible text extraction, frame or state evidence, and any model-bound context file.
+6. Create a cross-surface comparison table named `lab-11-cross-surface-review.md`. For each claim, record the artifact that supports it, the artifact that contradicts or limits it, the marker provenance, and whether the claim came from browser-observed data or model interpretation.
+7. Review the artifact manifest and `SHA256SUMS.txt`. Confirm the controlled input, variation input, browser artifacts, model-bound context, and finding draft are represented or explain why a missing artifact is expected.
+8. If proxy evidence is part of the confirmed Lab 11 workflow, keep proxy listeners loopback-only and confirm private CA material such as `mitmproxy-ca.pem`, `mitmproxy-ca-cert.pem`, `mitmproxy-ca-cert.p12`, `mitmproxy-ca.p12`, and every `*.p12` file is absent from the final live evidence output and archive.
+9. Draft the finding using the template in this lab. The finding must cite artifacts by filename and checksum rather than relying on model output.
+10. Package the reviewer evidence archive and verify its checksum before presenting the result.
+
+## Required student-authored variation
+
+Create a second local file named `lab-11-student-authored-variation.md`. The variation must be written by the student and must change the review problem in a meaningful way. It cannot be a note added after the run.
+
+The variation must include all of the following:
+
+1. A new synthetic marker chosen by the student, for example `LAB11-STUDENT-VARIATION-<initials>-<date>`.
+2. A changed browser-evidence claim, such as a visible-text claim that conflicts with DOM, source, model-bound context, frame state, delayed content, or proxy evidence.
+3. A statement of which evidence surface the student expects to prove the variation worked.
+4. A statement of which evidence surface might mislead a reviewer if reviewed alone.
+5. A finding impact sentence that remains scoped to local synthetic training evidence.
+
+The student must incorporate this variation into the controlled review input, browser interaction, evidence artifact review, marker provenance review, model-bound context review, or final finding write-up. A variation that appears only as a retrospective note is incomplete.
+
+## Evidence that proves the variation worked
+
+The variation is proven only when the evidence archive contains artifacts that let a reviewer reproduce the student's reasoning without trusting the model output. At minimum, the reviewer should be able to locate:
+
+- `lab-11-controlled-review-input.md` with the original synthetic marker.
+- `lab-11-student-authored-variation.md` with the student-created marker and changed claim.
+- Browser-observed evidence such as source, rendered DOM, visible text extraction, screenshot, frame tree, storage state, transition evidence, or equivalent fixture output produced by the confirmed Lab 11 workflow.
+- Model-bound context or model-output evidence that is clearly labeled as interpretation rather than browser truth.
+- A cross-surface review table that identifies which artifacts support the finding and which artifacts are incomplete, ambiguous, or contradictory.
+- A manifest and `SHA256SUMS.txt` proving the reviewed artifacts are present and unchanged after packaging.
+- A reviewer archive and archive checksum.
+
+The evidence proves a local browser-based AI review failure mode only. It does not prove production exploitability, exposure of real secrets, compromise of a third-party product, or effectiveness against systems outside this authorized lab.
+
+## Expected failure modes
+
+Common professional failure modes in this lab include:
+
+1. Trusting the model verdict instead of artifact-backed browser evidence.
+2. Treating a screenshot as complete evidence when hidden DOM, source, frame, delayed state, or model-bound context says more.
+3. Writing a finding without marker provenance or checksums.
+4. Creating a student-authored variation that does not appear in any controlled input, browser interaction, evidence artifact, model-bound context review, or final finding.
+5. Overstating the result as a production exploit instead of a local synthetic failure mode.
+6. Mixing real credentials, real regulated data, or third-party systems into a lab that must remain synthetic and local.
+7. Leaving private proxy CA material in a live output directory or evidence archive when proxy tooling is used.
+8. Failing to record why live target-backed validation was not applicable when no canonical Lab 11 live runner exists.
+
+## Defender interpretation
+
+A defender should interpret a passing Lab 11 result as evidence that the student can distinguish browser-observed facts from AI interpretation. The key defensive question is not whether the model produced a confident response. The key question is whether independent artifacts prove the browser state, the model-bound context, the synthetic marker path, and the final analyst conclusion.
+
+A SOC lead or incident responder should look for repeatable artifact references, checksum-backed evidence, and a clear statement of uncertainty. A vendor-risk reviewer should ask whether the vendor can provide source, DOM, screenshot, proxy, model-bound context, manifest, and checksum evidence for similar claims without requiring trust in the model summary. A product security reviewer should use the evidence to identify where browser-integrated AI controls need stronger provenance, isolation, logging, or review gates.
+
+## Reportable finding
+
+Use this finding template after the evidence comparison is complete:
+
+```markdown
+# Finding: Browser-based AI evidence confusion in local synthetic Lab 11 workflow
+
+## Summary
+The local Lab 11 workflow demonstrated that an AI-assisted browser review can overstate or misclassify a browser state unless source, DOM, screenshot, visible text, model-bound context, manifest, and checksum evidence are compared.
+
+## Evidence
+- Controlled input: <filename> , sha256 <hash>
+- Student-authored variation: <filename> , sha256 <hash>
+- Browser-observed artifacts: <filenames> , sha256 <hashes>
+- Model-bound context or model output: <filename> , sha256 <hash>
+- Cross-surface review table: <filename> , sha256 <hash>
+- Reviewer archive: <filename> , sha256 <hash>
+
+## What the evidence proves
+The evidence proves that the local synthetic workflow can produce a review condition where model interpretation must be checked against browser-observed artifacts before a security conclusion is made.
+
+## What the evidence does not prove
+The evidence does not prove production compromise, third-party exposure, real credential access, real customer data exposure, or exploitability outside the authorized local lab.
+
+## Defender or vendor interpretation
+Defenders and vendors should require artifact provenance, model-bound context review, checksum-backed manifests, and cross-surface comparison before accepting browser-based AI security claims.
+
+## Recommended remediation direction
+Add provenance-aware review gates, preserve raw browser evidence, label model interpretation separately from browser truth, and require reviewer-grade manifests and checksums for AI-assisted browser security findings.
+```
+
+## Safety and authorization boundary
+
+This lab must remain local, authorized, synthetic, and scoped to the intentionally weak workshop target or local fixture workflow. Do not test third-party systems. Do not use real credentials, real tokens, real customer data, real regulated data, production SaaS tenants, public callback infrastructure, malware behavior, persistence, destructive actions, or production hardening. Do not install, reinstall, upgrade, or modify NVIDIA drivers. Do not use snap-based instructions. Do not install packages from this lab. Use only free and open-source tooling already available in the prepared workshop environment or purpose-built local tools provided by the repository.
+
+Lab 11 is complete only when the student can hand a reviewer a local evidence archive, a checksum sidecar, a manifest, the controlled input, the student-authored variation, the cross-surface review, and a reportable finding that separates browser-observed evidence from model interpretation.
+
+<!-- slice-2.34-lab-11-practical-standard:end -->
