@@ -463,3 +463,149 @@ which deterministic policy decision applied
 ```
 
 The policy should not be delegated to page content, QR content, decoded destination text, model-bound text, or a model response.
+
+<!-- slice-2.31-lab-08-instructional-alignment-start -->
+
+## Practical instructional alignment supplement
+
+This supplement standardizes Lab 08 as a practical, evidence-first lab for senior practitioners. It preserves the intentionally weak local target behavior needed for training.
+
+### Scenario
+
+A browser-based AI workflow displays or references a QR or secondary-channel handoff. The security question is not whether the handoff looks harmless in the browser. The question is whether the encoded destination, visible representation, DOM/source evidence, proxy evidence, and model-bound context all tell the same story.
+
+## Method being taught
+
+This lab teaches a browser-based AI evidence comparison method for QR or secondary-channel handoff evidence validation. The student must prove the behavior through local artifacts rather than trusting a rendered page, screenshot, QR image, or model response by itself. For QR or handoff behavior, decode or inspect the represented value and compare it to browser-visible text, DOM/source evidence, screenshot evidence, proxy evidence, and model-bound context. A visual QR artifact alone is not sufficient evidence. Do not treat model output as a security decision.
+
+The method is:
+
+1. Establish the expected local fixture or route behavior.
+2. Capture the direct local HTTP response where applicable.
+3. Capture the proxied local HTTP response where applicable.
+4. Capture browser-visible evidence, including screenshot and visible text when applicable.
+5. Capture browser source or DOM evidence when applicable.
+6. Capture the model-bound context or prompt-adjacent evidence when the lab workflow exposes it.
+7. Compare the evidence surfaces and document agreement, disagreement, and limits.
+8. Produce a reviewer archive with manifest and SHA256 checksums.
+
+## Real-world TTP being emulated
+
+This lab emulates a controlled version of a browser-to-AI handoff weakness that an authorized tester may encounter during product security review, red team assessment, vendor validation, incident response reconstruction, or detection engineering. In real environments, a malicious page or workflow may attempt to make a handoff appear benign while hiding or transforming the value that is actually exposed to a browser, user, automation layer, model context, or downstream review process.
+
+The workshop version remains local and synthetic. The objective is to learn how to construct and prove the test method, not to target third-party systems.
+
+## Local-only PoC payload or controlled test input
+
+Create a local synthetic marker such as `BSAIS-LAB08-QR-HANDOFF-${USER}-$(date +%Y%m%d%H%M%S)` and bind it to a local-only handoff value such as `http://127.0.0.1:11435/lab08/handoff?marker=<marker>&channel=student-variation`. The marker must never contain real credentials, real customer data, production domains, or third-party callback infrastructure.
+
+Record the marker in the run notes before execution. The marker is the student's proof that the collected evidence belongs to the student-authored run and not to a stale fixture or copied artifact.
+
+Example local marker note:
+
+```text
+lab: Lab 08
+marker: BSAIS-LAB08-STUDENT-<student>-<timestamp>
+scope: local-only intentionally weak ollama-webui workshop target
+```
+
+## Step-by-step execution
+
+1. Start from the toolkit repository root at `/home/foo/Workspace/ai-browser-security-test-suite`.
+2. Confirm the weak target is local and reachable before testing. Use `ss`, `curl`, browser DevTools, or the lab runner's own preflight output to prove the listener and local response.
+3. Prepare a fresh Lab 08 evidence directory for the run. Do not reuse artifacts from a previous student or previous slice.
+4. Execute the canonical Lab 08 workflow described above in this document. Use the canonical Lab 08 runner or fixture path discovered for this repository, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, when it applies to the execution path above.
+5. Capture the direct local HTTP response when the workflow exposes one.
+6. Capture proxied local HTTP evidence with mitmproxy, mitmdump, or OWASP ZAP passive review when the workflow includes HTTP traffic worth reviewing.
+7. Capture browser evidence, including screenshot, visible text, source, DOM, frame or state evidence when applicable to the Lab 08 workflow.
+8. Capture model-bound context evidence when the workflow exposes what the AI system saw or used.
+9. Record the student-authored marker and explain where it appears in the artifacts.
+10. Build an artifact manifest and `SHA256SUMS.txt` for the evidence directory.
+11. Write the finding using the template below.
+
+## Required student-authored variation
+
+Change the local synthetic marker and one handoff attribute, for example `channel`, `case`, `label`, or equivalent local fixture input. The variation must appear in collected evidence, not only in the final notes.
+
+The variation is valid only if the changed value appears in at least two independent evidence surfaces, for example direct HTTP plus browser DOM, screenshot plus decoded handoff value, proxy flow plus model-bound context, or artifact manifest plus captured page evidence.
+
+A note in the final report is not enough. The variation must be visible in the controlled input, browser interaction, evidence artifacts, marker review, model-bound context review, or finding write-up.
+
+## Evidence that proves the variation worked
+
+The evidence set must allow a reviewer to reproduce the student's reasoning without trusting the model output or treating model output as a security decision. Collect the artifacts that apply to the confirmed Lab 08 workflow:
+
+1. Direct local HTTP response, when a route or local endpoint is involved.
+2. Proxied local HTTP response or passive proxy review, when traffic is part of the workflow.
+3. Browser screenshot showing the relevant rendered state.
+4. Browser source or DOM capture showing the relevant underlying state.
+5. Visible text extraction when rendered text is part of the claim.
+6. Decoded or inspected handoff value when the lab involves QR or secondary-channel handoff behavior.
+7. Model-bound context review when the AI workflow exposes what the model saw.
+8. Marker provenance notes showing where the student-authored marker entered the workflow and where it appeared in artifacts.
+9. `artifact-manifest.json` or equivalent repository manifest output.
+10. `SHA256SUMS.txt` covering the final evidence directory.
+11. Reviewer archive and archive checksum.
+
+The evidence proves the variation worked only when the student can point to the changed local synthetic value in the artifacts and explain which evidence surfaces agree or disagree.
+
+## Expected failure modes
+
+Expected failures are part of the lab. Record them instead of hiding them.
+
+1. The weak target is not running or is listening on a different loopback port.
+2. The student reuses an old evidence directory and captures stale artifacts.
+3. The marker appears in notes but not in browser or HTTP artifacts.
+4. The screenshot appears convincing but the DOM, source, decoded handoff value, or proxy evidence does not support it.
+5. The proxy was started after the relevant browser request already occurred.
+6. The model response summarizes the page incorrectly or omits the handoff detail.
+7. The evidence archive lacks a manifest or SHA256 checksums.
+8. The student changes a value that does not affect the tested browser or model-bound behavior.
+
+## Defender interpretation
+
+A defender, vendor reviewer, or product security engineer should interpret this lab as an evidence-chain validation exercise. The important result is not that the weak target can be made to show a marker. The important result is whether independent evidence surfaces prove what the browser displayed, what the local workflow encoded or exposed, what the model could have consumed, and where a reviewer should place trust.
+
+When the evidence surfaces disagree, the defender should treat the disagreement as the finding. A mismatch between visible representation, encoded value, DOM/source, proxy evidence, and model-bound context may indicate that browser-mediated AI controls need better inspection, logging, user warnings, or policy enforcement before trusting the workflow.
+
+## Reportable finding
+
+Use this structure for the Lab 08 finding:
+
+```text
+Title: Lab 08 local browser-AI handoff evidence mismatch or validation result
+
+Scope: Local-only intentionally weak ollama-webui workshop target.
+
+Summary:
+The Lab 08 workflow was tested with a student-authored synthetic marker. The evidence shows whether the browser-visible state, underlying page evidence, local HTTP or proxy evidence, handoff value, and model-bound context agreed or diverged.
+
+Evidence:
+- Direct local HTTP artifact:
+- Proxy or passive review artifact:
+- Browser screenshot:
+- Browser DOM or source artifact:
+- Visible text or decoded handoff artifact:
+- Model-bound context artifact:
+- Marker provenance note:
+- Manifest:
+- SHA256SUMS:
+
+Impact:
+A reviewer cannot safely rely on model output or a single visual artifact as a security decision about what the browser-based AI workflow exposed or used. Independent artifacts are required to validate the handoff or browser state.
+
+What the evidence proves:
+
+What the evidence does not prove:
+
+Recommended defender action:
+Compare rendered, encoded, DOM/source, proxy, and model-bound evidence before accepting the AI workflow's interpretation. Add logging, review workflows, or control checks where the evidence chain is incomplete or inconsistent.
+```
+
+## Safety and authorization boundary
+
+This lab must remain local, authorized, synthetic, and scoped to the intentionally weak local ollama-webui workshop target. Do not test third-party systems, production AI products, public callback infrastructure, real credentials, real customer data, malware behavior, persistence, destructive behavior, or unauthorized environments.
+
+Do not harden the weak target as part of this lab. The weak behavior is intentional and is required for training and evidence generation.
+
+<!-- slice-2.31-lab-08-instructional-alignment-end -->
