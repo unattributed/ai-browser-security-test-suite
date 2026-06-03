@@ -49,7 +49,7 @@ DEFAULT_REPO_ROOT=Path("/home/foo/Workspace/ai-browser-security-test-suite"); DE
 DEFAULT_TARGET_URL="http://127.0.0.1:11435"; DEFAULT_OLLAMA_URL="http://127.0.0.1:11434"; DEFAULT_FIXTURE_HOST="127.0.0.1"; DEFAULT_FIXTURE_PORT=18101; DEFAULT_MITM_HOST="127.0.0.1"; DEFAULT_MITM_PORT=18102
 ARCHIVE_SUFFIX=".tar.gz"; ARCHIVE_CHECKSUM_SUFFIX=".tar.gz.sha256"
 FORBIDDEN_COMMAND_TERMS=["apt"+"-get","apt"+" install","apt"+" upgrade","pip"+" install","playwright"+" install","nvidia","dkms","linux-"+"image","linux-"+"headers","cuda"]
-MITMPROXY_PRIVATE_CA_FILENAMES={"mitmproxy-ca.pem","mitmproxy-ca-cert.pem","mitmproxy-ca-cert.cer","mitmproxy-ca-cert.p12"}
+MITMPROXY_PRIVATE_CA_FILENAMES={"mitmproxy-ca.pem","mitmproxy-ca-cert.pem","mitmproxy-ca-cert.cer","mitmproxy-ca-cert.p12","mitmproxy-ca.p12"}
 REQUIRED_ARTIFACTS=["safety-boundary.json","service-exposure/listeners-before-fixture-server.txt","service-exposure/listeners-after-fixture-server.txt","service-exposure/listeners-after-run.txt","service-exposure/weak-target-sop.json","service-exposure/weak-target-health.http","target-contract/target-contract-readiness.json","fixtures/fixture-manifest.json","fixtures/policy-scenarios.json","fixtures/policy-simulation-results.json","fixtures/policy-decisions.jsonl","fixtures/verdict-mismatch-report.json","fixtures/model-response-review-harness.html","http-replay/captured-url-index.json","proxy-evidence/mitmdump-status.json","proxy-evidence/mitmproxy-private-material-removal.json","browser-evidence/browser-capture-index.json","browser-evidence/model-response-capture.json","browser-evidence/browser-source.html","browser-evidence/browser-dom.html","browser-evidence/browser-visible-text.txt","browser-evidence/browser-screenshot.png","policy-gate/target-backed-policy-gate.json","policy-gate/target-backed-policy-gate-review.md","model-response-capture/model-response-capture-review.md","verdict-boundary/verdict-boundary-review.md","zap-passive-review/zap-status.json","lab10-live-evidence-summary.md"]
 REPLAY_PATHS=["fixture-manifest.json","policy-scenarios.json","policy-simulation-results.json","policy-decisions.jsonl","verdict-mismatch-report.json","analyst-notes-template.md","model-response-review-harness.html"]
 @dataclass(frozen=True)
@@ -141,14 +141,38 @@ def start_mitmdump(out_dir:Path,host:str,port:int)->subprocess.Popen[str]|None:
         if process.poll() is not None: write_json(status_path,{"status":"failed","returncode":process.returncode,"local_only":True,"fabricated":False}); return None
         time.sleep(0.5)
     write_json(status_path,{"status":"startup-timeout","pid":process.pid,"local_only":True,"fabricated":False}); process.send_signal(signal.SIGTERM); return None
-def remove_mitmproxy_private_material(out_dir:Path)->None:
-    conf_dir=out_dir/"proxy-evidence/mitmdump-conf"; removed=[]
+def remove_mitmproxy_private_material(out_dir: Path) -> None:
+    conf_dir = out_dir / "proxy-evidence/mitmdump-conf"
+    removed: list[str] = []
+    private_names = set(MITMPROXY_PRIVATE_CA_FILENAMES) | {"mitmproxy-ca.p12"}
+    private_globs = ("*.p12",)
+    candidate_paths: set[Path] = set()
     if conf_dir.exists():
-        for path in sorted(conf_dir.iterdir()):
-            if path.is_file() and path.name in MITMPROXY_PRIVATE_CA_FILENAMES: removed.append(path.relative_to(out_dir).as_posix()); path.unlink()
-    remaining=[]
-    if conf_dir.exists(): remaining=[p.relative_to(out_dir).as_posix() for p in sorted(conf_dir.iterdir()) if p.is_file() and p.name in MITMPROXY_PRIVATE_CA_FILENAMES]
-    write_json(out_dir/"proxy-evidence/mitmproxy-private-material-removal.json",{"checked_at_utc":utc_now(),"removed":removed,"remaining_mitmproxy_ca_files":remaining})
+        for private_name in private_names:
+            candidate_paths.update(conf_dir.rglob(private_name))
+        for private_glob in private_globs:
+            candidate_paths.update(conf_dir.rglob(private_glob))
+    for path in sorted(candidate_paths):
+        if path.is_file():
+            removed.append(path.relative_to(out_dir).as_posix())
+            path.unlink()
+    remaining: list[str] = []
+    if conf_dir.exists():
+        for private_name in private_names:
+            remaining.extend(p.relative_to(out_dir).as_posix() for p in sorted(conf_dir.rglob(private_name)) if p.is_file())
+        for private_glob in private_globs:
+            remaining.extend(p.relative_to(out_dir).as_posix() for p in sorted(conf_dir.rglob(private_glob)) if p.is_file())
+    remaining = sorted(set(remaining))
+    write_json(
+        out_dir / "proxy-evidence/mitmproxy-private-material-removal.json",
+        {
+            "checked_at_utc": utc_now(),
+            "removed": sorted(set(removed)),
+            "remaining_mitmproxy_ca_files": remaining,
+            "private_material_patterns": sorted(private_names | set(private_globs)),
+        },
+    )
+
 def replay_paths(fixtures_dir:Path)->list[str]: return sorted(set(REPLAY_PATHS+[f"model-responses/{p.name}" for p in sorted((fixtures_dir/"model-responses").glob("*.txt"))]))
 def capture_http_replays(out_dir:Path,fixture_base_url:str,fixtures_dir:Path,mitm_host:str,mitm_port:int,use_proxy:bool)->None:
     captured=[]
