@@ -488,3 +488,169 @@ The weak target startup SOP remains unchanged: check `http://127.0.0.1:11435/hea
 The intentionally weak target must remain vulnerable. This runner records evidence only. It must not harden `ollama-webui`, install packages, modify browser packages, modify Playwright, modify ZAP, modify mitmproxy, modify NVIDIA drivers, modify CUDA, modify DKMS, modify linux-image, or modify linux-headers.
 
 This lab remains local-only, synthetic-only, and authorized-only. It does not test third-party systems and makes no production security validation claim.
+
+<!-- slice-2.29-lab06-instructional-alignment-start -->
+
+# Slice 2.29 student-facing instructional alignment supplement
+
+This supplement preserves the existing Lab 06 guide above and makes the lab usable as practical student-facing courseware. Lab 06 teaches iframe and frame-tree source confusion as an evidence-first browser security method. Students must prove which frame supplied which content before accepting model-bound context, analyst notes, or a report as security evidence.
+
+## Method being taught
+
+Lab 06 teaches iframe and frame-tree provenance validation. The practical method is to capture the top page, every browser-observed child frame, frame URLs, sandbox attributes, `srcdoc` evidence, cross-frame rendered text, browser source, DOM, visible text, screenshot evidence, direct local HTTP responses with proxied local HTTP responses, marker provenance, model-bound context review, artifact manifests, and checksums before writing a finding.
+
+The core lesson is that static top-page HTML is not sufficient when a browser-based AI workflow, analyst workflow, or control consumes a page with nested browsing contexts. A defensible review must preserve frame ancestry and source attribution so top-page content, same-origin child-frame content, sandboxed frame content, `srcdoc` content, and nested frame-chain content are not flattened into one undifferentiated page-level evidence class.
+
+## Real-world TTP being emulated
+
+This lab emulates browser-content source confusion where nested frames, sandboxed frames, `srcdoc` frames, or frame chains cause a reviewer, browser assistant, security workflow, or model-bound context builder to lose source attribution. In a real authorized assessment, that failure can make child-frame content appear as if it came from the trusted top page, hide sandbox context, omit frame URLs, or produce a report that cannot prove which frame supplied a claim.
+
+The lab uses only local synthetic content and the intentionally vulnerable local `ollama-webui` workshop target. It does not test public sites, third-party browser AI products, production SaaS tenants, or real user data.
+
+## Local-only PoC payload or controlled test input
+
+The controlled input is the local Lab 06 iframe and frame-tree fixture set exposed by the weak target and captured by the canonical helper and live runner:
+
+```bash
+cd /home/foo/Workspace/ai-browser-security-test-suite
+export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+test -x "${PYTHON_BIN}" || PYTHON_BIN="$(command -v python3)"
+"${PYTHON_BIN}" tools/run_iframe_frame_tree_lab.py --help
+```
+
+The canonical local variants are:
+
+```text
+baseline
+sandboxed_frame
+srcdoc_hidden_context
+nested_frame_chain
+```
+
+Every controlled input must remain on `http://127.0.0.1:11435` or another loopback address, must preserve `SYNTHETIC-LAB-MARKER` provenance, and must avoid real credentials, real customer data, external frame URLs, public callback endpoints, and production tenants.
+
+## Step-by-step execution
+
+1. Work from the toolkit repository and use the virtual environment Python when available:
+
+   ```bash
+   cd /home/foo/Workspace/ai-browser-security-test-suite
+   export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+   test -x "${PYTHON_BIN}" || PYTHON_BIN="$(command -v python3)"
+   "${PYTHON_BIN}" --version
+   ```
+
+2. Create a timestamped evidence directory before opening the target in a browser:
+
+   ```bash
+   export LAB06_ROOT="${HOME}/browser-safe-ai-workshop/lab-06"
+   export LAB06_RUN="${LAB06_ROOT}/iframe-frame-tree-source-confusion-$(date -u +%Y%m%d-%H%M%S)"
+   mkdir -p "${LAB06_RUN}"
+   printf '%s
+' "${LAB06_RUN}" | tee "${LAB06_RUN}/run-directory.txt"
+   ```
+
+3. Verify the local weak target and target contract:
+
+   ```bash
+   curl -fsS "http://127.0.0.1:11435/health" | tee "${LAB06_RUN}/weak-target-health.txt"
+   curl -fsS "http://127.0.0.1:11435/api/browser-safe/target-contract" | tee "${LAB06_RUN}/target-contract.json"
+   jq '.scenarios[] | select(.id == "browser.iframe_frame_tree")' "${LAB06_RUN}/target-contract.json"
+   ```
+
+4. Inspect supported variants before execution:
+
+   ```bash
+   curl -fsS "http://127.0.0.1:11435/api/browser-safe/iframe-frame-tree/scenarios" | tee "${LAB06_RUN}/iframe-frame-tree-scenarios.json"
+   jq . "${LAB06_RUN}/iframe-frame-tree-scenarios.json"
+   ```
+
+5. Run each canonical local variant with the helper when conducting the manual practical path:
+
+   ```bash
+   for VARIANT in baseline sandboxed_frame srcdoc_hidden_context nested_frame_chain; do
+     "${PYTHON_BIN}" tools/run_iframe_frame_tree_lab.py        --base-url "http://127.0.0.1:11435"        --variant "${VARIANT}"        --out-dir "${LAB06_RUN}/${VARIANT}"
+   done
+   ```
+
+6. Start optional proxy capture before the first meaningful browser interaction when proxy evidence is required. Use `docs/workshop/local-proxy-evidence-workflow.md` as the shared workflow. Preserve mitmdump or OWASP ZAP passive evidence only for local loopback traffic.
+
+7. Inspect `frame-tree.json`, `frame-url-list.txt`, `top-page-dom-snapshot.html`, `frame-dom-snapshots/index.json`, `sandbox-findings.json`, `srcdoc-findings.json`, `cross-frame-rendered-text.txt`, `model-bound-context.txt`, and `report.md` for each variant.
+
+8. Compare static top-page evidence with browser-observed frame evidence. Record what the top-page DOM proves, what child-frame DOM proves, what frame URLs prove, and what screenshot evidence proves.
+
+9. Create the required student-authored variation described below, then repeat the same evidence capture and comparison steps for that variation.
+
+10. Generate checksums and verify the final evidence set:
+
+    ```bash
+    find "${LAB06_RUN}" -type f -print0 | sort -z | xargs -0 sha256sum | tee "${LAB06_RUN}/SHA256SUMS.txt"
+    cd "${LAB06_RUN}"
+    sha256sum -c SHA256SUMS.txt
+    ```
+
+11. When closing the lab, use the canonical live target-backed runner if it exists:
+
+    ```bash
+    "${PYTHON_BIN}" tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py       --repo-root /home/foo/Workspace/ai-browser-security-test-suite       --weak-target-repo /home/foo/Workspace/ollama-webui       --target-url http://127.0.0.1:11435       --out-dir "${LAB06_RUN}/live-target-backed-evidence"
+    ```
+
+    The live runner is the one-command Lab 06 iframe frame-tree end-to-end live evidence runner. It captures browser source, DOM, visible text, `frame-tree.json`, frame URL list, child-frame DOM snapshots, screenshot evidence, direct local HTTP responses with proxied local HTTP responses, ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and a reviewer archive. The weak target startup SOP remains the required target startup model.
+
+## Required student-authored variation
+
+The student must create one local-only variation that changes frame provenance without leaving the lab boundary. The variation must use synthetic markers only and must preserve `SYNTHETIC-LAB-MARKER` evidence. Acceptable variations include changing the visible text in a same-origin child frame, changing the harmless marker inside a `srcdoc` frame, adding a nested child frame to a local fixture copy, changing sandbox attribute notes in a controlled local copy, or adding a new marker that appears in a child frame but not in the top-page DOM.
+
+Use a unique marker pattern like this:
+
+```text
+LAB06_VARIATION_FRAME_PROVENANCE_SAFE_MARKER_YOURINITIALS_20260602
+```
+
+The variation must be small, reviewable, harmless, and local. It must not introduce external iframe URLs, credential flows, token collection, public callbacks, malware behavior, persistence, destructive behavior, production SaaS testing, or target hardening.
+
+## Evidence that proves the variation worked
+
+The variation is proven only when the student can show all of the following:
+
+- Baseline and variation evidence directories.
+- Browser source, DOM, visible text, and screenshot evidence for the affected page or frame.
+- `frame-tree.json` proving frame ancestry.
+- `frame-url-list.txt` proving the top-page URL and child-frame URLs or `srcdoc` sources.
+- `top-page-dom-snapshot.html` proving what static top-page evidence did or did not contain.
+- `frame-dom-snapshots/index.json` and child-frame DOM snapshots proving which frame supplied the variation marker.
+- `sandbox-findings.json` when sandbox behavior is part of the test.
+- `srcdoc-findings.json` when `srcdoc` behavior is part of the test.
+- `cross-frame-rendered-text.txt` proving what text crossed frame boundaries.
+- Direct local HTTP responses with proxied local HTTP responses when proxy evidence is used or when the live runner is used.
+- `artifact-manifest.json`, `SHA256SUMS.txt`, and reviewer notes that map each artifact to the claim it proves.
+
+Model output may be included as a placeholder or comparison artifact, but it must not be treated as the security decision. The finding must be supported by browser, frame, HTTP, proxy, manifest, and checksum evidence.
+
+## Expected failure modes
+
+Expected failure modes include the weak target not running on `127.0.0.1:11435`, the target contract missing `browser.iframe_frame_tree`, the helper arguments changing, Playwright or Chromium not being available, proxy capture starting after the browser interaction, `frame-tree.json` missing, `frame-url-list.txt` missing, child-frame DOM snapshots missing, sandbox or `srcdoc` findings missing, screenshots that cannot be tied to frame evidence, missing `SYNTHETIC-LAB-MARKER` provenance, non-loopback frame URLs, missing manifest entries, missing checksums, retained mitmproxy CA private material, and a report that collapses top-page and child-frame content into one evidence class.
+
+Do not overwrite failed evidence. Preserve the failed run, explain what failed, correct the workflow, and rerun so the final evidence is reviewable.
+
+## Defender interpretation
+
+A defender should interpret Lab 06 as a control validation for frame provenance. A browser-based AI control, analyst workflow, or evidence collector is weak if it cannot tell which frame supplied each content item, whether the frame was top-level, same-origin, sandboxed, `srcdoc`, or nested, and whether model-bound context preserved that ancestry.
+
+A defensible control should require frame tree capture, frame URL capture, child-frame DOM snapshots, sandbox review, `srcdoc` review, visible text review, screenshot correlation, direct and proxied HTTP capture, marker provenance review, model-bound context review, manifest records, and checksums before accepting a frame-heavy browser finding.
+
+## Reportable finding
+
+Finding title: Browser-based AI workflow loses iframe and frame-tree source provenance.
+
+Finding summary: In a local authorized Lab 06 test, a synthetic iframe or nested frame variation caused browser-observed content to require frame-tree provenance before it could be attributed safely. A workflow that reviewed only static top-page HTML, flattened visible text, or model-bound context without frame ancestry would have produced an incomplete or misleading security conclusion.
+
+Evidence to attach: baseline and variation screenshots, browser source, DOM, visible text, `frame-tree.json`, `frame-url-list.txt`, top-page DOM snapshot, child-frame DOM snapshots, sandbox findings, `srcdoc` findings, cross-frame rendered text, direct local HTTP responses with proxied local HTTP responses when available, ZAP passive notes when available, `artifact-manifest.json`, `SHA256SUMS.txt`, reviewer archive checksum, and student-authored variation notes.
+
+Defender recommendation: Require frame-aware browser evidence collection and reviewer workflow checks that preserve top-page, child-frame, sandbox, `srcdoc`, nested frame, HTTP, proxy, marker, and model-bound context provenance. Do not accept model output or flattened page text as the policy decision.
+
+## Safety and authorization boundary
+
+Conduct this lab only against local synthetic fixtures and the intentionally vulnerable local `ollama-webui` workshop target. Do not harden the target. The intentionally weak target must remain vulnerable so the training evidence remains valid. Do not use real credentials, real customer data, third-party sites, production tenants, external iframe URLs, public callback infrastructure, malware behavior, persistence, destructive behavior, or unauthorized systems. Keep proxy listeners on loopback. Keep evidence inside the lab run directory. Do not install, reinstall, upgrade, or modify NVIDIA drivers. This lab is a training and validation exercise with no production security validation claim.
+
+<!-- slice-2.29-lab06-instructional-alignment-end -->
