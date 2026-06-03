@@ -115,6 +115,7 @@ MITMPROXY_PRIVATE_CA_FILENAMES = {
     "mitmproxy-ca-cert.pem",
     "mitmproxy-ca-cert.cer",
     "mitmproxy-ca-cert.p12",
+    "mitmproxy-ca.p12",
 }
 
 REQUIRED_ARTIFACTS = [
