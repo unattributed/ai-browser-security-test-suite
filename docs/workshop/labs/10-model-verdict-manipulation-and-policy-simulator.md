@@ -103,7 +103,7 @@ The marker must be inserted through a local controlled input, browser interactio
 
 1. Create a run directory under the workshop evidence root for Lab 10.
 2. Start only the local intentionally weak `ollama-webui` workshop target, or confirm it is already reachable on loopback.
-3. From the toolkit repository root, run the canonical Lab 10 workflow. Use `tests/test_workshop_lab_10_model_verdict_policy_live_evidence_runner.py` for static or fixture validation when it exists. Use `tools/generate_lab_10_model_verdict_policy_fixtures.py` for live target-backed validation when it exists and supports an `--out-dir` argument.
+3. From the toolkit repository root, run the canonical Lab 10 workflow. Use `tests/test_workshop_lab_10_model_verdict_policy_live_evidence_runner.py` for targeted runner validation when it exists. Use `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` for live target-backed validation. Use `tools/generate_lab_10_model_verdict_policy_fixtures.py` only for fixture generation when needed.
 4. Save the baseline controlled input exactly as submitted.
 5. Capture direct local HTTP evidence, such as response status, headers, body excerpt, and the target URL.
 6. Capture browser evidence, including screenshot, page source, DOM or DOM-derived JSON, visible text extraction, and relevant browser state or transition evidence.
@@ -117,7 +117,7 @@ Minimum command pattern, adjusted only for the actual runner discovered in the r
 
 ```bash
 cd /home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python <lab-10-runner>.py --out-dir ~/browser-safe-ai-workshop-development-evidence/lab10-local-run
+/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py --out-dir ~/browser-safe-ai-workshop-development-evidence/lab10-local-run
 ```
 
 Do not install packages during the lab. If a tool is missing, record that as an environmental failure mode and continue with the evidence surfaces that are available.
@@ -234,3 +234,14 @@ Do not test third-party systems. Do not use production SaaS tenants. Do not coll
 Model output is evidence to review, not a security decision. The acceptable result is an artifact-backed explanation of what happened locally and what can be safely claimed.
 Release-gate marker note: `SYNTHETIC-LAB-MARKER`, `BAI_EXECUTED_VERDICT_16`, and `BAI_EXECUTED_OUTPUT_CONTRACT_20` are synthetic workshop markers only. They must remain local and must not be replaced with real bypass strings, real secrets, real credentials, real tokens, or real customer data.
 
+<!-- slice-2.36-proxy-tooling-note:start -->
+
+## Proxy tooling and evidence equivalence
+
+The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces.
+
+Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow. Burp is optional and never mandatory for this lab. A Burp workflow must produce evidence equivalent to the FOSS path, including request and response records, browser artifacts, marker provenance, private CA material cleanup, manifest entries, and checksum coverage.
+
+This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
+
+<!-- slice-2.36-proxy-tooling-note:end -->

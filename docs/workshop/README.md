@@ -159,3 +159,13 @@ The runner verifies the student workstation or prepared VM, toolkit repository, 
 
 The Lab 00 practical environment readiness runner produces evidence under `$HOME/browser-safe-ai-workshop-development-evidence/` and declares `ready for Lab 01: yes` or `ready for Lab 01: no` with blocking readiness items and planned remediation.
 <!-- slice-2.22:end -->
+
+<!-- slice-2.36-proxy-tooling-policy-note:start -->
+
+## Slice 2.36 proxy tooling policy alignment
+
+The required workshop path uses free and open source tooling. OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg, grep, ss, nmap, and sha256sum remain the required evidence baseline. Burp Suite Community Edition and Burp Suite Professional are optional professional workflows only. Burp is optional and never mandatory for course completion, and any Burp workflow must produce evidence equivalent to the FOSS path.
+
+See `docs/workshop/proxy-tooling.md` for the repository-wide policy.
+
+<!-- slice-2.36-proxy-tooling-policy-note:end -->

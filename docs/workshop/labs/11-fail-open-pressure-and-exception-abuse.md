@@ -556,7 +556,7 @@ Common professional failure modes in this lab include:
 5. Overstating the result as a production exploit instead of a local synthetic failure mode.
 6. Mixing real credentials, real regulated data, or third-party systems into a lab that must remain synthetic and local.
 7. Leaving private proxy CA material in a live output directory or evidence archive when proxy tooling is used.
-8. Failing to record why live target-backed validation was not applicable when no canonical Lab 11 live runner exists.
+8. Failing to record why live target-backed validation was not applicable when the canonical Lab 11 live runner cannot be executed safely in the local environment.
 
 ## Defender interpretation
 
@@ -602,3 +602,30 @@ This lab must remain local, authorized, synthetic, and scoped to the intentional
 Lab 11 is complete only when the student can hand a reviewer a local evidence archive, a checksum sidecar, a manifest, the controlled input, the student-authored variation, the cross-surface review, and a reportable finding that separates browser-observed evidence from model interpretation.
 
 <!-- slice-2.34-lab-11-practical-standard:end -->
+
+<!-- slice-2.36-lab11-runner-note:start -->
+
+## Canonical live evidence runner
+
+The repository includes a Lab 11 live evidence runner. Use it when live target-backed validation is safe and applicable in the local environment:
+
+```bash
+/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py \
+  --out-dir "${LAB11_RUN}/live-evidence"
+```
+
+If the runner cannot be executed in a specific local environment, record the concrete blocker in the evidence notes. Student-facing Lab 11 documentation must reflect the current repository runner state.
+
+<!-- slice-2.36-lab11-runner-note:end -->
+
+<!-- slice-2.36-proxy-tooling-note:start -->
+
+## Proxy tooling and evidence equivalence
+
+The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces.
+
+Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow. Burp is optional and never mandatory for this lab. A Burp workflow must produce evidence equivalent to the FOSS path, including request and response records, browser artifacts, marker provenance, private CA material cleanup, manifest entries, and checksum coverage.
+
+This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
+
+<!-- slice-2.36-proxy-tooling-note:end -->
