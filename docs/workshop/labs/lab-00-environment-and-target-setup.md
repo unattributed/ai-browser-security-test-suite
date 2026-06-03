@@ -1,5 +1,13 @@
 # Lab 00, initialize the workshop environment
 
+<!-- slice-2.36-lab00-redirect-status:start -->
+
+> Canonical student setup path: `docs/workshop/labs/00-environment-and-target-setup.md`.
+>
+> This file is retained as a redirect-only compatibility reference for older links. Student-facing setup work should start from the canonical Lab 00 file above. The content below is preserved for historical continuity, but it is not the canonical setup path.
+
+<!-- slice-2.36-lab00-redirect-status:end -->
+
 ## Estimated time
 
 60 to 90 minutes for a self-hosted Debian-family Linux laptop or the prepared workshop VM.

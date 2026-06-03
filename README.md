@@ -882,3 +882,13 @@ src/ai_browser_security_suite/iframe_frame_tree.py
 The lab maps to `guided.iframe_frame_tree_evidence` and target scenario `browser.iframe_frame_tree`. It captures browser-observed frame relationships, frame URLs, top-page DOM, child-frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
 
 Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.
+
+<!-- slice-2.36-proxy-tooling-policy-note:start -->
+
+## Slice 2.36 proxy tooling policy alignment
+
+The required workshop path uses free and open source tooling. OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg, grep, ss, nmap, and sha256sum remain the required evidence baseline. Burp Suite Community Edition and Burp Suite Professional are optional professional workflows only. Burp is optional and never mandatory for course completion, and any Burp workflow must produce evidence equivalent to the FOSS path.
+
+See `docs/workshop/proxy-tooling.md` for the repository-wide policy.
+
+<!-- slice-2.36-proxy-tooling-policy-note:end -->

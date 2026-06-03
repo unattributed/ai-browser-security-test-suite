@@ -459,3 +459,15 @@ Stop the target terminal with `Ctrl+C`.
 Stop `ollama serve` with `Ctrl+C` if you started it manually.
 
 Keep the evidence directory. Later labs use the same evidence discipline.
+
+<!-- slice-2.36-proxy-tooling-note:start -->
+
+## Proxy tooling and evidence equivalence
+
+The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces.
+
+Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow. Burp is optional and never mandatory for this lab. A Burp workflow must produce evidence equivalent to the FOSS path, including request and response records, browser artifacts, marker provenance, private CA material cleanup, manifest entries, and checksum coverage.
+
+This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
+
+<!-- slice-2.36-proxy-tooling-note:end -->
