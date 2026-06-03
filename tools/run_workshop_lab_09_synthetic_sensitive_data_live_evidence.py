@@ -109,6 +109,7 @@ MITMPROXY_PRIVATE_CA_FILENAMES = {
     "mitmproxy-ca-cert.pem",
     "mitmproxy-ca-cert.cer",
     "mitmproxy-ca-cert.p12",
+    "mitmproxy-ca.p12",
 }
 
 REQUIRED_ARTIFACTS = [
@@ -509,22 +510,55 @@ def start_mitmdump(out_dir: Path, host: str, port: int) -> subprocess.Popen[str]
     raise SystemExit("mitmdump did not become reachable on loopback")
 
 
+def is_mitmproxy_private_material(path: Path) -> bool:
+    return path.is_file() and (
+        path.name in MITMPROXY_PRIVATE_CA_FILENAMES
+        or path.suffix.lower() == ".p12"
+    )
+
+
 def remove_mitmproxy_private_material(out_dir: Path) -> None:
     conf_dir = out_dir / "proxy-evidence/mitmdump-conf"
+    report_path = out_dir / "proxy-evidence/mitmproxy-private-material-removal.json"
+    previous_removed: list[str] = []
+    if report_path.is_file():
+        try:
+            previous = json.loads(report_path.read_text(encoding="utf-8"))
+            previous_removed = list(previous.get("removed", []))
+        except Exception:
+            previous_removed = []
+
     removed: list[str] = []
     if conf_dir.exists():
-        for path in sorted(conf_dir.iterdir()):
-            if path.is_file() and path.name in MITMPROXY_PRIVATE_CA_FILENAMES:
+        for path in sorted(conf_dir.rglob("*")):
+            if is_mitmproxy_private_material(path):
                 removed.append(path.relative_to(out_dir).as_posix())
                 path.unlink()
+
     remaining: list[str] = []
     if conf_dir.exists():
         remaining = [
             path.relative_to(out_dir).as_posix()
-            for path in sorted(conf_dir.iterdir())
-            if path.is_file() and path.name in MITMPROXY_PRIVATE_CA_FILENAMES
+            for path in sorted(conf_dir.rglob("*"))
+            if is_mitmproxy_private_material(path)
         ]
-    write_json(out_dir / "proxy-evidence/mitmproxy-private-material-removal.json", {"checked_at_utc": utc_now(), "removed": removed, "remaining_mitmproxy_ca_files": remaining})
+
+    cumulative_removed = sorted(set(previous_removed + removed))
+    write_json(
+        report_path,
+        {
+            "checked_at_utc": utc_now(),
+            "removed": cumulative_removed,
+            "remaining_mitmproxy_ca_files": remaining,
+            "cleanup_policy": {
+                "remove_known_mitmproxy_ca_filenames": True,
+                "remove_all_p12_files": True,
+                "recursive_confdir_scan": True,
+            },
+        },
+    )
+    if remaining:
+        raise SystemExit(f"mitmproxy private CA material remained after cleanup: {remaining}")
 
 
 def record_zap_status(out_dir: Path) -> None:
@@ -989,6 +1023,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         if weak_target_started:
             stop_process(weak_process)
         record_listeners(out_dir / "service-exposure/listeners-after-run.txt")
+        remove_mitmproxy_private_material(out_dir)
 
     write_artifact_manifest(out_dir)
     write_checksums(out_dir)
