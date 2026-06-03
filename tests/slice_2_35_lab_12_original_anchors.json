@@ -1,0 +1,104 @@
+{
+  "generated_utc": "2026-06-03T11:33:06.214647+00:00",
+  "lab12_path": "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md",
+  "lab12_title": "Lab 12: Capstone Attack Chain Evidence Package",
+  "lab12_topic": "capstone evidence synthesis and reviewer-grade browser-based AI security validation",
+  "legacy_headings": {
+    "estimated time": [
+      "Estimated time"
+    ],
+    "learning objectives": [
+      "Learning objectives"
+    ],
+    "prerequisites": [
+      "Prerequisites"
+    ],
+    "purpose": [
+      "Purpose"
+    ],
+    "safety boundary": [
+      "Safety and authorization boundary",
+      "Safety boundary"
+    ],
+    "steps": [
+      "Step-by-step execution"
+    ]
+  },
+  "neighbor_first_headings": {
+    "docs/workshop/labs/00-environment-and-target-setup.md": "Lab 00: Environment and Target Setup",
+    "docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md": "Lab 01: Baseline Browser-AI Evidence Capture",
+    "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md": "Lab 02: Indirect Prompt Injection Through Browser Content",
+    "docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md": "Lab 03: Hidden DOM and Low-Visibility Content",
+    "docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md": "Lab 04: DOM Versus Rendered-Page Mismatch",
+    "docs/workshop/labs/05-screenshot-and-visual-deception.md": "Lab 05: Screenshot and Visual Deception",
+    "docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md": "Lab 06: iframe and Frame-Tree Source Confusion",
+    "docs/workshop/labs/07-delayed-content-and-state-transition-risk.md": "Lab 07: Delayed Content and State Transition Risk",
+    "docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md": "Lab 08: QR Handoff and Off-Browser Transition Risk",
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md": "Lab 09: Synthetic Sensitive-Data Handling",
+    "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md": "Lab 10: Model Verdict Manipulation and Policy Simulator",
+    "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md": "Lab 11: Fail-Open Pressure and Exception Abuse"
+  },
+  "neighbor_hashes": {
+    "docs/workshop/labs/00-environment-and-target-setup.md": "7e66fb8e65005b02b750f319d54cdbcc3a3b6bc7b335eec2b5437beb054295fb",
+    "docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md": "a7d8c72ceef8111b0022d30ebcb9c1c2cba1d7ee04ecfc9637700706cddc0e74",
+    "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md": "6573a360b9146d888e89d8d7b665602c607900e8f9141b89f7fbd6ee27e221d3",
+    "docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md": "160974cbc97e88f02538d0b77f0edf589386f13bfeffe54e525a735335646eda",
+    "docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md": "06565a1feb2786fbf8f378f7144a12dd0381f75a9c897bd0fd40fd8768996716",
+    "docs/workshop/labs/05-screenshot-and-visual-deception.md": "aa6eb279996e1bb78423ac50d7ee4fb43f61ac251108d366d41bd895bb7305f3",
+    "docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md": "7ee68a975431284defb3715486d6b125bc92b475c62e64ba81c2d6f853f6fa73",
+    "docs/workshop/labs/07-delayed-content-and-state-transition-risk.md": "e4709c2e6eea43ea9a550ef32971b25f7da1fc4e3817ffaaf11b67d7ecd511de",
+    "docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md": "b0110d5c14c3d6d5bfb8892ee3f8046763cb0a31d0eda2e73baac20ff21422ba",
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md": "13947198943e0d48c82ce123d55d5fe9f25adc0f1e7b719a2cd69fbe6bc6bb2c",
+    "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md": "294a0c31dc26654c9e85043138f16e536d3ee768104b98eb90ae35c76b383998",
+    "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md": "25bc4493f785f9efde3a21a7d369301b5c0ab89f36ebdd7e41b2ee140396d1f3"
+  },
+  "neighbor_preexisting_lab12_refs": {
+    "docs/workshop/labs/00-environment-and-target-setup.md": [],
+    "docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md": [],
+    "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md": [],
+    "docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md": [],
+    "docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md": [],
+    "docs/workshop/labs/05-screenshot-and-visual-deception.md": [],
+    "docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md": [],
+    "docs/workshop/labs/07-delayed-content-and-state-transition-risk.md": [],
+    "docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md": [],
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md": [],
+    "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md": [],
+    "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md": []
+  },
+  "proxy_applicable": true,
+  "schema": "slice-2.35-lab-12-original-anchors-v1",
+  "synthetic_marker_anchors": [
+    "The lab uses local synthetic markers such as:",
+    "SYNTHETIC-LAB-MARKER",
+    "These are fake workshop markers only. They must not be replaced with real bypass strings, real customer data, real credentials, real model-provider secrets, real browser state, real policy data, or live production evidence.",
+    "export LAB12_ROOT=\"${HOME}/browser-safe-ai-workshop/lab-12\"",
+    "export LAB12_RUN=\"${LAB12_ROOT}/capstone-attack-chain-evidence-$(date -u +%Y%m%d-%H%M%S)\"",
+    "mkdir -p \"${LAB12_RUN}\"",
+    "printf '%s\\n' \"${LAB12_RUN}\" | tee \"${LAB12_RUN}/run-directory.txt\"",
+    "--out-dir \"${LAB12_RUN}/capstone-package\"",
+    "jq . \"${LAB12_RUN}/capstone-package/fixture-manifest.json\"",
+    "lab_id is workshop.lab12.capstone_attack_chain_evidence_package",
+    "jq . \"${LAB12_RUN}/capstone-package/attack-chain.json\"",
+    "jq . \"${LAB12_RUN}/capstone-package/evidence-package-index.json\"",
+    "jq . \"${LAB12_RUN}/capstone-package/capstone-findings.json\"",
+    "sed -n '1,260p' \"${LAB12_RUN}/capstone-package/capstone-finding-report.md\"",
+    "find \"${LAB12_RUN}/capstone-package/stage-artifacts\" -type f -maxdepth 1 -print | sort",
+    "sed -n '1,220p' \"${LAB12_RUN}/capstone-package/stage-artifacts/01-baseline-evidence-readiness.md\"",
+    "sed -n '1,220p' \"${LAB12_RUN}/capstone-package/stage-artifacts/08-negative-control-and-reporting.md\"",
+    "jq . \"${LAB12_RUN}/capstone-package/capstone-validation-report.json\"",
+    "## Step 10: verify markers and URL boundary",
+    "rg -n \"SYNTHETIC-LAB-MARKER|BAI_EXECUTED_CAPSTONE_12\" \"${LAB12_RUN}/capstone-package\"",
+    "rg -n \"https?://\" \"${LAB12_RUN}/capstone-package\" || true",
+    "synthetic markers are present",
+    "cd \"${LAB12_RUN}/capstone-package\"",
+    "cp \"${LAB12_RUN}/capstone-package/student-submission-template.md\" \\",
+    "\"${LAB12_RUN}/student-submission.md\"",
+    "sed -n '1,220p' \"${LAB12_RUN}/capstone-package/reviewer-checklist.md\"",
+    "comparisons/marker-provenance-review.md",
+    "SYNTHETIC-LAB-MARKER is missing",
+    "The runner verifies the intentionally weak local `ollama-webui` target on loopback, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, screenshot evidence, records `SYNTHETIC-LAB-MARKER` provenance, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, and creates a reviewer archive.",
+    "It verifies the intentionally weak local `ollama-webui` target, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, and screenshot evidence under the target-root browser evidence directory, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, writes `lab12-live-evidence-summary.json`, and creates a reviewer archive.",
+    "SYNTHETIC-LAB-MARKER"
+  ]
+}

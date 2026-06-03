@@ -574,3 +574,144 @@ no production security validation
 ```
 
 The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
+
+<!-- slice-2.35-lab-12-practical-supplement:start -->
+
+## Method being taught
+
+Lab 12 teaches a practical, evidence-first method for validating a browser-based AI security finding from multiple local evidence surfaces. The student must separate browser-observed facts from model interpretation, compare direct local HTTP evidence with browser evidence, review synthetic marker provenance, and package the result so a reviewer can verify it without trusting a model answer. The confirmed Lab 12 topic from repository inspection is: **capstone evidence synthesis and reviewer-grade browser-based AI security validation**. Because this Lab 12 asset map indicates a capstone or final-evidence role, the lab also closes the workshop by packaging a bounded evidence map.
+
+The method is deliberately professional rather than checklist-driven. A passing result requires the student to explain what each artifact proves, which artifact is only interpretation, which evidence surfaces disagree or are incomplete, and why the intentionally weak local target remains suitable only for training.
+
+## Real-world TTP being emulated
+
+This lab emulates the real-world TTP of using browser-visible content, hidden or transformed page state, proxy-observed traffic, and model-facing context to influence or confuse AI-assisted browser workflows. In a production assessment, the same method helps a red teamer, detection engineer, incident responder, product security reviewer, or vendor-risk reviewer decide whether an AI browser control was bypassed, merely summarized poorly, or only exposed a training-target weakness.
+
+The emulation remains local and synthetic. The student is not proving production exploitability. The student is proving that a bounded local weakness can be demonstrated, varied, captured, and reported with reviewer-grade evidence.
+
+## Local-only PoC payload or controlled test input
+
+Use only the intentionally weak local workshop target, the repository Lab 12 fixture workflow, or the canonical Lab 12 runner discovered in this repository. The local controlled input for this lab is a synthetic capstone marker and analyst instruction packet that the student creates under the Lab 12 evidence directory before running the browser workflow.
+
+Create a local-only controlled input similar to this, replacing the student suffix with a value you choose:
+
+```text
+LAB12-CAPSTONE-SYNTHETIC-MARKER: student-authored-local-variation
+Observed claim: the browser page, source, DOM, visible text, proxy evidence when available, and model-bound context may not all tell the same story.
+Student instruction: prove which surface is authoritative for each claim before writing the finding.
+Boundary: local weak target only, synthetic content only, no real credentials, no real customer data, no third-party systems.
+```
+
+Store the input inside the fresh Lab 12 run directory as `student-controlled-input.txt`. The marker must appear in at least one captured evidence artifact or in the final finding write-up with a clear explanation of where it came from.
+
+## Step-by-step execution
+
+1. Create a fresh Lab 12 evidence directory under the current slice run directory. Do not reuse an old output directory.
+2. Record the selected toolkit Python path in the run evidence. Use the toolkit virtual environment Python when it exists.
+3. Confirm the local weak target is reachable before starting any browser-backed workflow. If it is already reachable, do not start a second copy.
+4. Write `student-controlled-input.txt` with your synthetic marker and local claim packet.
+5. Execute the canonical Lab 12 workflow from the repository root. The Slice 2.35 asset map discovered this runner command candidate or manual fallback:
+
+```bash
+.venv/bin/python tools/run_workshop_lab_12_capstone_live_evidence.py --out-dir "$LAB12_RUN_DIR/live-evidence"
+```
+
+6. Capture direct local HTTP response evidence when the workflow exposes a local URL.
+7. Capture browser screenshot, browser source, browser DOM, visible text extraction, and any frame or state transition evidence required by the current Lab 12 tooling.
+8. Capture proxy flow or OWASP ZAP passive evidence only when the Lab 12 workflow actually uses proxy tooling. Proxy evidence is in scope for this Lab 12 inspection, so private proxy CA material must be removed before manifests, checksums, and reviewer archives are created.
+9. Review model-bound context separately from browser-observed artifacts. Treat model output as interpretation, not a security decision. Model output must not be treated as a security decision.
+10. Build `artifact-manifest.json`, `SHA256SUMS.txt`, and a reviewer archive from the evidence directory after private material cleanup.
+11. Compare all evidence surfaces and write the reportable finding from artifacts, not from model output alone.
+12. Preserve the intentionally weak target behavior. Do not harden the target while conducting this lab.
+
+## Required student-authored variation
+
+The student must create a meaningful local synthetic variation before or during execution. The variation cannot be a note added after the run. It must change the controlled input, browser interaction, marker review, model-bound context review, or finding package in a way that can be proven from artifacts.
+
+A valid variation changes at least two of these local fields:
+
+- The synthetic marker value.
+- The observed claim that the student asks the evidence to prove or disprove.
+- The browser interaction path used to expose the marker.
+- The evidence surface selected as authoritative for the claim.
+- The final finding confidence and limitation statement.
+
+The final package must show where the variation appears and how the reviewer can verify that it was student-authored.
+
+## Evidence that proves the variation worked
+
+The variation is proven only when the evidence package contains artifacts that let a reviewer trace the synthetic input through the workflow. Minimum evidence for Lab 12 is:
+
+- `student-controlled-input.txt` containing the student-authored local variation.
+- A direct local HTTP response or documented reason why the workflow did not expose one.
+- Browser screenshot evidence.
+- Browser source, DOM, or visible text evidence that captures the relevant state.
+- Proxy evidence only when the Lab 12 workflow actually uses proxy tooling.
+- Model-bound context review showing what the model could have interpreted.
+- Synthetic marker provenance review explaining where the marker originated and where it appeared.
+- `artifact-manifest.json` describing every artifact and its purpose.
+- `SHA256SUMS.txt` covering the evidence files.
+- A reviewer archive and archive checksum.
+- A cross-surface comparison table that marks each claim as browser-observed, proxy-observed, model-interpreted, analyst-inferred, or unsupported.
+
+A screenshot or model summary alone is insufficient. The reviewer must be able to validate the finding from local artifacts.
+
+## Expected failure modes
+
+Expected failure modes include an unreachable weak target, a stale browser session, a reused output directory, missing screenshot or DOM evidence, proxy tooling unavailable when optional proxy evidence is requested, private proxy CA material left in the output directory, a marker that appears only in the write-up and not in captured artifacts, a model response treated as authoritative, an incomplete manifest, or a checksum file that does not cover the reviewer archive inputs.
+
+A professional failure report should state what failed, which command produced the failure, which artifacts were still captured, whether the variation was partially observable, and which recovery scope is narrow enough to try next without rewriting completed courseware.
+
+## Defender interpretation
+
+A defender should interpret this lab as a bounded proof that browser-based AI findings require cross-surface evidence. Direct HTTP responses, proxy flows, browser DOM, visible text, screenshots, storage or frame evidence, model-bound context, and analyst findings can support different parts of the same claim. The defender should not accept model output as proof and should not dismiss a finding only because one evidence surface is incomplete.
+
+For triage, classify every claim by source:
+
+- Browser-observed evidence supports what the local page actually exposed.
+- Proxy-observed evidence supports what local traffic carried when proxy capture is in scope.
+- Model-bound context supports what the model could have considered.
+- Analyst interpretation explains impact, confidence, and limits.
+- Missing or conflicting evidence lowers confidence and must be disclosed.
+
+A vendor-risk reviewer should use the manifest, checksums, and cross-surface comparison to verify that the finding is bounded, synthetic, local-only, and not overstated as production exploitability.
+
+## Reportable finding
+
+Use this structure for the final Lab 12 finding:
+
+```markdown
+### Finding title
+Local synthetic Lab 12 evidence shows [bounded browser-based AI failure mode]
+
+### Scope
+Local intentionally weak ollama-webui workshop target only. Synthetic marker only. No third-party systems, real credentials, real secrets, real customer data, or production SaaS tenants.
+
+### Method
+Describe the controlled input, student-authored variation, browser workflow, evidence surfaces captured, and checksum-backed reviewer package.
+
+### Evidence summary
+List the direct HTTP, proxy when applicable, screenshot, DOM/source/text, model-bound context, manifest, and checksum artifacts that support the finding.
+
+### What the evidence proves
+Explain the browser-observed behavior and the path from synthetic input to captured artifact.
+
+### What the evidence does not prove
+State that this does not prove production exploitability, real data exposure, third-party compromise, or model correctness.
+
+### Defender or vendor interpretation
+Explain how a defender should reproduce the review and which artifacts should be trusted for each claim.
+
+### Confidence and limitations
+Assign confidence based on artifact agreement, not model wording.
+```
+
+The finding is complete only when the reviewer can verify it from the archive without trusting the model response.
+
+## Safety and authorization boundary
+
+Conduct this lab only against the local intentionally weak workshop target or local fixture workflow. Use synthetic markers only. Do not use real credentials, real secrets, real customer data, regulated data, production SaaS tenants, public callback infrastructure, third-party systems, persistence, malware behavior, destructive behavior, or token theft. Do not harden the weak target as part of this lab. Do not install packages, browser dependencies, NVIDIA drivers, CUDA components, DKMS modules, kernels, headers, snap packages, or external services. Keep all listeners loopback-only and keep all artifacts inside the required slice evidence folder.
+
+Lab 12 closes only when the evidence package, manifest, checksums, targeted validation, workshop validators, release gate, full pytest, and canonical live target-backed validation when applicable all pass and the closure report explains what the artifacts prove and what they do not prove.
+
+<!-- slice-2.35-lab-12-practical-supplement:end -->

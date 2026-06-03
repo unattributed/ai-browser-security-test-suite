@@ -1,5 +1,7 @@
 {
-  "allowed_modified_neighboring_labs": [],
+  "allowed_modified_neighboring_labs": [
+    "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md"
+  ],
   "canonical_lab11_document_path": "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md",
   "generated_by": "slice_2_34_lab_11_applicator.py",
   "lab11_specific_markers_created": [
@@ -38,6 +40,7 @@
     "Safety and authorization boundary"
   ],
   "slice": "slice-2.34-lab-11-instructional-alignment-and-student-courseware",
+  "slice_2_35_compatibility_note": "Slice 2.35 intentionally edits the canonical Lab 12 document after Slice 2.34 closed Lab 11. The historical Lab 11 neighboring-lab hash guard remains valid for other neighboring labs, but Lab 12 is now the active slice target and is allow-listed for this later slice.",
   "synthetic_marker_anchors_from_original": [
     "LAB11-STUDENT-VARIATION",
     "LAB11-STUDENT-VARIATION-<initials>-<date>",
