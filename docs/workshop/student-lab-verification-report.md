@@ -4,10 +4,10 @@ Review date: 2026-06-04
 
 Reviewer environment: local workshop workspace with `ai-browser-security-test-suite` and `ollama-webui` under `$HOME/Workspace`.
 
-Evidence root:
+Current session evidence root:
 
 ```text
-/tmp/browser-safe-ai-student-verification-20260604-045824
+/tmp/lab01-baseline-runner-smoke-20260604101209
 ```
 
 ## Scope
@@ -29,7 +29,7 @@ On the prepared VirtualBox VM, `$HOME/Workspace` resolves to `/home/foo/Workspac
 | Lab | Verification result | Evidence produced |
 | --- | --- | --- |
 | Lab 00, environment and target setup | Passed | Preflight browser evidence plus practical readiness evidence, manifests, checksums, and archive |
-| Lab 01, baseline browser AI evidence capture | Passed | Manual browser/proxy capture, DOM, screenshots, proxy flows, target headers, manifest, and verifiable checksum manifest |
+| Lab 01, baseline browser AI evidence capture | Passed | Canonical runner-backed baseline evidence package plus manual variation path, target evidence, prompt artifacts, optional-tool status artifacts, browser evidence when available, manifest, checksums, and archive |
 | Lab 02, indirect prompt injection | Passed | Live evidence runner output, synthetic marker provenance, manifest, checksums, and archive |
 | Lab 03, hidden DOM and low visibility content | Passed | Live evidence runner output, source/render comparison evidence, manifest, checksums, and archive |
 | Lab 04, DOM versus rendered page mismatch | Passed | Live evidence runner output, mismatch evidence, manifest, checksums, and archive |
@@ -44,6 +44,10 @@ On the prepared VirtualBox VM, `$HOME/Workspace` resolves to `/home/foo/Workspac
 
 ## Findings Fixed
 
+- Added the canonical Lab 01 baseline browser-AI evidence runner and documented the runner-backed path while preserving the required student-authored variation.
+- Removed implementation-history wording and transient cache artifacts from student-facing lab documents.
+- Updated the workshop README runner anchors so Labs 00 through 12 include the current student-facing canonical runner references.
+- Added documentation contamination regression coverage for transient cache artifacts, implementation-inspection phrases, and stale runner-placeholder wording.
 - Replaced VM-specific executable lab paths with `$HOME/Workspace` and overridable `WORKSHOP_ROOT`, `TOOLKIT_REPO`, and `WEAK_TARGET_REPO` declarations.
 - Removed duplicate legacy lab files so the lab set is exactly canonical Lab 00 through Lab 12.
 - Replaced Lab 01 placeholder/student-substitution commands with concrete evidence capture commands.
@@ -79,13 +83,24 @@ Use `ministral-3:8b` as the fallback if `gemma4:e2b` is unavailable. Avoid makin
 
 ## Final Validation
 
-The final repository validation commands are:
+Validation completed in this session on 2026-06-04:
 
 ```bash
 tools/validate_workshop_labs.py
 tools/validate_workshop_practical_labs.py
 tools/validate_workshop_lab_commands.py
+tools/validate_workshop_docs_consistency.py
 .venv/bin/python -m pytest
 ```
 
-Final test result: `401 passed`.
+Validation results:
+
+```text
+tools/validate_workshop_labs.py: passed
+tools/validate_workshop_practical_labs.py: passed
+tools/validate_workshop_lab_commands.py: passed
+tools/validate_workshop_docs_consistency.py: passed
+.venv/bin/python -m pytest: 407 passed
+```
+
+Full validation completed in this session. Release reviewers should rerun the same commands from a clean checkout before publishing a final course bundle.

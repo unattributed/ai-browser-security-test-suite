@@ -156,6 +156,8 @@ Recommended tools:
 3. `tree` for evidence directory review.
 4. `tcpdump` or `tshark` for instructor-led packet-level locality evidence.
 
+Optional proxy tooling is governed by `docs/workshop/proxy-tooling.md`. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+
 ## Prerequisites
 
 Complete Lab 00 first.
@@ -265,6 +267,24 @@ curl -i http://127.0.0.1:11435/ | head -40
 ```
 
 This check only proves the target is reachable. It is not the baseline prompt capture. Do not submit the lab prompt yet.
+
+## Canonical Lab 01 Runner
+
+Lab 01 includes a one-command baseline evidence runner:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python \
+  tools/run_workshop_lab_01_baseline_browser_ai_evidence.py \
+  --target-url "http://127.0.0.1:11435"
+```
+
+If the virtual environment Python is not available, use the repository-supported Python interpreter assigned by your instructor.
+
+The runner produces a timestamped evidence directory containing target health evidence, baseline and student-variation prompt artifacts, direct local HTTP evidence, proxied local HTTP evidence or a clear unavailable-tool exception artifact, browser source, DOM, visible text, and screenshot evidence when Playwright or Chromium is available, a model mode declaration, `artifact-manifest.json`, `SHA256SUMS.txt`, and a reviewer archive with a checksum sidecar.
+
+The runner does not replace your student-authored variation. After the canonical run, inspect `prompts/student-variation-prompt.txt`, create your own variation using the rules below, submit it through the local target while capture is active, and add the resulting browser, proxy, notes, manifest, and checksum evidence to your Lab 01 package.
 
 ## Local-only PoC payload or controlled test input
 
@@ -793,7 +813,7 @@ comparisons/browser-proxy-model-context-comparison.md
 
 These paths are listed explicitly so students and reviewers can map the courseware checklist to the generated Lab 01 evidence package. The first file records local proxy tool readiness, the second preserves the mitmdump flow capture, and the two comparison notes explain how direct local responses, proxied responses, browser evidence, and model-bound context evidence are correlated.
 
-Follow `docs/workshop/local-proxy-evidence-workflow.md` when reviewing whether the proxy evidence is complete enough for the workshop standard.
+Follow `docs/workshop/local-proxy-evidence-workflow.md` when reviewing whether the proxy evidence is complete enough for the workshop standard, and follow `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy.
 
 ## Evidence collection checklist
 
@@ -852,6 +872,22 @@ A complete Lab 01 run produces a timestamped evidence directory similar to:
   notes/
   manifest/artifact-manifest.json
   checksums/lab01-all-evidence.sha256
+```
+
+The canonical runner produces a timestamped evidence directory similar to:
+
+```text
+~/browser-safe-ai-workshop/lab-01/baseline-browser-ai-evidence-YYYYMMDD-HHMMSS/
+  browser-evidence/
+  comparisons/
+  http-replay/
+  model-bound-context/
+  prompts/
+  proxy-evidence/
+  reviewer-notes/
+  target/
+  artifact-manifest.json
+  SHA256SUMS.txt
 ```
 
 ## Expected failure modes
@@ -950,7 +986,7 @@ The expected result is not only a successful model response. The expected result
 
 ## Local proxy workflow reference
 
-The detailed local proxy workflow for the workshop is documented in `docs/workshop/local-proxy-evidence-workflow.md`. Lab 01 applies that workflow in a student-facing sequence by starting proxy capture before the first target prompt and keeping capture active through the baseline prompt, student-authored variation, and final review.
+The detailed local proxy workflow for the workshop is documented in `docs/workshop/local-proxy-evidence-workflow.md`, and the repository-wide proxy tooling policy is documented in `docs/workshop/proxy-tooling.md`. Lab 01 applies that workflow in a student-facing sequence by starting proxy capture before the first target prompt and keeping capture active through the baseline prompt, student-authored variation, and final review.
 
 Tool availability can be checked with commands such as `zap.sh -cmd -version` for OWASP ZAP and `mitmdump --version` for mitmproxy. Students must not preserve or submit mitmproxy CA private material. If mitmproxy creates certificate authority files for local interception support, those files remain local workstation material and are outside the Lab 01 evidence package.
 

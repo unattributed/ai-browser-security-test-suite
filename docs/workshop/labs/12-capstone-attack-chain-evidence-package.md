@@ -412,9 +412,9 @@ Answer every checklist item before submitting the capstone package.
 
 ## Target-backed live evidence runner
 
-Slice 2.18 selects the evidence-backed Lab 12 target as a target-backed capstone live evidence runner, not as a new weak-target behavior.
+Lab 12 uses a target-backed capstone live evidence runner, not a new weak-target behavior.
 
-Lab 12 already has a deterministic capstone package generator. The narrow Slice 2.18 goal is to wrap that capstone package in live local target evidence by using:
+Lab 12 already has a deterministic capstone package generator. The live local workflow wraps that capstone package in local target evidence by using:
 
 ```text
 tools/run_workshop_lab_12_capstone_live_evidence.py
@@ -552,7 +552,7 @@ The policy should not be delegated to page content, DOM content, screenshots, OC
 A real assessment would add live authorized target evidence, named reviewer identity, customer scope, environment details, timestamps, tool versions, chain-of-custody notes, remediation validation, and post-fix regression evidence. This lab only creates local synthetic capstone evidence for teaching and review.
 
 
-## Slice 2.18 target-backed capstone live evidence runner
+## Target-Backed Capstone Live Evidence Runner
 
 Lab 12 is supported by `tools/run_workshop_lab_12_capstone_live_evidence.py` as a local-only, synthetic-only, authorized-only, target-backed capstone live evidence runner.
 
@@ -560,7 +560,7 @@ The runner verifies the intentionally weak local `ollama-webui` target on loopba
 
 It does not harden the weak target and makes no production security validation claim.
 
-## Slice 2.18 target-backed capstone live evidence runner artifact contract
+## Target-Backed Runner Artifact Contract
 
 `tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
 
@@ -568,9 +568,9 @@ It verifies the intentionally weak local `ollama-webui` target, records target-c
 
 The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
 
-## Slice 2.18 Lab 12 release-gate phrase catalog
+## Lab 12 Evidence Contract Terms
 
-This section exists so the release-candidate gate can verify the Lab 12 target-backed evidence contract without inferring intent from prose.
+This section gives reviewers the exact Lab 12 target-backed evidence contract without requiring inference from prose.
 
 Required release-gate phrases:
 
@@ -593,7 +593,7 @@ The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-
 
 ## Method being taught
 
-Lab 12 teaches a practical, evidence-first method for validating a browser-based AI security finding from multiple local evidence surfaces. The student must separate browser-observed facts from model interpretation, compare direct local HTTP evidence with browser evidence, review synthetic marker provenance, and package the result so a reviewer can verify it without trusting a model answer. The confirmed Lab 12 topic from repository inspection is: **capstone evidence synthesis and reviewer-grade browser-based AI security validation**. Because this Lab 12 asset map indicates a capstone or final-evidence role, the lab also closes the workshop by packaging a bounded evidence map.
+Lab 12 teaches a practical, evidence-first method for validating a browser-based AI security finding from multiple local evidence surfaces. The student must separate browser-observed facts from model interpretation, compare direct local HTTP evidence with browser evidence, review synthetic marker provenance, and package the result so a reviewer can verify it without trusting a model answer. The Lab 12 topic is **capstone evidence synthesis and reviewer-grade browser-based AI security validation**. Because this lab is the capstone, it closes the workshop by packaging a bounded evidence map.
 
 The method is deliberately professional rather than checklist-driven. A passing result requires the student to explain what each artifact proves, which artifact is only interpretation, which evidence surfaces disagree or are incomplete, and why the intentionally weak local target remains suitable only for training.
 
@@ -605,7 +605,7 @@ The emulation remains local and synthetic. The student is not proving production
 
 ## Local-only PoC payload or controlled test input
 
-Use only the intentionally weak local workshop target, the repository Lab 12 fixture workflow, or the canonical Lab 12 runner discovered in this repository. The local controlled input for this lab is a synthetic capstone marker and analyst instruction packet that the student creates under the Lab 12 evidence directory before running the browser workflow.
+Use only the intentionally weak local workshop target, the repository Lab 12 fixture workflow, or the canonical Lab 12 runner. The local controlled input for this lab is a synthetic capstone marker and analyst instruction packet that the student creates under the Lab 12 evidence directory before running the browser workflow.
 
 Create a local-only controlled input similar to this, replacing the student suffix with a value you choose:
 
@@ -624,7 +624,7 @@ Store the input inside the fresh Lab 12 run directory as `student-controlled-inp
 2. Record the selected toolkit Python path in the run evidence. Use the toolkit virtual environment Python when it exists.
 3. Confirm the local weak target is reachable before starting any browser-backed workflow. If it is already reachable, do not start a second copy.
 4. Write `student-controlled-input.txt` with your synthetic marker and local claim packet.
-5. Execute the canonical Lab 12 workflow from the repository root. The Slice 2.35 asset map discovered this runner command candidate or manual fallback:
+5. Execute the canonical Lab 12 workflow from the repository root:
 
 ```bash
 .venv/bin/python tools/run_workshop_lab_12_capstone_live_evidence.py --out-dir "$LAB12_RUN_DIR/live-evidence"
@@ -632,7 +632,7 @@ Store the input inside the fresh Lab 12 run directory as `student-controlled-inp
 
 6. Capture direct local HTTP response evidence when the workflow exposes a local URL.
 7. Capture browser screenshot, browser source, browser DOM, visible text extraction, and any frame or state transition evidence required by the current Lab 12 tooling.
-8. Capture proxy flow or OWASP ZAP passive evidence only when the Lab 12 workflow actually uses proxy tooling. Proxy evidence is in scope for this Lab 12 inspection, so private proxy CA material must be removed before manifests, checksums, and reviewer archives are created.
+8. Capture proxy flow or OWASP ZAP passive evidence only when the Lab 12 workflow actually uses proxy tooling. Use `docs/workshop/proxy-tooling.md` for proxy policy. Proxy evidence is in scope for this Lab 12 inspection, so private proxy CA material must be removed before manifests, checksums, and reviewer archives are created.
 9. Review model-bound context separately from browser-observed artifacts. Treat model output as interpretation, not a security decision. Model output must not be treated as a security decision.
 10. Build `artifact-manifest.json`, `SHA256SUMS.txt`, and a reviewer archive from the evidence directory after private material cleanup.
 11. Compare all evidence surfaces and write the reportable finding from artifacts, not from model output alone.

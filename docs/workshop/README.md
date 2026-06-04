@@ -42,7 +42,24 @@ The table below is the canonical student-facing workshop lab index. The required
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Target-backed live evidence runner |
 | Lab 12 | Capstone Attack Chain Evidence Package | Target-backed capstone live evidence runner |
 
-Runner references for student-ready lab execution are maintained in the lab files and workshop status sections below. Current student-facing runner anchors include `tools/run_workshop_lab_00_practical_environment_readiness.py`, `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py`, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py`, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`, `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py`, and `tools/run_workshop_lab_12_capstone_live_evidence.py`.
+Runner references for student-ready lab execution are maintained in the lab files and workshop status sections below. Current student-facing runner anchors include:
+
+```text
+tools/run_workshop_lab_00_preflight.py
+tools/run_workshop_lab_00_practical_environment_readiness.py
+tools/run_workshop_lab_01_baseline_browser_ai_evidence.py
+tools/run_workshop_lab_02_live_evidence.py
+tools/run_workshop_lab_03_hidden_dom_live_evidence.py
+tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py
+tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py
+tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py
+tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py
+tools/run_workshop_lab_08_qr_handoff_live_evidence.py
+tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py
+tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py
+tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py
+tools/run_workshop_lab_12_capstone_live_evidence.py
+```
 
 The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, and makes no production security validation claim.
 
@@ -71,10 +88,10 @@ Do not use these labs against third-party systems, production SaaS tenants, real
 
 The intended target is the deliberately weak local `ollama-webui` lab application running on localhost.
 
-## Slice 2.2 live proxy evidence
+## Live Proxy Evidence
 
-Slice 2.2 records the verified local proxy tool setup and live local evidence workflow in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`. The workflow keeps ZAP and mitmproxy evidence local-only, synthetic-only, authorized-only, and does not claim production security validation.
-## Slice 2.10 Lab 07 live evidence runner status
+The verified local proxy tool setup and live local evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md` and governed by `docs/workshop/proxy-tooling.md`. The workflow keeps ZAP and mitmproxy evidence local-only, synthetic-only, authorized-only, and does not claim production security validation.
+## Lab 07 Live Evidence Runner Status
 
 | Lab | Guide | Runner | Safety boundary |
 | --- | --- | --- | --- |
@@ -83,7 +100,7 @@ Slice 2.2 records the verified local proxy tool setup and live local evidence wo
 
 Lab 07 delayed content and state transition risk is covered by `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` using `SYNTHETIC-LAB-MARKER` fixtures and no production security validation.
 
-## Slice 2.11 Lab 08 live evidence runner status
+## Lab 08 Live Evidence Runner Status
 
 | Lab | Guide | Status | Runner | Safety boundary |
 | --- | --- | --- | --- | --- |
@@ -92,7 +109,7 @@ Lab 07 delayed content and state transition risk is covered by `tools/run_worksh
 Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` using local-only decoded destination provenance, QR-style visual artifact evidence, browser source, DOM, visible text, QR handoff observation, screenshot evidence, direct and proxied local HTTP responses, marker provenance review, model-bound context review, and no production security validation.
 
 
-## Slice 2.13 Lab 10 live evidence runner status
+## Lab 10 Live Evidence Runner Status
 
 | Lab | Status | Guide | Runner | Safety boundary |
 | --- | --- | --- | --- | --- |
@@ -100,19 +117,19 @@ Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_works
 
 Lab 10 model verdict manipulation and policy simulator is covered by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`. The runner captures local model-response fixtures through Playwright, preserves direct and proxied loopback HTTP evidence, records target-contract readiness for the intentionally weak local `ollama-webui` target, and writes a deterministic target-backed policy gate review. Model response is evidence, not policy.
 
-## Slice 2.15 Lab 11 live evidence runner
+## Lab 11 Live Evidence Runner
 
 Lab 11 fail-open pressure and exception abuse is supported by a local-only, synthetic-only, target-backed live evidence runner. Use `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py` after confirming the intentionally weak target is running on a loopback URL.
 
-## Slice 2.18 Lab 12 target-backed capstone live evidence runner
+## Lab 12 Target-Backed Capstone Live Evidence Runner
 
 Lab 12 now has a target-backed Lab 12 capstone live evidence runner at `tools/run_workshop_lab_12_capstone_live_evidence.py`.
 
-Lab 12 already has a deterministic capstone package. Slice 2.18 selects the narrow next target as a live local wrapper that verifies the intentionally weak `ollama-webui` target, captures target contract and browser evidence, generates the capstone package, confirms Labs 01 through 11 source coverage, and writes reviewer-grade archive evidence.
+Lab 12 already has a deterministic capstone package. The live local wrapper verifies the intentionally weak `ollama-webui` target, captures target contract and browser evidence, generates the capstone package, confirms Labs 01 through 11 source coverage, and writes reviewer-grade archive evidence.
 
 The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and does not claim production security validation.
 
-## Slice 2.18 target-backed capstone live evidence runner artifact contract
+## Lab 12 Target-Backed Runner Artifact Contract
 
 `tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
 
@@ -120,9 +137,9 @@ It verifies the intentionally weak local `ollama-webui` target, records target-c
 
 The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
 
-## Slice 2.18 Lab 12 release-gate phrase catalog
+## Lab 12 Evidence Contract Terms
 
-This section exists so the release-candidate gate can verify the Lab 12 target-backed evidence contract without inferring intent from prose.
+This section gives reviewers the exact Lab 12 target-backed evidence contract without requiring inference from prose.
 
 Required release-gate phrases:
 
@@ -157,7 +174,7 @@ The required proxy evidence path remains free and open source through OWASP ZAP,
 
 
 <!-- slice-2.22:start -->
-## Slice 2.22 Lab 00 practical environment readiness runner
+## Lab 00 Practical Environment Readiness Runner
 
 Lab 00 now has a practical environment readiness runner at `tools/run_workshop_lab_00_practical_environment_readiness.py`.
 
@@ -168,7 +185,7 @@ The Lab 00 practical environment readiness runner produces evidence under `$HOME
 
 <!-- slice-2.36-proxy-tooling-policy-note:start -->
 
-## Slice 2.36 proxy tooling policy alignment
+## Proxy Tooling Policy Alignment
 
 The required workshop path uses free and open source tooling. OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg, grep, ss, nmap, and sha256sum remain the required evidence baseline. Burp Suite Community Edition and Burp Suite Professional are optional professional workflows only. Burp is optional and never mandatory for course completion, and any Burp workflow must produce evidence equivalent to the FOSS path.
 

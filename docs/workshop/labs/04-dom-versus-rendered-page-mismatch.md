@@ -348,9 +348,9 @@ which deterministic policy decision applied
 
 The policy should not be delegated to page content or to a model response.
 
-## Slice 2.7 automated end-to-end evidence runner
+## Automated End-to-End Evidence Runner
 
-Slice 2.7 adds `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`, a one-command Lab 04 DOM/render mismatch end-to-end live evidence runner.
+Use `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` as the one-command Lab 04 DOM/render mismatch end-to-end live evidence runner.
 
 The runner generates local synthetic DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixtures. It uses the weak target startup SOP only to verify that the intentionally weak local `ollama-webui` target is available for lab verification. The intentionally weak target must remain vulnerable for this workshop. The runner must not harden `ollama-webui`, must not patch the weak target, and must not convert the training target into a non-vulnerable application.
 
@@ -358,24 +358,25 @@ The runner captures browser source, DOM, visible text, DOM/render mismatch obser
 
 The exercise remains local-only, synthetic-only, authorized-only, and marked with `SYNTHETIC-LAB-MARKER`. It does not collect real credentials, real customer data, real tokens, real cookies, or production browser storage. It does not prove production security validation.
 
-## Slice 2.7 Lab 04 end-to-end evidence runner preservation
+## Reviewer Evidence Reminders
 
-This section preserves exact reviewer and validator language for the Slice 2.7 Lab 04 end-to-end evidence standard.
+The Lab 04 evidence package must state the lab boundary clearly:
 
 - no production security validation
 
-## Slice 2.7 validator recovery terms
+## Proxy Workflow Reference
 
-This section preserves exact reviewer and validator language for the Slice 2.7 Lab 04 end-to-end evidence standard.
+Use the shared proxy workflow and repository-wide proxy tooling policy when proxy evidence is part of the run:
 
 - Practical proxy evidence exercise
 - docs/workshop/local-proxy-evidence-workflow.md
+- docs/workshop/proxy-tooling.md
 
 <!-- slice-2.27-lab-04-practical-method-alignment:start -->
 
 # Lab 04 student-facing practical method alignment
 
-This managed section preserves the existing Lab 04 content above and adds the practical student courseware required for Slice 2.27. Keep this section with the Lab 04 document so students can conduct the lab without relying on instructor-only notes.
+This section gives students the practical Lab 04 method, evidence workflow, student-authored variation, and completion criteria without relying on instructor-only notes.
 
 ## Lab title and purpose
 
@@ -419,7 +420,7 @@ Use only local and free tooling for this lab:
 - The toolkit virtual environment Python at `$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python` when available.
 - The canonical Lab 04 runner, if present: `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`.
 - Local shell tools already used by the workshop, including `curl`, `sha256sum`, and `ss`.
-- Optional proxy evidence tooling, such as mitmproxy or OWASP ZAP, only when your instructor requires HTTP capture for this lab.
+- Optional proxy evidence tooling, such as mitmproxy or OWASP ZAP, only when your instructor requires HTTP capture for this lab. Follow `docs/workshop/proxy-tooling.md` for the repository-wide policy.
 
 ## Setup checks
 
@@ -479,20 +480,16 @@ Configure the browser HTTP and HTTPS proxy to `127.0.0.1:8080`, then load `http:
 
 Start ZAP before the browser interaction, launch or configure a browser to proxy through ZAP, then browse to `http://127.0.0.1:11435`. Verify the local target appears in ZAP History before completing the Lab 04 interaction. Preserve screenshots or exported messages that show the local target requests. Those artifacts help prove what the browser requested and when.
 
-## Canonical Lab 04 assets found during Slice 2.27 inspection
+## Canonical Lab 04 Assets
 
 - Document: `docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md`
 - Runner: `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`
 - Method: `DOM rendered page mismatch validation`
-- Fixture candidates:
-- `tests/__pycache__/test_slice_2_27_lab04_instructional_alignment.cpython-313-pytest-9.0.3.pyc`
-- `tests/__pycache__/test_workshop_lab_04_dom_render_mismatch_fixtures.cpython-313-pytest-9.0.3.pyc`
-- `tests/__pycache__/test_workshop_lab_04_dom_render_mismatch_live_evidence_runner.cpython-313-pytest-9.0.3.pyc`
-- `tests/__pycache__/test_workshop_practical_yaml_fallback.cpython-313-pytest-9.0.3.pyc`
+- Fixture generator: `tools/generate_lab_04_dom_render_mismatch_fixtures.py`
+- Live evidence runner: `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`
 - `tests/test_slice_2_27_lab04_instructional_alignment.py`
 - `tests/test_workshop_lab_04_dom_render_mismatch_fixtures.py`
 - `tests/test_workshop_lab_04_dom_render_mismatch_live_evidence_runner.py`
-- `tests/test_workshop_practical_yaml_fallback.py`
 
 ## 1. Method being taught
 

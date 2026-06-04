@@ -538,9 +538,9 @@ Keep the evidence directory. Later labs use the same evidence discipline.
 
 ## Proxy tooling and evidence equivalence
 
-The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces.
+The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`.
 
-Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow. Burp is optional and never mandatory for this lab. A Burp workflow must produce evidence equivalent to the FOSS path, including request and response records, browser artifacts, marker provenance, private CA material cleanup, manifest entries, and checksum coverage.
+Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
 

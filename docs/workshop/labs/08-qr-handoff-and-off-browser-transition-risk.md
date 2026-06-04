@@ -121,6 +121,8 @@ Required:
 - `ss` and `nmap`, to confirm loopback-only services.
 - `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
 - OWASP ZAP, to perform passive local HTTP history review when available.
+
+Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 - `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
@@ -532,7 +534,7 @@ scope: local-only intentionally weak ollama-webui workshop target
 3. Prepare a fresh Lab 08 evidence directory for the run. Do not reuse artifacts from a previous student or previous slice.
 4. Execute the canonical Lab 08 workflow described above in this document. Use the canonical Lab 08 runner or fixture path discovered for this repository, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, when it applies to the execution path above.
 5. Capture the direct local HTTP response when the workflow exposes one.
-6. Capture proxied local HTTP evidence with mitmproxy, mitmdump, or OWASP ZAP passive review when the workflow includes HTTP traffic worth reviewing.
+6. Capture proxied local HTTP evidence with mitmproxy, mitmdump, or OWASP ZAP passive review when the workflow includes HTTP traffic worth reviewing. Follow `docs/workshop/proxy-tooling.md` for proxy policy.
 7. Capture browser evidence, including screenshot, visible text, source, DOM, frame or state evidence when applicable to the Lab 08 workflow.
 8. Capture model-bound context evidence when the workflow exposes what the AI system saw or used.
 9. Record the student-authored marker and explain where it appears in the artifacts.

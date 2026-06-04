@@ -45,13 +45,31 @@ STALE_VERIFIED_LAB_PHRASES = [
     "fixture-only gap",
 ]
 
+STUDENT_DOC_CONTAMINATION_PHRASES = [
+    "__pycache__",
+    ".pyc",
+    ".pytest_cache",
+    "found during Slice",
+    "asset map discovered",
+    "repository inspection",
+    "preserves validator language",
+    "release-gate phrase catalog",
+    "student-facing instructional alignment supplement",
+    "placeholder runner",
+]
+
 MODEL_EXAMPLE_RE = re.compile(r"OLLAMA_MODEL=deepseek-r1(?!:7b)|--model deepseek-r1(?!:7b)")
 TARGET_START_RE = re.compile(r"(?<![/.\w-])python scripts/pull_model\.py")
 STANDALONE_PYTEST_RE = re.compile(r"^pytest$", re.MULTILINE)
+HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 
 
 def read(path: Path) -> str:
     return (REPO_ROOT / path).read_text(encoding="utf-8")
+
+
+def strip_html_comments(text: str) -> str:
+    return HTML_COMMENT_RE.sub("", text)
 
 
 def validate() -> list[str]:
@@ -78,6 +96,12 @@ def validate() -> list[str]:
             if phrase in text:
                 errors.append(f"{rel_path} contains stale verified-lab wording: {phrase!r}")
 
+        if rel_path in LAB_DOCS:
+            student_text = strip_html_comments(text)
+            for phrase in STUDENT_DOC_CONTAMINATION_PHRASES:
+                if phrase in student_text:
+                    errors.append(f"{rel_path} contains student-facing implementation artifact wording: {phrase!r}")
+
     model_doc = read(Path("docs/workshop/model-runtime-modes.md"))
     if "gemma4:e2b" not in model_doc or "ministral-3:8b" not in model_doc:
         errors.append("docs/workshop/model-runtime-modes.md must document gemma4:e2b and ministral-3:8b")
@@ -89,7 +113,7 @@ def validate() -> list[str]:
         errors.append("student-course-synopsis must describe Lab 11 as using the live evidence runner")
 
     report = read(Path("docs/workshop/student-lab-verification-report.md"))
-    for required in ["FOSS Tool Audit", "gemma4:e2b", "401 passed", "Lab 00 through Lab 12"]:
+    for required in ["FOSS Tool Audit", "gemma4:e2b", "407 passed", "Lab 00 through Lab 12"]:
         if required not in report:
             errors.append(f"student-lab-verification-report must include {required!r}")
 

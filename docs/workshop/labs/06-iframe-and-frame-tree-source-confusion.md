@@ -489,9 +489,9 @@ docs/workshop/local-proxy-evidence-workflow.md
 
 This exercise remains local-only, synthetic-only, and authorized-only. It does not test public sites, third-party browser-AI products, or production controls.
 
-## Slice 2.9 end-to-end live evidence runner
+## End-to-End Live Evidence Runner
 
-Slice 2.9 adds `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` as the one-command Lab 06 iframe frame-tree end-to-end live evidence runner.
+Use `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` as the one-command Lab 06 iframe frame-tree end-to-end live evidence runner.
 
 The runner uses the existing `tools/run_iframe_frame_tree_lab.py` helper for the baseline, sandboxed frame, srcdoc hidden context, and nested frame-chain variants, then wraps those outputs in the same reviewer-grade live evidence standard used by Labs 02 through 05.
 
@@ -505,9 +505,9 @@ This lab remains local-only, synthetic-only, and authorized-only. It does not te
 
 <!-- slice-2.29-lab06-instructional-alignment-start -->
 
-# Slice 2.29 student-facing instructional alignment supplement
+# Lab 06 Practical Courseware Supplement
 
-This supplement preserves the existing Lab 06 guide above and makes the lab usable as practical student-facing courseware. Lab 06 teaches iframe and frame-tree source confusion as an evidence-first browser security method. Students must prove which frame supplied which content before accepting model-bound context, analyst notes, or a report as security evidence.
+This supplement makes Lab 06 usable as practical student courseware. Lab 06 teaches iframe and frame-tree source confusion as an evidence-first browser security method. Students must prove which frame supplied which content before accepting model-bound context, analyst notes, or a report as security evidence.
 
 ## Method being taught
 
@@ -587,7 +587,7 @@ Every controlled input must remain on `http://127.0.0.1:11435` or another loopba
    done
    ```
 
-6. Start optional proxy capture before the first meaningful browser interaction when proxy evidence is required. Use `docs/workshop/local-proxy-evidence-workflow.md` as the shared workflow. Preserve mitmdump or OWASP ZAP passive evidence only for local loopback traffic.
+6. Start optional proxy capture before the first meaningful browser interaction when proxy evidence is required. Use `docs/workshop/local-proxy-evidence-workflow.md` as the shared workflow and `docs/workshop/proxy-tooling.md` for proxy-tool policy. Preserve mitmdump or OWASP ZAP passive evidence only for local loopback traffic.
 
 7. Inspect `frame-tree.json`, `frame-url-list.txt`, `top-page-dom-snapshot.html`, `frame-dom-snapshots/index.json`, `sandbox-findings.json`, `srcdoc-findings.json`, `cross-frame-rendered-text.txt`, `model-bound-context.txt`, and `report.md` for each variant.
 

@@ -48,7 +48,7 @@ Record the exact local route, fixture, form field, or helper workflow used to su
 3. Open the canonical Lab 09 local fixture or route in the browser.
 4. Submit, load, or render the controlled Lab 09 input using the target workflow discovered in the repository.
 5. Save the direct local HTTP response for the relevant request. A curl capture, browser developer tools export, or runner-produced response artifact is acceptable when it is local-only.
-6. Capture proxied local HTTP evidence when the lab runner, mitmproxy, mitmdump, or OWASP ZAP workflow supports it. Record when proxy tooling is unavailable rather than fabricating evidence.
+6. Capture proxied local HTTP evidence when the lab runner, mitmproxy, mitmdump, or OWASP ZAP workflow supports it. Follow `docs/workshop/proxy-tooling.md` for proxy policy. Record when proxy tooling is unavailable rather than fabricating evidence.
 7. Capture browser screenshot evidence showing the rendered state.
 8. Capture browser source, browser DOM, visible text extraction, and any relevant storage or state transition evidence.
 9. Capture or review the model-bound context artifact when the runner provides one. Identify which synthetic markers were included, summarized, omitted, or transformed.
@@ -161,9 +161,9 @@ Lab 09 is complete only when the student can provide:
 
 ---
 
-## Preserved pre-slice Lab 09 notes
+## Additional Lab 09 Method Notes
 
-The following notes were preserved from the pre-slice Lab 09 document for reviewer continuity. The practical lab above is the authoritative student execution path for Slice 2.32.
+The following notes provide additional student-facing method detail. The practical lab above is the authoritative student execution path.
 
 # Lab 09: Synthetic Sensitive-Data Handling
 
@@ -282,6 +282,8 @@ Required:
 - `ss` and `nmap`, to confirm loopback-only services.
 - `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
 - OWASP ZAP, to perform passive local HTTP history review when available.
+
+Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 - `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
@@ -574,7 +576,7 @@ The policy should not be delegated to uploaded content, browser storage, local p
 
 ## One-command live evidence runner
 
-Slice 2.12 closes the Lab 09 live-evidence gap with:
+Lab 09 includes this one-command live evidence runner:
 
 ```text
 tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py

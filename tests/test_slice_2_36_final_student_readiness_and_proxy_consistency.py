@@ -107,7 +107,7 @@ def test_lab05_practical_supplement_renders_as_markdown_not_code_block() -> None
     ]
     assert not bad, f"Lab 05 has indented markdown headings that render as code: {bad[:5]}"
     headings = {heading.normalized for heading in markdown_headings(block)}
-    assert "slice 2 28 student facing instructional alignment supplement" in headings
+    assert "lab 05 practical courseware supplement" in headings
     assert "method being taught" in headings
     assert "required student authored variation" in headings
 

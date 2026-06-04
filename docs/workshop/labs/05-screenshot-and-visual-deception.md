@@ -400,9 +400,9 @@ which deterministic policy decision applied
 
 The policy should not be delegated to page content, OCR text, vision-model output, or a model response.
 
-## Slice 2.8 end-to-end live evidence runner
+## End-to-End Live Evidence Runner
 
-Slice 2.8 adds `tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py` as the one-command Lab 05 screenshot and visual deception end-to-end live evidence runner.
+Use `tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py` as the one-command Lab 05 screenshot and visual deception end-to-end live evidence runner.
 
 This runner turns the original manual fixture workflow into a reviewer-grade local evidence workflow. It generates the Lab 05 synthetic fixtures, follows the weak target startup SOP, serves fixtures from a temporary loopback-only fixture server, records direct local HTTP responses with proxied local HTTP responses, captures browser source, DOM, visible text, visual observation, screenshot evidence, and optional local OCR evidence, records marker provenance, records model-bound context review, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, creates a `.tar.gz` reviewer archive, and writes a relative `.tar.gz.sha256` checksum file.
 
@@ -438,9 +438,9 @@ confirm no production security validation is claimed
 ```
 
 <!-- slice-2.28-lab05-instructional-alignment-start -->
-# Slice 2.28 student-facing instructional alignment supplement
+# Lab 05 Practical Courseware Supplement
 
-This supplement makes the existing Lab 05 screenshot and visual deception lab usable as student-facing practical courseware while preserving the existing validator compatibility anchors and release-gated end-to-end runner wording.
+This supplement makes the Lab 05 screenshot and visual deception lab usable as practical student courseware with the current end-to-end runner wording and evidence expectations.
 
 ## Method being taught
 
@@ -498,7 +498,7 @@ The fixture set includes canvas-rendered text, SVG-rendered text, bitmap image t
    rg -n "SYNTHETIC-LAB-MARKER" "${LAB05_RUN}/fixtures" || grep -RIn "SYNTHETIC-LAB-MARKER" "${LAB05_RUN}/fixtures"
    ```
 
-5. Start evidence capture before the first meaningful browser interaction. This is the Practical proxy evidence exercise for Lab 05. The shared local proxy workflow is `docs/workshop/local-proxy-evidence-workflow.md`.
+5. Start evidence capture before the first meaningful browser interaction. This is the Practical proxy evidence exercise for Lab 05. The shared local proxy workflow is `docs/workshop/local-proxy-evidence-workflow.md`, and the repository-wide proxy tooling policy is `docs/workshop/proxy-tooling.md`.
 
    mitmdump path:
 
@@ -579,9 +579,9 @@ Conduct this lab only against local synthetic fixtures and the intentionally vul
 
 ## Proxy tooling and evidence equivalence
 
-The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces.
+The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`.
 
-Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow. Burp is optional and never mandatory for this lab. A Burp workflow must produce evidence equivalent to the FOSS path, including request and response records, browser artifacts, marker provenance, private CA material cleanup, manifest entries, and checksum coverage.
+Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
 

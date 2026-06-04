@@ -185,6 +185,7 @@ Reference workflow:
 ```text
 docs/workshop/local-proxy-evidence-workflow.md
 docs/workshop/proxy-tool-setup-and-live-local-evidence.md
+docs/workshop/proxy-tooling.md
 ```
 
 This section is intentionally named for existing validation because the lab must remain a practical proxy exercise, not shallow prose.
@@ -1312,9 +1313,9 @@ snap-based tooling requirements
 
 This boundary is the rules-of-engagement statement for the lab. It does not make the technique less real. It keeps the exercise authorized, reproducible, reviewable, and safe for a hands-on training environment.
 
-## Slice 2.5 automated end-to-end evidence runner
+## Automated End-to-End Evidence Runner
 
-Slice 2.5 adds a one-command Lab 02 end-to-end live evidence runner:
+Lab 02 includes a one-command end-to-end live evidence runner:
 
 ```text
 tools/run_workshop_lab_02_live_evidence.py

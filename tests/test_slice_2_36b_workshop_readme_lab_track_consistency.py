@@ -23,7 +23,14 @@ EXPECTED_ROWS = [
 ]
 
 REQUIRED_RUNNERS = [
+    "tools/run_workshop_lab_00_preflight.py",
     "tools/run_workshop_lab_00_practical_environment_readiness.py",
+    "tools/run_workshop_lab_01_baseline_browser_ai_evidence.py",
+    "tools/run_workshop_lab_02_live_evidence.py",
+    "tools/run_workshop_lab_03_hidden_dom_live_evidence.py",
+    "tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py",
+    "tools/run_workshop_lab_05_screenshot_visual_deception_live_evidence.py",
+    "tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py",
     "tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py",
     "tools/run_workshop_lab_08_qr_handoff_live_evidence.py",
     "tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py",
@@ -109,13 +116,13 @@ def test_lab_track_preserves_existing_legacy_readme_anchor_phrases() -> None:
     assert "no production security validation" in text
 
 
-def test_slice_2_10_lab07_status_table_has_matching_columns() -> None:
+def test_lab07_status_table_has_matching_columns() -> None:
     text = readme_text()
-    start = text.index("## Slice 2.10 Lab 07 live evidence runner status")
-    end = text.index("## Slice 2.11 Lab 08 live evidence runner status", start)
+    start = text.index("## Lab 07 Live Evidence Runner Status")
+    end = text.index("## Lab 08 Live Evidence Runner Status", start)
     section = text[start:end]
     rows = [line.strip() for line in section.splitlines() if line.strip().startswith("|")]
-    assert rows, "missing Slice 2.10 Lab 07 status table"
+    assert rows, "missing Lab 07 status table"
     header_columns = len(rows[0].strip("|").split("|"))
     assert header_columns == 4
     for row in rows[1:]:

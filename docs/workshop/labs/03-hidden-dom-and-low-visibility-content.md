@@ -530,9 +530,9 @@ Lab 03 is complete only when:
 9. Full pytest passes.
 10. Live target-backed validation passes when a canonical Lab 03 live runner exists.
 
-## Slice 2.6 one-command hidden DOM live evidence runner
+## One-Command Hidden DOM Live Evidence Runner
 
-Slice 2.6 closes Lab 03 to the same standard as Lab 01 and Lab 02 with `tools/run_workshop_lab_03_hidden_dom_live_evidence.py`, a one-command Lab 03 hidden DOM end-to-end live evidence runner.
+Use `tools/run_workshop_lab_03_hidden_dom_live_evidence.py` as the one-command Lab 03 hidden DOM end-to-end live evidence runner.
 
 The runner generates local synthetic display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixtures. It starts a temporary loopback-only fixture server, ensures the intentionally weak local `ollama-webui` target is available on `127.0.0.1:11435`, verifies local Ollama on `127.0.0.1:11434` only when `live-local-text` mode is selected, captures direct local HTTP responses with proxied local HTTP responses, captures browser source, DOM, visible text, computed style, and screenshot evidence, records OWASP ZAP passive status or a clear unavailable-tool exception, records marker provenance review artifacts, records model-bound context review artifacts, compares visible text with hidden DOM and low-visibility content, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes mitmproxy CA private material before archive creation, and creates the final `.tar.gz` evidence archive and `.tar.gz.sha256` checksum file.
 
@@ -586,6 +586,6 @@ Students must explain which evidence source proves that the `SYNTHETIC-LAB-MARKE
 
 ### Practical proxy evidence exercise cross-reference
 
-Practical proxy evidence exercise coverage for Lab 03 is now provided by the Slice 2.6 hidden DOM end-to-end live evidence runner and must be reviewed alongside `docs/workshop/local-proxy-evidence-workflow.md`.
+Practical proxy evidence exercise coverage for Lab 03 is provided by the hidden DOM end-to-end live evidence runner and must be reviewed alongside `docs/workshop/local-proxy-evidence-workflow.md` and `docs/workshop/proxy-tooling.md`.
 
 This cross-reference keeps Lab 03 aligned with the practical adversarial lab standard: direct HTTP capture, proxied HTTP capture, browser source, parsed DOM, visible text, screenshot, marker provenance, model-bound context review, manifest, checksums, and reviewer archive output are required before the lab can be treated as closed for workshop release-candidate purposes.
