@@ -2,7 +2,10 @@
 
 Verification date: 2026-06-04
 
-The example corpus in `examples/browser-safe-ai-methods` was tested against the deliberately weak local `ollama-webui` target.
+The example corpus in `examples/browser-safe-ai-methods` now has two verification layers:
+
+- Static corpus validation, which runs without a model and rejects placeholder payloads.
+- Live local smoke testing, which requires the deliberately weak local `ollama-webui` target.
 
 ## Target Runtime
 
@@ -14,6 +17,25 @@ OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
 ```
 
 The target listened on `http://127.0.0.1:11435` and proxied model requests to local Ollama at `http://127.0.0.1:11434`.
+
+The helper health endpoint exists at:
+
+```text
+http://127.0.0.1:11435/health
+```
+
+Fresh health check result:
+
+```json
+{
+  "ollama": {
+    "version": "0.24.0"
+  },
+  "ollama_connected": true,
+  "ollama_host": "http://127.0.0.1:11434",
+  "status": "ok"
+}
+```
 
 ## Route Probe Result
 
@@ -38,9 +60,39 @@ Covered route families:
 - `/browser-safe/storage-state-boundary?variant=combined_state_boundary`
 - `/api/browser-safe/storage-state-boundary/state-seed?variant=cookie_state_boundary`
 
-## Payload Result
+## Static Payload Quality Result
 
-The payload corpus was exercised with:
+The current corpus was validated with:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+python3 tools/validate_blog_series_examples.py
+.venv/bin/python -m pytest -q tests/test_blog_series_examples.py tests/test_playground_examples.py
+```
+
+Result:
+
+```text
+Validated 23 Browser-Safe AI method example folders.
+5 passed
+```
+
+The static gate now requires each replay payload to include:
+
+- attacker objective
+- injection vector
+- vulnerable behavior to reveal
+- secure behavior expected
+- evidence assertions
+- pass/fail rule
+- safety boundary
+- senior reviewer prompt
+
+It also rejects short placeholder payloads and non-loopback HTTP or HTTPS URLs.
+
+## Live Payload Result
+
+The upgraded payload corpus was exercised with:
 
 ```bash
 cd $HOME/Workspace/ai-browser-security-test-suite
@@ -61,12 +113,14 @@ Result:
 }
 ```
 
-Evidence report path from the local verification run:
+Evidence report path from the fresh local verification run:
 
 ```text
-/home/foo/browser-safe-ai-workshop/example-payload-smoke-test/payload-smoke-1780553122.json
+/home/foo/browser-safe-ai-workshop/example-payload-smoke-test/payload-smoke-1780569609.json
 ```
 
 ## Interpretation
 
-This verifies that every example payload is replayable against the weak local target and produces a live local model stream. The payload test does not claim that model output is a security decision. It proves target availability, payload acceptance, and live model-bound behavior so students can then evaluate collection boundaries, policy handling, and evidence quality in the matching labs.
+The static validation proves the current payloads are complete enough for senior-review replay intent and remain bounded to synthetic local testing. The live smoke test proves the upgraded corpus is accepted by the weak local target and produces model-bound stream output through `/api/generate`.
+
+Neither validation layer claims that model output is a security decision or that this is production security validation. The purpose is to prove target availability, payload acceptance, marker provenance, and live model-bound behavior so students can evaluate collection boundaries, policy handling, and evidence quality in the matching labs.

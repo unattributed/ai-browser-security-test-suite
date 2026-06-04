@@ -9,8 +9,40 @@ VALID_IFRAME={'baseline','sandboxed_frame','srcdoc_hidden_context','nested_frame
 VALID_STORAGE={'baseline_no_state','cookie_state_boundary','local_storage_state_boundary','session_storage_state_boundary','combined_state_boundary'}
 VALID_REDIRECT={'baseline','encoded','slow'}
 SECTIONS=['## Blog reference','## Workshop lab','## Operator objective','## Method definition','## Start weak ollama-webui','## Payload','## Execute against weak ollama-webui','## Evidence to collect','## Expected result','## Reporting notes']
+MIN_PAYLOAD_WORDS=90
+PAYLOAD_QUALITY_TERMS=[
+    'Adversarial test contract:',
+    '- Attacker objective:',
+    '- Injection vector:',
+    '- Vulnerable behavior to reveal:',
+    '- Secure behavior expected:',
+    '- Evidence assertions:',
+    '- Pass/fail rule:',
+    '- Safety boundary:',
+    'Senior reviewer prompt:',
+    'http://127.0.0.1:11435',
+    'synthetic markers',
+    'no external callbacks',
+    'production security validation',
+]
+PAYLOAD_FORBIDDEN_URL=re.compile(r'https?://(?!127\.0\.0\.1(?::|/|$)|localhost(?::|/|$))[^\s)]+')
 def dirs(): return sorted(p for p in EXAMPLE_ROOT.iterdir() if p.is_dir())
 def vars_from(text,prefix): return re.findall(re.escape(prefix)+r'[^\s"\'`)]*variant=([A-Za-z0-9_]+)',text)
+def rel(path):
+    try:
+        return path.relative_to(ROOT)
+    except ValueError:
+        return path
+def validate_payload_quality(path, text):
+    errors=[]
+    words=re.findall(r'[A-Za-z0-9_:/.-]+',text)
+    display=rel(path)
+    if len(words)<MIN_PAYLOAD_WORDS: errors.append(f'{display} payload too short for adversarial replay intent: {len(words)} words')
+    for term in PAYLOAD_QUALITY_TERMS:
+        if term not in text: errors.append(f'{display} payload missing quality term {term}')
+    for url in PAYLOAD_FORBIDDEN_URL.findall(text):
+        errors.append(f'{display} payload contains non-loopback URL {url}')
+    return errors
 def validate():
     errors=[]
     if not EXAMPLE_ROOT.exists(): return [f'missing example root: {EXAMPLE_ROOT}']
@@ -38,6 +70,7 @@ def validate():
                 pt=pf.read_text(encoding='utf-8').strip()
                 if 'SYNTHETIC-LAB-MARKER' not in pt: errors.append(f'{pf.relative_to(ROOT)} missing SYNTHETIC-LAB-MARKER')
                 if pt not in text: errors.append(f'{doc.relative_to(ROOT)} does not embed exact paired payload')
+                errors.extend(validate_payload_quality(pf,pt))
             for v in vars_from(text,'/browser-safe/dom-render-mismatch'):
                 if v not in VALID_DOM: errors.append(f'{doc.relative_to(ROOT)} invalid DOM variant {v}')
             for v in vars_from(text,'/browser-safe/iframe-frame-tree'):
