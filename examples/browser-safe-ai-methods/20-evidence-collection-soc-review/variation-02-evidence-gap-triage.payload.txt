@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Evidence gap: screenshot missing, DOM and proxy present.
+Task: write SOC note with residual risk and next action.

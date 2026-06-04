@@ -1,0 +1,2 @@
+SYNTHETIC-LAB-MARKER
+Matrix: baseline, hidden_instruction, rendered_contradiction; collect source, DOM, visible text, screenshot, model context.

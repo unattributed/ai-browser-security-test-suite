@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Finding: model followed untrusted DOM text.
+Task: add replay command, expected evidence, and pass/fail rule.

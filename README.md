@@ -317,8 +317,7 @@ Start `ollama-webui` in a separate terminal:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Verify the target:
@@ -336,8 +335,7 @@ Start the target in a separate terminal:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Then run:
@@ -374,7 +372,7 @@ RUN_OLLAMA_TARGET=0 scripts/test_series_coverage_against_ollama_webui.sh
 Optional model override:
 
 ```bash
-OLLAMA_MODEL=deepseek-r1 scripts/run_supported_local_target_suite.sh
+OLLAMA_MODEL=gemma4:e2b scripts/run_supported_local_target_suite.sh
 ```
 
 ## CLI overview
@@ -402,7 +400,7 @@ ollama-project-agent-validate
 
 ```bash
 python -m compileall -q src tools
-pytest
+python -m pytest
 python tools/audit_series_coverage.py \
   --payload payloads/ollama_webui_safe_prompts.yaml \
   --out-dir /tmp/ai-browser-coverage
@@ -568,7 +566,7 @@ python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.
 Optional model override:
 
 ```bash
-python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.1:11435/   --model deepseek-r1   --cases payloads/ollama_webui_safe_prompts.yaml   --out reports/ollama-webui-validation   --i-have-authorization
+python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.1:11435/   --model gemma4:e2b   --cases payloads/ollama_webui_safe_prompts.yaml   --out reports/ollama-webui-validation   --i-have-authorization
 ```
 
 Generated local evidence:

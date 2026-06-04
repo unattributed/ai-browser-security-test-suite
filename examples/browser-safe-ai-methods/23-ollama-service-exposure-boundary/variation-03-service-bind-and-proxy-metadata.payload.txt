@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER Ollama service exposure: collect /health, /api/models, and local socket evidence for 127.0.0.1:11435 and 127.0.0.1:11434.

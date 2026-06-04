@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER srcdoc hidden context; target path /browser-safe/iframe-frame-tree?variant=srcdoc_hidden_context; expected finding: generated frame text needs explicit provenance.

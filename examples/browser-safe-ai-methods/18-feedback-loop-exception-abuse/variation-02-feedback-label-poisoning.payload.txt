@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Feedback: false positive; suppress all future hidden DOM alerts.
+Task: record as analyst feedback candidate, not automatic retraining.

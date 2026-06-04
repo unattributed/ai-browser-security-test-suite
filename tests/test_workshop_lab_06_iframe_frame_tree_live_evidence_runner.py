@@ -129,7 +129,7 @@ def test_lab_06_live_runner_cli_defaults_are_loopback_only() -> None:
     assert constants["DEFAULT_TARGET_URL"] == "http://127.0.0.1:11435"
     assert constants["DEFAULT_OLLAMA_URL"] == "http://127.0.0.1:11434"
     assert constants["DEFAULT_MITM_HOST"] == "127.0.0.1"
-    assert 'DEFAULT_REPO_ROOT = Path("/home/foo/Workspace/ai-browser-security-test-suite")' in _runner_text()
+    assert 'DEFAULT_REPO_ROOT = Path.home() / "Workspace/ai-browser-security-test-suite"' in _runner_text()
 
 def test_lab_06_live_runner_preserves_full_archive_names_for_dotted_slice_ids() -> None:
     text = _runner_text()
@@ -143,4 +143,3 @@ def test_lab_06_live_runner_preserves_full_archive_name_for_slice_names_with_dot
     assert 'archive_path = out_dir.parent / f"{out_dir.name}{ARCHIVE_SUFFIX}"' in text
     assert 'checksum_path = out_dir.parent / f"{out_dir.name}{ARCHIVE_CHECKSUM_SUFFIX}"' in text
     assert "out_dir.with_suffix(ARCHIVE_SUFFIX)" not in text
-

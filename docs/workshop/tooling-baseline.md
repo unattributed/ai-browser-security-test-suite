@@ -127,10 +127,10 @@ These can be used in optional contrast material or future explicit local-only sl
 | Lab 06 | Python, Playwright, frame-tree capture, browser DevTools, OWASP ZAP, mitmproxy or mitmdump, curl, jq. |
 | Lab 07 | Python, Playwright, timeline capture. |
 | Lab 08 | Python, Playwright, QR generator, QR decoder. |
-| Lab 09 | Python, Playwright, seeded marker tracker, future proxy and API evidence workflow. |
-| Lab 10 | Python, schema validation, policy simulator, future proxy and API evidence workflow. |
-| Lab 11 | Python, policy simulator, reviewer worksheet, future proxy and API evidence workflow. |
-| Lab 12 | Full toolkit plus selected optional tools. |
+| Lab 09 | Python, Playwright, seeded marker tracker, curl, jq, rg or grep, OWASP ZAP, mitmproxy or mitmdump, sha256sum. |
+| Lab 10 | Python, Playwright, schema validation, policy simulator, curl, jq, rg or grep, OWASP ZAP, mitmproxy or mitmdump, sha256sum. |
+| Lab 11 | Python, Playwright or browser evidence capture, policy simulator, reviewer worksheet, curl, jq, rg or grep, OWASP ZAP, mitmproxy or mitmdump, sha256sum. |
+| Lab 12 | Full toolkit plus selected optional FOSS tools, including Playwright, curl, jq, rg or grep, OWASP ZAP, mitmproxy or mitmdump, sha256sum, and tar. |
 
 ## Practical lab creation enforcement
 

@@ -71,8 +71,8 @@ from urllib.request import Request, urlopen
 SCHEMA_VERSION = "browser-safe-ai-workshop-lab09-sensitive-data-live-evidence/v0.1"
 SAFETY_MARKER = "SYNTHETIC-LAB-MARKER"
 WEAK_TARGET_PRESERVATION_RULE = "ollama-webui is intentionally weak and must not be hardened by this Lab 09 evidence runner"
-DEFAULT_REPO_ROOT = Path("/home/foo/Workspace/ai-browser-security-test-suite")
-DEFAULT_WEAK_TARGET_REPO = Path("/home/foo/Workspace/ollama-webui")
+DEFAULT_REPO_ROOT = Path.home() / "Workspace/ai-browser-security-test-suite"
+DEFAULT_WEAK_TARGET_REPO = Path.home() / "Workspace/ollama-webui"
 DEFAULT_TARGET_URL = "http://127.0.0.1:11435"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_FIXTURE_HOST = "127.0.0.1"

@@ -29,8 +29,8 @@ from urllib.parse import urlparse
 
 
 SCHEMA_VERSION = "browser-safe-ai-workshop-live-proxy-evidence/v0.1"
-DEFAULT_REPO_ROOT = Path("/home/foo/Workspace/ai-browser-security-test-suite")
-DEFAULT_TARGET_ROOT = Path("/home/foo/Workspace/ollama-webui")
+DEFAULT_REPO_ROOT = Path.home() / "Workspace/ai-browser-security-test-suite"
+DEFAULT_TARGET_ROOT = Path.home() / "Workspace/ollama-webui"
 DEFAULT_BASE_URL = "http://127.0.0.1:11435"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 PROBE_PATHS = [

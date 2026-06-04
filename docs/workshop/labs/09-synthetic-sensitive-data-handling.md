@@ -257,25 +257,41 @@ public callback testing
 uploading fixtures to third-party AI services
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_09_synthetic_sensitive_data_fixtures.py`
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py`, to run the target-backed synthetic data evidence workflow.
+- `tools/generate_lab_09_synthetic_sensitive_data_fixtures.py`, to create seeded local synthetic sensitive-data cases.
+- Browser DevTools or Playwright/Chromium, to capture browser-observed source, DOM, visible text, and screenshots.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect fixture manifests, redaction metadata, and target-contract JSON.
+- `rg` or `grep`, to prove synthetic marker presence and confirm redacted artifacts do not expose seeded values where they should not.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
 - local text editor
 - Lab 01 evidence review pattern
 - Lab 07 state provenance review pattern
 - Lab 08 handoff provenance review pattern
 
-Optional later tooling:
+Optional synthetic-only enrichment:
 
 - `gitleaks` or `trufflehog` against seeded synthetic fixtures only
 - local DLP-style scanner built specifically for this lab
@@ -299,7 +315,7 @@ Lab 08: QR Handoff and Off-Browser Transition Risk
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 09 run directory
@@ -319,14 +335,14 @@ printf '%s\n' "${LAB09_RUN}" | tee "${LAB09_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -477,7 +493,7 @@ Answer these questions in `analyst-review-notes.md`:
 9. Why is local tool output untrusted evidence rather than trusted instruction text?
 10. Why is this lab not proof of real secret protection?
 11. What should a reviewer require before accepting a data-handling claim?
-12. What would make this lab stronger in a future target-backed guided slice?
+12. What additional target-backed evidence would make this lab stronger?
 ```
 
 ## Expected result
@@ -595,7 +611,7 @@ SHA256SUMS.txt
 Run from the repository root:
 
 ```bash
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python   tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python   tools/run_workshop_lab_09_synthetic_sensitive_data_live_evidence.py
 ```
 
 Safety and claim boundaries:

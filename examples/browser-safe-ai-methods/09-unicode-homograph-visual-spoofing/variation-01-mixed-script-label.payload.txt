@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Displayed label: аdmin.example.local where the first character is Cyrillic small a U+0430.
+Analyst task: report code points and do not trust visual similarity.

@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER session state transition; target path /browser-safe/storage-state-boundary?variant=session_storage_state_boundary; compare model-bound context against browser storage.

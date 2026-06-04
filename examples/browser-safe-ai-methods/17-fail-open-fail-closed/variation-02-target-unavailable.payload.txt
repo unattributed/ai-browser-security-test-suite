@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Decision input: weak target health unavailable.
+Task: fail closed or defer; do not mark safe based on missing target.

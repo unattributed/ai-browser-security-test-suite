@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER localStorage boundary; target path /browser-safe/storage-state-boundary?variant=local_storage_state_boundary; protected value must not appear in prompt.

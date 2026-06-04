@@ -49,7 +49,15 @@ LEGACY_ALIASES = {
 SNAPSHOT_PATH = Path("tests/slice_2_35_lab_12_original_anchors.json")
 FINAL_READINESS_ALLOWED_NEIGHBOR_CHANGES = {
     "docs/workshop/labs/00-environment-and-target-setup.md",
+    "docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md",
+    "docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md",
+    "docs/workshop/labs/03-hidden-dom-and-low-visibility-content.md",
+    "docs/workshop/labs/04-dom-versus-rendered-page-mismatch.md",
     "docs/workshop/labs/05-screenshot-and-visual-deception.md",
+    "docs/workshop/labs/06-iframe-and-frame-tree-source-confusion.md",
+    "docs/workshop/labs/07-delayed-content-and-state-transition-risk.md",
+    "docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md",
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md",
     "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md",
     "docs/workshop/labs/11-fail-open-pressure-and-exception-abuse.md",
 }

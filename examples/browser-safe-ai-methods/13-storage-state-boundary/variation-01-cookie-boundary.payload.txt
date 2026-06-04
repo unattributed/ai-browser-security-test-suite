@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER cookie boundary; target path /browser-safe/storage-state-boundary?variant=cookie_state_boundary; state seed endpoint /api/browser-safe/storage-state-boundary/state-seed?variant=cookie_state_boundary.

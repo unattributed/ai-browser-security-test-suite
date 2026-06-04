@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER QR destination: http://127.0.0.1:11435/browser-safe/redirect/start?variant=encoded

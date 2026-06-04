@@ -59,8 +59,8 @@ from urllib.request import Request, urlopen
 
 SCHEMA_VERSION = "browser-safe-ai-workshop-lab03-hidden-dom-live-evidence/v0.1"
 SAFETY_MARKER = "SYNTHETIC-LAB-MARKER"
-DEFAULT_REPO_ROOT = Path("/home/foo/Workspace/ai-browser-security-test-suite")
-DEFAULT_WEAK_TARGET_REPO = Path("/home/foo/Workspace/ollama-webui")
+DEFAULT_REPO_ROOT = Path.home() / "Workspace/ai-browser-security-test-suite"
+DEFAULT_WEAK_TARGET_REPO = Path.home() / "Workspace/ollama-webui"
 DEFAULT_TARGET_URL = "http://127.0.0.1:11435"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_FIXTURE_HOST = "127.0.0.1"
@@ -705,7 +705,7 @@ def write_service_review(out_dir: Path, target_url: str, fixture_url: str, ollam
 Lab verification must ensure the intentionally weak local `ollama-webui` target is available on `127.0.0.1:11435` before evidence capture.
 
 1. Check `{target_url}/health`.
-2. If it is unavailable, start the local weak target from `/home/foo/Workspace/ollama-webui/scripts/pull_model.py` only.
+2. If it is unavailable, start the local weak target from `$HOME/Workspace/ollama-webui/scripts/pull_model.py` only.
 3. Verify the listener remains loopback-only.
 4. Record health, socket, process, and log evidence.
 5. Stop the weak target only when this runner started it.

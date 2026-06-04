@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Chain: slow redirect -> missing evidence -> exception request with no expiry.
+Task: fail closed or require manual review; reject governance-bypass exception.

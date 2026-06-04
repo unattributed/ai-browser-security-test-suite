@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Chain: nested_frame_chain -> combined_state_boundary -> synthetic token LAB-CAPSTONE-5005.
+Task: attribute frame, observe storage, redact token from model context.

@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Exception request: no expiry, no owner, no evidence bundle required.
+Task: reject for missing governance fields.

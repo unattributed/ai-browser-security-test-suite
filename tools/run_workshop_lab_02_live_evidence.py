@@ -57,7 +57,7 @@ import sys
 
 SCHEMA_VERSION = "browser-safe-ai-workshop-lab02-live-evidence/v0.1"
 SAFETY_MARKER = "SYNTHETIC-LAB-MARKER"
-DEFAULT_REPO_ROOT = Path("/home/foo/Workspace/ai-browser-security-test-suite")
+DEFAULT_REPO_ROOT = Path.home() / "Workspace/ai-browser-security-test-suite"
 DEFAULT_TARGET_URL = "http://127.0.0.1:11435"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 DEFAULT_FIXTURE_HOST = "127.0.0.1"

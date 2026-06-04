@@ -76,6 +76,18 @@ Not allowed:
 10. NVIDIA driver installation, reinstallation, upgrade, or modification.
 11. Snap-based setup instructions.
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required tools:
@@ -186,7 +198,7 @@ The weak target is intentionally vulnerable for training. Do not harden it durin
 From the toolkit repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 pwd
 git status --short
 git log --oneline --decorate -10
@@ -531,7 +543,7 @@ This local synthetic exercise makes no production security validation claim and 
 Lab verification must not assume `ollama-webui` is already running. The standard operating procedure is:
 
 1. Check `http://127.0.0.1:11435/health` before evidence capture.
-2. If unavailable, start `/home/foo/Workspace/ollama-webui/scripts/pull_model.py` from the local weak target repository only.
+2. If unavailable, start `$HOME/Workspace/ollama-webui/scripts/pull_model.py` from the local weak target repository only.
 3. Verify the listener remains bound to loopback only.
 4. Record `service-exposure/weak-target-sop.json`, `service-exposure/weak-target-health.http`, startup logs, socket evidence, and listener snapshots.
 5. Stop the weak target only if the runner started it.
@@ -542,8 +554,8 @@ Lab verification must not assume `ollama-webui` is already running. The standard
 
 ```bash
 python3 tools/run_workshop_lab_03_hidden_dom_live_evidence.py \
-  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
-  --weak-target-repo /home/foo/Workspace/ollama-webui \
+  --repo-root $HOME/Workspace/ai-browser-security-test-suite \
+  --weak-target-repo $HOME/Workspace/ollama-webui \
   --target-url http://127.0.0.1:11435 \
   --model-mode deterministic-placeholder
 ```

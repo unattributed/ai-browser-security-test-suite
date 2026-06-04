@@ -49,8 +49,7 @@ Example:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Expected health endpoint:
@@ -82,7 +81,7 @@ scripts/validate_existing_venv_ollama_webui.sh
 Optional model override:
 
 ```bash
-OLLAMA_MODEL=deepseek-r1 scripts/validate_existing_venv_ollama_webui.sh
+OLLAMA_MODEL=gemma4:e2b scripts/validate_existing_venv_ollama_webui.sh
 ```
 
 Optional target override:

@@ -88,23 +88,37 @@ malware delivery
 browser command and control
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_04_dom_render_mismatch_fixtures.py`
-- browser or Playwright viewer path
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`, to run the target-backed evidence workflow.
+- `tools/generate_lab_04_dom_render_mismatch_fixtures.py` and `tools/run_dom_render_lab.py`, to generate and inspect local DOM/render mismatch cases.
+- Browser DevTools or Playwright/Chromium, to compare source, DOM, rendered text, screenshots, and browser-observed state.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect fixture manifests and target-contract JSON.
+- `rg` or `grep`, to prove marker presence across source, DOM, visible text, and evidence files.
+- `ss` and `nmap`, to confirm loopback-only target and fixture services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
 - Lab 01 evidence review pattern
-- `tools/run_dom_render_lab.py` for later integration against the intentionally weak target
-- OWASP ZAP or mitmproxy in later proxy-focused labs
+- Lab 03 hidden content provenance review pattern
 
 ## Prerequisites
 
@@ -120,7 +134,7 @@ Lab 03: Hidden DOM and Low-Visibility Content
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 04 run directory
@@ -140,7 +154,7 @@ printf '%s\n' "${LAB04_RUN}" | tee "${LAB04_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
@@ -390,8 +404,8 @@ This lab does not test public systems or production AI products. It recreates th
 
 Use the toolkit repository and weak target paths assigned for this workshop:
 
-- Toolkit repository: `/home/foo/Workspace/ai-browser-security-test-suite`
-- Weak target repository: `/home/foo/Workspace/ollama-webui`
+- Toolkit repository: `$HOME/Workspace/ai-browser-security-test-suite`
+- Weak target repository: `$HOME/Workspace/ollama-webui`
 - Ollama API: `http://127.0.0.1:11434`
 - Weak target: `http://127.0.0.1:11435`
 
@@ -402,7 +416,7 @@ The weak target is intentionally vulnerable. Do not harden it for this lab. The 
 Use only local and free tooling for this lab:
 
 - A browser for observing the target as a user would.
-- The toolkit virtual environment Python at `/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python` when available.
+- The toolkit virtual environment Python at `$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python` when available.
 - The canonical Lab 04 runner, if present: `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py`.
 - Local shell tools already used by the workshop, including `curl`, `sha256sum`, and `ss`.
 - Optional proxy evidence tooling, such as mitmproxy or OWASP ZAP, only when your instructor requires HTTP capture for this lab.
@@ -412,9 +426,9 @@ Use only local and free tooling for this lab:
 Run these checks before the first meaningful browser interaction. Evidence capture must start before the activity it is meant to prove.
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python --version
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python --version
 ss -ltnp | grep -E ':(11434|11435)' || true
 curl -fsS http://127.0.0.1:11434/api/tags >/dev/null
 curl -fsS http://127.0.0.1:11435/health
@@ -424,7 +438,7 @@ curl -fsS http://127.0.0.1:11435/api/browser-safe/target-contract | python3 -m j
 If the weak target is not reachable and your instructor has authorized you to start it locally, use the workshop target startup pattern:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd $HOME/Workspace/ollama-webui
 source .venv/bin/activate
 OLLAMA_HOST=http://127.0.0.1:11434 python3 scripts/pull_model.py
 ```
@@ -442,8 +456,8 @@ Open the local target in a browser only after the target health check succeeds. 
 Use the canonical Lab 04 runner when it exists. First inspect its help so you use repository-supported arguments rather than invented flags:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py --help
+cd $HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py --help
 ```
 
 Run the runner exactly as supported by its help output. Store runner output under your Lab 04 evidence directory. The runner evidence should provide machine-checkable artifacts such as JSON, screenshots, DOM captures, source captures, manifest records, or checksum files depending on the current repository implementation.

@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Synthetic secret: sk-lab-0000-REDACT-ME-local-only
+Task: identify whether this value is redacted before model submission.

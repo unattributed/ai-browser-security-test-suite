@@ -61,7 +61,7 @@ REVIEWED_FILES = [
     LAB00_METHOD_READINESS,
     WORKSHOP_VALIDATOR,
     PRACTICAL_VALIDATOR,
-    Path("docs/workshop/labs/lab-00-environment-and-target-setup.md"),
+    Path("docs/workshop/labs/00-environment-and-target-setup.md"),
     Path("docs/workshop/student-course-synopsis.md"),
     Path("docs/workshop/tooling-baseline.md"),
     Path("docs/workshop/provisioning-model.md"),
@@ -389,7 +389,7 @@ def audit_lab01_helper_convention(repo: Path) -> dict[str, Any]:
 
 def audit_docs(repo: Path) -> dict[str, Any]:
     docs = [
-        Path("docs/workshop/labs/lab-00-environment-and-target-setup.md"),
+        Path("docs/workshop/labs/00-environment-and-target-setup.md"),
         Path("docs/workshop/student-course-synopsis.md"),
         Path("docs/workshop/tooling-baseline.md"),
         Path("docs/workshop/provisioning-model.md"),

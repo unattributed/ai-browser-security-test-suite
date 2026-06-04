@@ -94,21 +94,37 @@ third-party QR decoders
 third-party vision models
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_08_qr_handoff_fixtures.py`
-- browser or Playwright viewer path
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, to run the target-backed QR handoff evidence workflow.
+- `tools/generate_lab_08_qr_handoff_fixtures.py`, to create local QR handoff cases.
+- Browser DevTools or Playwright/Chromium, to capture rendered QR pages and browser state.
+- `qrencode`, to generate local QR images for student-authored variations.
+- `zbarimg` from zbar-tools, to decode QR images and prove the handoff destination.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect fixture manifests, decoded destination JSON, and target-contract JSON.
+- `rg` or `grep`, to prove marker and destination provenance across evidence files.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
-- local QR decoder in a later integration slice
 - Lab 01 evidence review pattern
 - Lab 05 visual provenance review pattern
 - Lab 07 state transition review pattern
@@ -131,7 +147,7 @@ Lab 07: Delayed Content and State Transition Risk
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 08 run directory
@@ -151,14 +167,14 @@ printf '%s\n' "${LAB08_RUN}" | tee "${LAB08_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -336,10 +352,10 @@ Answer these questions in `analyst-review-notes.md`:
 
 ## One-command live evidence runner
 
-Slice 2.11 closes the Lab 08 fixture-only gap with a one-command Lab 08 QR handoff and off-browser transition end-to-end live evidence runner:
+Lab 08 includes a one-command QR handoff and off-browser transition end-to-end live evidence runner:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 python tools/run_workshop_lab_08_qr_handoff_live_evidence.py
 ```
@@ -511,7 +527,7 @@ scope: local-only intentionally weak ollama-webui workshop target
 
 ## Step-by-step execution
 
-1. Start from the toolkit repository root at `/home/foo/Workspace/ai-browser-security-test-suite`.
+1. Start from the toolkit repository root at `$HOME/Workspace/ai-browser-security-test-suite`.
 2. Confirm the weak target is local and reachable before testing. Use `ss`, `curl`, browser DevTools, or the lab runner's own preflight output to prove the listener and local response.
 3. Prepare a fresh Lab 08 evidence directory for the run. Do not reuse artifacts from a previous student or previous slice.
 4. Execute the canonical Lab 08 workflow described above in this document. Use the canonical Lab 08 runner or fixture path discovered for this repository, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py`, when it applies to the execution path above.

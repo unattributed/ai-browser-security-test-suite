@@ -117,6 +117,18 @@ Default evidence root:
 ~/browser-safe-ai-workshop/lab-01
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required tools:
@@ -151,8 +163,8 @@ Complete Lab 00 first.
 Expected repositories:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ollama-webui
+$HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ollama-webui
 ```
 
 Expected local service:
@@ -241,7 +253,7 @@ Proxy evidence tools, choose one:
 From the toolkit repository, verify the working directory:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 pwd
 git status --short
 ```
@@ -348,12 +360,20 @@ Verify mitmdump capture:
 Record the verification result:
 
 ```bash
-cat > "${LAB01_RUN}/notes/proxy-verification-mitmdump.txt" <<'EOF'
-Proxy path: mitmdump live capture
-Proxy listener: 127.0.0.1:8081
-Target URL: http://127.0.0.1:11435
-Verification result: replace this line with what appeared in the mitmdump terminal before submitting the baseline prompt
-EOF
+{
+  printf 'Proxy path: mitmdump live capture\n'
+  printf 'Proxy listener: 127.0.0.1:8081\n'
+  printf 'Target URL: http://127.0.0.1:11435\n'
+  printf 'Evidence source: %s\n' "${LAB01_RUN}/proxy/lab01-mitmdump.console.log"
+  printf 'Verification result:\n'
+  if rg -n '127\.0\.0\.1:11435|11435' "${LAB01_RUN}/proxy/lab01-mitmdump.console.log"; then
+    printf 'status=observed-before-baseline-prompt\n'
+  else
+    printf 'status=not-observed-stop-and-fix-browser-proxy-settings\n'
+  fi
+} > "${LAB01_RUN}/notes/proxy-verification-mitmdump.txt"
+
+test "$(rg -c '127\.0\.0\.1:11435|11435' "${LAB01_RUN}/proxy/lab01-mitmdump.console.log")" -gt 0
 ```
 
 What this capture proves:
@@ -406,12 +426,25 @@ Verify ZAP capture:
 Record the verification result:
 
 ```bash
-cat > "${LAB01_RUN}/notes/proxy-verification-zap.txt" <<'EOF'
-Proxy path: OWASP ZAP passive local HTTP history review
-Proxy listener: 127.0.0.1:8080
-Target URL: http://127.0.0.1:11435
-Verification result: replace this line with the ZAP History entry observed before submitting the baseline prompt
-EOF
+ZAP_HISTORY_EVIDENCE="${ZAP_HISTORY_EVIDENCE:-}"
+
+{
+  printf 'Proxy path: OWASP ZAP passive local HTTP history review\n'
+  printf 'Proxy listener: 127.0.0.1:8080\n'
+  printf 'Target URL: http://127.0.0.1:11435\n'
+  if test -n "$ZAP_HISTORY_EVIDENCE" && test -f "$ZAP_HISTORY_EVIDENCE"; then
+    printf 'Evidence source: %s\n' "$ZAP_HISTORY_EVIDENCE"
+    printf 'Evidence source sha256: '
+    sha256sum "$ZAP_HISTORY_EVIDENCE" | awk '{print $1}'
+    printf 'Verification result: status=observed-before-baseline-prompt\n'
+  else
+    printf 'Evidence source: missing\n'
+    printf 'Verification result: status=not-recorded-export-zap-history-screenshot-or-notes-before-continuing\n'
+  fi
+} > "${LAB01_RUN}/notes/proxy-verification-zap.txt"
+
+test -n "$ZAP_HISTORY_EVIDENCE"
+test -f "$ZAP_HISTORY_EVIDENCE"
 ```
 
 What this capture proves:
@@ -440,18 +473,24 @@ Capture browser evidence:
 Create the notes file:
 
 ```bash
-cat > "${LAB01_RUN}/notes/baseline-observation.md" <<'EOF'
+LAB01_UTC_SUBMISSION="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+: "${LAB01_PROXY_PATH:?set LAB01_PROXY_PATH to mitmdump or ZAP}"
+: "${LAB01_VISIBLE_RESPONSE:?set LAB01_VISIBLE_RESPONSE to the observed browser response summary}"
+: "${LAB01_SCREENSHOT_PATH:?set LAB01_SCREENSHOT_PATH to the saved screenshot path}"
+: "${LAB01_PROXY_EVIDENCE_PATH:?set LAB01_PROXY_EVIDENCE_PATH to the flow file, ZAP screenshot, or exported evidence path}"
+
+cat > "${LAB01_RUN}/notes/baseline-observation.md" <<EOF
 # Lab 01 baseline observation
 
 Target URL: http://127.0.0.1:11435
 Synthetic marker: SYNTHETIC-LAB-MARKER
 Expected response phrase: BASELINE-EVIDENCE-READY
-UTC submission time: replace with UTC time
-Proxy path used: replace with mitmdump or ZAP
-Visible response summary: replace with observed response
-Evidence screenshot path: replace with screenshot path
-Proxy evidence path: replace with flow file, ZAP screenshot, or exported evidence path
-Reviewer note: explain how the browser evidence and proxy evidence correlate
+UTC submission time: ${LAB01_UTC_SUBMISSION}
+Proxy path used: ${LAB01_PROXY_PATH}
+Visible response summary: ${LAB01_VISIBLE_RESPONSE}
+Evidence screenshot path: ${LAB01_SCREENSHOT_PATH}
+Proxy evidence path: ${LAB01_PROXY_EVIDENCE_PATH}
+Reviewer note: browser evidence and proxy evidence must show the same local target interaction before this note is accepted.
 EOF
 ```
 
@@ -480,16 +519,22 @@ The student must modify the wording. Do not submit the example unchanged.
 Record the variation:
 
 ```bash
-cat > "${LAB01_RUN}/notes/student-variation.md" <<'EOF'
+LAB01_VARIATION_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+: "${LAB01_VARIATION_PROMPT:?set LAB01_VARIATION_PROMPT to your exact submitted variation prompt}"
+: "${LAB01_VARIATION_PHRASE:?set LAB01_VARIATION_PHRASE to the distinct phrase requested in the variation}"
+: "${LAB01_VARIATION_RESPONSE:?set LAB01_VARIATION_RESPONSE to the observed browser response summary}"
+: "${LAB01_VARIATION_PROXY_EVIDENCE_PATH:?set LAB01_VARIATION_PROXY_EVIDENCE_PATH to the flow file, ZAP screenshot, or exported evidence path}"
+
+cat > "${LAB01_RUN}/notes/student-variation.md" <<EOF
 # Lab 01 student-authored variation
 
-Variation prompt: replace with your exact variation prompt
+Variation prompt: ${LAB01_VARIATION_PROMPT}
 Required marker: SYNTHETIC-LAB-MARKER
-Expected response phrase: replace with your chosen phrase
-UTC submission time: replace with UTC time
-Visible response summary: replace with observed response
-Proxy evidence path: replace with flow file, ZAP screenshot, or exported evidence path
-Reviewer note: explain how the variation evidence differs from the baseline evidence
+Expected response phrase: ${LAB01_VARIATION_PHRASE}
+UTC submission time: ${LAB01_VARIATION_UTC}
+Visible response summary: ${LAB01_VARIATION_RESPONSE}
+Proxy evidence path: ${LAB01_VARIATION_PROXY_EVIDENCE_PATH}
+Reviewer note: the variation evidence must differ from the baseline evidence by prompt text and expected phrase while preserving the same local-only target boundary.
 EOF
 ```
 
@@ -608,6 +653,7 @@ Run:
 
 ```bash
 find "${LAB01_RUN}" -type f -print0 \
+  | grep -z -v '/checksums/lab01-all-evidence\.sha256$' \
   | sort -z \
   | xargs -0 sha256sum \
   > "${LAB01_RUN}/checksums/lab01-all-evidence.sha256"
@@ -617,6 +663,8 @@ Verify the checksum file is populated:
 
 ```bash
 wc -l "${LAB01_RUN}/checksums/lab01-all-evidence.sha256"
+
+sha256sum -c "${LAB01_RUN}/checksums/lab01-all-evidence.sha256"
 ```
 
 ### Step 10, write reviewer notes

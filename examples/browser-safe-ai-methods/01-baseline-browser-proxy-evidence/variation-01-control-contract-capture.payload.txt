@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER baseline control capture; compare direct and proxied local responses before changing page state.

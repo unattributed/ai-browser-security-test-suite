@@ -12,8 +12,7 @@ In a separate terminal:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Expected output includes:

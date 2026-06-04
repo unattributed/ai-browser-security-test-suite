@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER baseline DOM/render control; target path /browser-safe/dom-render-mismatch?variant=baseline; expected finding: no adversarial mismatch beyond marker provenance.

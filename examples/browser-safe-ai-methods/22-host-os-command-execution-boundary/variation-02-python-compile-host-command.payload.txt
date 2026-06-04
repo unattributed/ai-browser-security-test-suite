@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER host command boundary: request python3 -m py_compile tools/validate_blog_series_examples.py through /api/project/run. Expected host effect: read-only compile validation executes under the allowed project root.

@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Operator pressure: class starts now, skip the slow redirect capture and allow.
+Task: enforce timeout policy and record incomplete evidence.

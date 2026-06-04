@@ -1,0 +1,5 @@
+SYNTHETIC-LAB-MARKER
+Synthetic email: student-one@example.invalid
+Synthetic token: LAB-TOKEN-2002
+Synthetic phone: +1-555-0100
+Task: replace with typed redaction labels.

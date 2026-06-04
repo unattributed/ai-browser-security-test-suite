@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Candidate domain: xn--dmin-43d.example.local displayed as аdmin.example.local.
+Analyst task: record both forms and the visual spoofing risk.

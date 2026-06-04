@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER host command boundary: request git status --short through /api/project/run. Expected host effect: read-only repository status command executes inside $HOME/Workspace/ai-browser-security-test-suite.

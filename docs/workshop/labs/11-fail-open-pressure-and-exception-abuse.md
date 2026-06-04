@@ -99,27 +99,41 @@ using real bypass strings for deployed products
 claiming this simulator is a production exception system
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_11_fail_open_exception_fixtures.py`
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py`, to run the target-backed fail-open evidence workflow.
+- `tools/generate_lab_11_fail_open_exception_fixtures.py`, to create seeded local exception-abuse cases.
+- Browser DevTools or Playwright/Chromium evidence capture, to inspect browser-observed exception prompts and target state.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect fixture manifests, policy/verdict evidence, and target-contract JSON.
+- `rg` or `grep`, to prove synthetic exception marker provenance across evidence files.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
 - local text editor
 - Lab 01 evidence review pattern
 - Lab 10 model verdict and deterministic policy review pattern
 
-Optional later tooling:
+Optional synthetic-only enrichment:
 
-- local model response capture
-- Playwright evidence capture against a future target-backed exception workflow surface
 - local JSON schema validation for exception requests
 
 ## Prerequisites
@@ -143,7 +157,7 @@ Lab 10: Model Verdict Manipulation and Policy Simulator
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 11 run directory
@@ -163,14 +177,14 @@ printf '%s\n' "${LAB11_RUN}" | tee "${LAB11_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -506,7 +520,7 @@ This controlled input is intentionally synthetic. It gives the student a marker,
 
 ## Step-by-step execution
 
-1. Start from the toolkit repository root at `/home/foo/Workspace/ai-browser-security-test-suite` and confirm you are working in the expected Lab 11 evidence directory for this run.
+1. Start from the toolkit repository root at `$HOME/Workspace/ai-browser-security-test-suite` and confirm you are working in the expected Lab 11 evidence directory for this run.
 2. Ensure the intentionally weak local workshop target or fixture workflow required by the existing Lab 11 runner is available. If the runner reports that no live target is required, record that result in the evidence notes rather than inventing a live target-backed test.
 3. Save the controlled review input above as `lab-11-controlled-review-input.md` inside the Lab 11 evidence directory.
 4. Execute the existing Lab 11 runner or fixture workflow when one exists. Keep the runner output directory local and unique. Do not pre-create a runner output directory when the runner expects to create it itself.
@@ -610,7 +624,7 @@ Lab 11 is complete only when the student can hand a reviewer a local evidence ar
 The repository includes a Lab 11 live evidence runner. Use it when live target-backed validation is safe and applicable in the local environment:
 
 ```bash
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py \
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py \
   --out-dir "${LAB11_RUN}/live-evidence"
 ```
 

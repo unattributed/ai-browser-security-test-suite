@@ -91,21 +91,35 @@ unbounded waits
 background polling against external systems
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_07_delayed_content_state_transition_fixtures.py`
-- browser or Playwright viewer path
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py`, to run the target-backed timeline evidence workflow.
+- `tools/generate_lab_07_delayed_content_state_transition_fixtures.py`, to create local delayed-content and state-transition cases.
+- Browser DevTools or Playwright/Chromium, to capture before, during, and after state evidence.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect fixture manifests, timing metadata, and target-contract JSON.
+- `rg` or `grep`, to prove marker presence across each captured state.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
-- Playwright timeline capture in a later integration slice
 - Lab 01 evidence review pattern
 - Lab 04 DOM/render provenance review pattern
 - Lab 06 source attribution review pattern
@@ -127,7 +141,7 @@ Lab 06: iframe and Frame-Tree Source Confusion
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 07 run directory
@@ -147,14 +161,14 @@ printf '%s\n' "${LAB07_RUN}" | tee "${LAB07_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -527,7 +541,7 @@ LAB07_STUDENT_AUTHORED_VARIATION_<your_id>_<yyyymmdd>
 11. Run the canonical live runner:
 
 ```bash
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python \
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python \
   tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py \
   --out-dir "$LAB07_EVIDENCE_DIR/live-evidence"
 ```
@@ -626,4 +640,3 @@ Lab 07 is complete when the student can show:
 - The safety boundary was preserved.
 
 <!-- slice-2.30-lab-07-practical-courseware:end -->
-

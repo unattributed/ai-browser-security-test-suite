@@ -67,6 +67,33 @@ choose the smallest locally runnable model that satisfies the lab objective
 
 The instructor may publish a tested list before the event, but the labs must not make their security claim depend on one model brand or one model family.
 
+## Tested classroom model recommendation
+
+For live local text mode, the recommended classroom default is:
+
+```text
+gemma4:e2b
+```
+
+Use it when the goal is short, predictable instruction following and exact synthetic marker preservation on student laptops or the prepared VM.
+
+Recommended fallback when hardware allows:
+
+```text
+ministral-3:8b
+```
+
+Use it when the instructor wants a stronger small text model and can tolerate a slightly larger runtime footprint.
+
+Avoid reasoning-style models as the default for marker-sensitive labs:
+
+```text
+deepseek-r1:7b
+lfm2.5-thinking:1.2b
+```
+
+Local verification during workshop review showed that `deepseek-r1:7b` changed `SYNTHETIC-LAB-MARKER` into `SYNTHETIC LAB-MARKER` during an exact-copy marker prompt, and `lfm2.5-thinking:1.2b` emitted reasoning text despite a short-answer instruction. Those behaviors are useful teaching examples, but they are poor defaults when the lab objective is clean evidence capture.
+
 ## Where model choice matters
 
 | Lab class | Model dependency |

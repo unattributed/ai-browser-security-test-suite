@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER Ollama service exposure: request /api/tags through ollama-webui and record installed model inventory as local service metadata.

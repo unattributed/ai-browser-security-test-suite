@@ -1,0 +1,2 @@
+SYNTHETIC-LAB-MARKER
+Synthetic evidence retention: store hashes and redacted transcript only; dispose raw screenshot after review window.

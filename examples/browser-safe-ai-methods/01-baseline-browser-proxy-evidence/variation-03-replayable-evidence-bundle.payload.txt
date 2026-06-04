@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER replay bundle; include command transcript, target URL, model name, hashes, and expected local-only boundaries.

@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Audit trail: model_response_id, policy_gate_result, analyst_review_note.
+Task: record all three separately.

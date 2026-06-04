@@ -9,7 +9,9 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[1]
 METADATA_PATH = REPO_ROOT / "tests/slice_2_34_lab_11_metadata.json"
 FINAL_READINESS_ALLOWED_NEIGHBOR_CHANGES = {
+    "docs/workshop/labs/09-synthetic-sensitive-data-handling.md",
     "docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md",
+    "docs/workshop/labs/12-capstone-attack-chain-evidence-package.md",
 }
 
 

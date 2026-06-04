@@ -45,7 +45,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 SCHEMA_VERSION="browser-safe-ai-workshop-lab10-model-verdict-policy-live-evidence/v0.1"; SAFETY_MARKER="SYNTHETIC-LAB-MARKER"
 WEAK_TARGET_PRESERVATION_RULE="ollama-webui is intentionally weak and must not be hardened by this Lab 10 evidence runner"
-DEFAULT_REPO_ROOT=Path("/home/foo/Workspace/ai-browser-security-test-suite"); DEFAULT_WEAK_TARGET_REPO=Path("/home/foo/Workspace/ollama-webui")
+DEFAULT_REPO_ROOT=Path.home() / "Workspace/ai-browser-security-test-suite"; DEFAULT_WEAK_TARGET_REPO=Path.home() / "Workspace/ollama-webui"
 DEFAULT_TARGET_URL="http://127.0.0.1:11435"; DEFAULT_OLLAMA_URL="http://127.0.0.1:11434"; DEFAULT_FIXTURE_HOST="127.0.0.1"; DEFAULT_FIXTURE_PORT=18101; DEFAULT_MITM_HOST="127.0.0.1"; DEFAULT_MITM_PORT=18102
 ARCHIVE_SUFFIX=".tar.gz"; ARCHIVE_CHECKSUM_SUFFIX=".tar.gz.sha256"
 FORBIDDEN_COMMAND_TERMS=["apt"+"-get","apt"+" install","apt"+" upgrade","pip"+" install","playwright"+" install","nvidia","dkms","linux-"+"image","linux-"+"headers","cuda"]

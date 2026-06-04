@@ -97,22 +97,36 @@ using real bypass strings for deployed products
 claiming this capstone proves production security
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- `tools/generate_lab_12_capstone_evidence_package.py`
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
-- Prior workshop lab outputs or deterministic placeholders
+- Python and `tools/run_workshop_lab_12_capstone_live_evidence.py`, to run the target-backed capstone evidence workflow.
+- `tools/generate_lab_12_capstone_evidence_package.py`, to assemble deterministic capstone evidence when prior lab outputs are unavailable.
+- Prior workshop lab outputs or deterministic placeholders.
+- Playwright/Chromium or browser DevTools, to capture target-backed browser evidence.
+- `curl`, to replay local target and fixture responses directly.
+- `jq`, to inspect manifests, target-contract JSON, and capstone package metadata.
+- `rg` or `grep`, to prove marker and attack-chain provenance across lab artifacts.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- browser DevTools
-- Playwright
-- Chromium
 - local text editor
 - Lab 01 evidence review pattern
 - Lab 10 model verdict and deterministic policy review pattern
@@ -146,7 +160,7 @@ Lab 11: Fail-Open Pressure and Exception Abuse
 Expected repository:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite
 ```
 
 ## Step 1: prepare a Lab 12 run directory
@@ -166,14 +180,14 @@ printf '%s\n' "${LAB12_RUN}" | tee "${LAB12_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -414,8 +428,8 @@ Expected command:
 
 ```bash
 .venv/bin/python tools/run_workshop_lab_12_capstone_live_evidence.py \
-  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
-  --weak-target-repo /home/foo/Workspace/ollama-webui \
+  --repo-root $HOME/Workspace/ai-browser-security-test-suite \
+  --weak-target-repo $HOME/Workspace/ollama-webui \
   --target-url http://127.0.0.1:11435 \
   --ollama-url http://127.0.0.1:11434
 ```

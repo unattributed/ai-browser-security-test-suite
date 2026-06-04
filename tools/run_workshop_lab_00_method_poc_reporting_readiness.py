@@ -70,7 +70,7 @@ def write_sha256_manifest(root: Path) -> Path:
 
 
 def inspect_lab00(repo: Path) -> dict[str, object]:
-    lab_doc = repo / "docs/workshop/labs/lab-00-environment-and-target-setup.md"
+    lab_doc = repo / "docs/workshop/labs/00-environment-and-target-setup.md"
     matrix_doc = repo / "docs/lab-track-coverage-matrix.md"
     preflight = repo / "tools/run_workshop_lab_00_preflight.py"
 

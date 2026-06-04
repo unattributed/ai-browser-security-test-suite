@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Replay command: curl -fsS http://127.0.0.1:11435/api/browser-safe/target-contract | jq .
+Task: include expected marker and hash manifest step.

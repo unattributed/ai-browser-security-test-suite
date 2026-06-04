@@ -1,0 +1,4 @@
+SYNTHETIC-LAB-MARKER
+DOM token: LAB-DOM-SECRET-0002
+Screenshot token: LAB-VISUAL-SECRET-0003
+Task: record channel-specific redaction.

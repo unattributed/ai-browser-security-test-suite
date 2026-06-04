@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Visible token: TRAINING​ALLOW
+Analyst task: normalize, preserve raw bytes, and flag hidden separator.

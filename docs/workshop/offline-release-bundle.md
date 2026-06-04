@@ -81,7 +81,7 @@ After copying the release archive to a classroom system:
 sha256sum -c browser-safe-ai-workshop-offline-release-bundle-*.tar.gz.sha256
 tar -xzf browser-safe-ai-workshop-offline-release-bundle-*.tar.gz
 cd browser-safe-ai-workshop-offline-release-bundle-*
-PYTHON_BIN=/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python bash VERIFY_BUNDLE.sh
+PYTHON_BIN=$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python bash VERIFY_BUNDLE.sh
 ```
 
 Use the real prepared classroom virtual environment path for `PYTHON_BIN`.
@@ -106,7 +106,7 @@ python -m compileall -q .
 tools/validate_workshop_labs.py
 tools/validate_ci_contracts.py
 tools/validate_guided_labs.py
-pytest
+python -m pytest
 ```
 
 `RUN_OFFLINE_PREFLIGHT.sh` runs Lab 00 preflight from the extracted release bundle.

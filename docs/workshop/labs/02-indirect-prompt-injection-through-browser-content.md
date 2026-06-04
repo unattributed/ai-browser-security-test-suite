@@ -26,6 +26,18 @@ The risk is that untrusted browser content can influence model-bound context, re
 
 This lab stays inside the workshop operating boundary: local-only, synthetic-only, authorized-only, against `ollama-webui` on loopback. Do not use real credentials, real tokens, real cookies, real customer data, public callback endpoints, third-party targets, production SaaS tenants, malware behavior, persistence, destructive behavior, or production hardening of the weak target. Do not install, reinstall, upgrade, or modify NVIDIA drivers.
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 The lab uses Python, the Lab 02 fixture generator, the Lab 02 live evidence runner, a local browser, browser DevTools, `curl`, `jq`, `rg` or `grep`, `ss`, `nmap`, `sha256sum`, `mitmdump` or `mitmproxy`, and OWASP ZAP for passive local HTTP history review when available.
@@ -135,7 +147,7 @@ Do not add snap-based instructions.
 From the toolkit repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 pwd
 git status --short
 ```
@@ -517,7 +529,7 @@ curl -fsS --max-time 10 "${OLLAMA_URL}/api/version" \
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 python tools/generate_lab_02_indirect_prompt_fixtures.py \
   --out-dir "${LAB02_RUN}/fixtures" \
   --local-target "${TARGET_URL}"
@@ -1313,10 +1325,10 @@ The runner closes the manual evidence gap for Lab 02. It generates or reuses the
 Required execution pattern:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 python tools/run_workshop_lab_02_live_evidence.py \
-  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
+  --repo-root $HOME/Workspace/ai-browser-security-test-suite \
   --target-url http://127.0.0.1:11435 \
   --ollama-url http://127.0.0.1:11434 \
   --model-mode deterministic-placeholder \

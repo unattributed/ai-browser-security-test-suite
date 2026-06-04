@@ -120,7 +120,7 @@ def test_offline_release_documentation_preserves_boundary_and_acceptance_terms()
         "SHA256",
         "does not claim production security validation",
         "Offline Python dependency contract",
-        "PYTHON_BIN=/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python bash VERIFY_BUNDLE.sh",
+        "PYTHON_BIN=$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python bash VERIFY_BUNDLE.sh",
         "PyYAML and pytest",
         "examples/ollama-webui-playground",
         "docs/schemas/",

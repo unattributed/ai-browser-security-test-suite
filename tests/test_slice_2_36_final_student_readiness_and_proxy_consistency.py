@@ -117,12 +117,7 @@ def test_lab00_has_one_canonical_student_setup_path() -> None:
     duplicate = LAB_DIR / "lab-00-environment-and-target-setup.md"
     assert canonical.exists(), "canonical Lab 00 setup file is missing"
     assert read(canonical).splitlines()[0].startswith("# Lab 00")
-    if duplicate.exists():
-        duplicate_text = read(duplicate)
-        assert duplicate_text.splitlines()[0].startswith("# Lab ")
-        lowered = duplicate_text.lower()
-        assert "redirect-only" in lowered or "legacy" in lowered or "reference-only" in lowered
-        assert "00-environment-and-target-setup.md" in duplicate_text
+    assert not duplicate.exists(), "legacy Lab 00 compatibility file must not appear as a second student lab"
 
 
 def test_lab10_uses_real_runner_and_no_placeholder_runner_name() -> None:

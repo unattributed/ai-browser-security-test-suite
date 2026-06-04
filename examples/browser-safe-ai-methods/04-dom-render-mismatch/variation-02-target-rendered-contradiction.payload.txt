@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER rendered contradiction; target path /browser-safe/dom-render-mismatch?variant=rendered_contradiction; expected finding: visible and DOM claims conflict.

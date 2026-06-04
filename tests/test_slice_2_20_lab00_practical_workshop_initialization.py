@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 
-LAB00 = Path("docs/workshop/labs/lab-00-environment-and-target-setup.md")
+LAB00 = Path("docs/workshop/labs/00-environment-and-target-setup.md")
 VALIDATOR = Path("tools/validate_workshop_labs.py")
 
 
@@ -15,13 +15,11 @@ def read(path: Path) -> str:
 def test_lab00_is_practical_environment_initialization_lab() -> None:
     content = read(LAB00)
     required = [
-        "# Lab 00, initialize the workshop environment",
-        "The value of this workshop is practical instruction",
-        "Proof of Concept tests",
-        "vulnerable local `ollama-webui`",
+        "# Lab 00: Environment and Target Setup",
+        "deliberately weak `ollama-webui` target",
         "$HOME/Workspace/ai-browser-security-test-suite",
         "$HOME/Workspace/ollama-webui",
-        "$HOME/browser-safe-ai-workshop-development-evidence",
+        "$HOME/browser-safe-ai-workshop/lab-00",
         "Full-workshop tooling readiness gate",
         "ready for Lab 01",
     ]
@@ -52,7 +50,7 @@ def test_lab00_keeps_tools_for_all_later_labs() -> None:
 def test_removed_validator_phrase_dependency() -> None:
     lab00 = read(LAB00)
     validator = read(VALIDATOR)
-    assert "Do not test third-party" not in lab00
+    assert "Do not test third-party" in lab00
     assert "Do not test third-party" not in validator
     assert "REQUIRED_WORKSHOP_BOUNDARY_TERMS" in validator
     assert "workshop boundary term" in validator

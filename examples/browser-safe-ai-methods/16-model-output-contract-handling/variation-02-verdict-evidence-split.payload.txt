@@ -1,0 +1,2 @@
+SYNTHETIC-LAB-MARKER
+Model may describe the page, but policy must use evidence flags: hidden_instruction_seen, marker_seen, target_available.

@@ -50,6 +50,8 @@ The risk demonstrated by this lab is not exploitation. The risk is uncontrolled 
 
 This lab must remain local and synthetic.
 
+The workshop operating boundary is the student's local workstation or prepared VM, the local AI Browser Security Test Suite repository, the local intentionally weak `ollama-webui` target on `127.0.0.1:11435`, local Ollama when live model mode is used, local browser and proxy tooling, and the local evidence directory.
+
 Do not test third-party AI products.
 
 Do not use real credentials.
@@ -61,6 +63,8 @@ Do not connect the target to production accounts.
 Do not expose the lab target to the Internet.
 
 Do not replace the deliberately weak target with a real SaaS tenant or production browser security product.
+
+Record this boundary phrase in the Lab 00 evidence package: do not claim production security validation.
 
 ## Lab topology
 
@@ -90,6 +94,18 @@ export TARGET_URL="http://127.0.0.1:11435"
 ```
 
 The preflight tool refuses non-local target hosts. This is intentional. The workshop target must remain local.
+
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
 
 ## Tools used
 
@@ -121,8 +137,8 @@ Optional tools:
 Expected local repositories:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ollama-webui
+$HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ollama-webui
 ```
 
 The workshop assumes the target is intentionally weak by design and local to the student system. The target is a training surface, not a production security control.
@@ -155,7 +171,7 @@ sudo apt install -y lsof procps net-tools
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 
 python3 -m venv .venv
 . .venv/bin/activate
@@ -178,7 +194,7 @@ python3 -m pip show ai-browser-security-test-suite || true
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 
 python3 -m playwright install chromium
@@ -246,7 +262,7 @@ Open a second terminal.
 Run:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
+cd $HOME/Workspace/ollama-webui
 
 pwd
 git status --short
@@ -269,10 +285,9 @@ curl -fsS http://127.0.0.1:11434/api/tags | jq .
 Start the target:
 
 ```bash
-cd /home/foo/Workspace/ollama-webui
-. .venv/bin/activate
+cd $HOME/Workspace/ollama-webui
 
-OLLAMA_HOST="http://127.0.0.1:11434" python scripts/pull_model.py
+OLLAMA_HOST="http://127.0.0.1:11434" .venv/bin/python scripts/pull_model.py
 ```
 
 Leave that terminal running.
@@ -315,7 +330,7 @@ Open a third terminal.
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 
 export TARGET_URL="${TARGET_URL:-http://127.0.0.1:11435}"
@@ -331,7 +346,7 @@ The command prints the evidence directory path. Example:
 
 ```text
 [ok] lab 00 preflight completed
-evidence_dir=/home/foo/browser-safe-ai-workshop/lab-00/lab00-20260525-143012
+evidence_dir=$HOME/browser-safe-ai-workshop/lab-00/lab00-20260525-143012
 ```
 
 ## Step 7: inspect expected evidence
@@ -404,6 +419,65 @@ This lab passes when:
 - The evidence directory is unique for the run.
 - No non-local target is used.
 
+## Full-workshop tooling readiness gate
+
+Lab 00 is the readiness gate for the complete workshop, not only a narrow local preflight.
+
+Before moving to Lab 01, the student or instructor should verify or record readiness for the tools used across Labs 01 through 12:
+
+- OWASP ZAP, mitmproxy, and mitmdump for the required free and open-source proxy evidence path.
+- Browser developer tools, Playwright, and Chromium for browser-observed evidence.
+- `curl`, `jq`, `rg` or `grep`, `ss`, `nmap`, and `sha256sum` for command-line evidence review.
+- `qrencode` plus `zbarimg or zbar-tools` for QR handoff labs.
+- ImageMagick, Pillow, and Tesseract OCR for media and screenshot labs where available.
+- Burp Suite only as an optional Burp Suite manual proxy path when a student already has it available.
+
+The Lab 00 practical environment readiness runner records the full-course readiness state without installing system packages or changing the target. Do not install packages from the readiness runner; it inspects, records, and reports.
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+. .venv/bin/activate
+
+python3 tools/run_workshop_lab_00_practical_environment_readiness.py \
+  --repo $HOME/Workspace/ai-browser-security-test-suite \
+  --target-repo $HOME/Workspace/ollama-webui \
+  --target-url "${TARGET_URL:-http://127.0.0.1:11435/}"
+```
+
+Expected readiness artifacts include `tool-readiness.json`, `proxy-readiness.json`, `media-authoring-readiness.json`, `lab-runner-availability.json`, `artifact-manifest.json`, `SHA256SUMS.txt`, `student-readiness-finding-report.md`, `lab-00-media-check/qr-local-payload.png`, and `lab-00-media-check/synthetic-image-instruction.png`.
+
+The readiness report must declare whether the environment is ready for Lab 01 and list blocking remediation items when it is not ready.
+
+## Method, PoC, evidence, and reporting readiness
+
+Assessment method taught: verify the local target, browser automation, proxy evidence path, media tooling, manifest, and checksums before trusting later browser-AI security claims.
+
+Student proof-of-concept requirement: the student must run the preflight or practical readiness command against `127.0.0.1:11435`, inspect the generated artifacts, and explain which artifacts prove the target, browser, and evidence path were real.
+
+Proof-of-concept construction guidance: keep the PoC local-only, synthetic-only, and authorized-only; use the deliberately weak local `ollama-webui` target; preserve the command output, browser artifacts, manifest, and checksums.
+
+Proof-of-concept execution guidance: execute the readiness command from the repository virtual environment, review failures before moving forward, and rerun only after remediation is complete.
+
+Evidence collection requirements: preserve `preflight.json`, browser screenshot evidence, rendered text, DOM snapshot, target health output, manifest files, SHA256 files, and the student readiness finding report.
+
+Negative control: do not treat a stopped target, missing screenshot, missing DOM snapshot, proxy bypass, non-loopback target, failed checksum, or unavailable required tool as a successful setup.
+
+Expected versus observed behavior: expected behavior is a reachable local target with complete evidence artifacts; observed behavior is whatever the command outputs and the manifest records.
+
+Root cause or remediable programmatic error class: common causes include missing service startup, wrong port, missing Playwright Chromium, missing Python dependency, proxy bypass, or evidence path permissions.
+
+Engineering remediation guidance: fix the local service, tool, dependency, or path issue; do not change the weak target into a hardened or production system to make the readiness check pass.
+
+Regression test recommendation: rerun `tools/run_workshop_lab_00_preflight.py`, `tools/run_workshop_lab_00_practical_environment_readiness.py`, and the checksum verification after remediation.
+
+Finding report template: state the readiness decision, exact command run, target URL, evidence directory, failed checks, remediation performed, and remaining limitations.
+
+Standards mapping readiness: standards mapping is allowed only after the evidence package proves the local method was executed.
+
+Professional transfer guidance: the same method transfers to authorized product-security, red-team, detection-engineering, and incident-response reviews where local evidence discipline is required before drawing security conclusions.
+
+Completion criteria: Lab 00 is complete only when the local target is reachable, browser evidence exists, required tooling readiness is recorded, manifest and checksum files verify, and the report says whether the student is ready for Lab 01.
+
 ## Failure conditions
 
 Stop and troubleshoot if:
@@ -445,7 +519,7 @@ curl -v http://127.0.0.1:11434/api/version
 If Playwright fails, reinstall Chromium:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 python3 -m playwright install chromium
 ```

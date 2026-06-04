@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+ROE: local target only, no external calls, seeded data only, evidence manifest required.
+Task: derive commands and acceptance criteria.

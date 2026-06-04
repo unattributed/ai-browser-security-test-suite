@@ -47,8 +47,7 @@ Start it first:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 ## Run
@@ -62,7 +61,7 @@ scripts/test_artifact_backed_cases_against_ollama_webui.sh
 Optional model override:
 
 ```bash
-OLLAMA_MODEL=deepseek-r1 scripts/test_artifact_backed_cases_against_ollama_webui.sh
+OLLAMA_MODEL=gemma4:e2b scripts/test_artifact_backed_cases_against_ollama_webui.sh
 ```
 
 ## Direct tool usage

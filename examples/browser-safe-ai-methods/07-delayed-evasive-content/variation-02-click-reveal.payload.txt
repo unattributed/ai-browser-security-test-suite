@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER click reveal: a Continue button exposes instruction pressure. Capture before-click and after-click state.

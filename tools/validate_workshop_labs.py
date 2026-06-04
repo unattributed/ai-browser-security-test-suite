@@ -43,7 +43,7 @@ def validate_lab(path: Path) -> list[str]:
             errors.append(f"{path}: missing section {section!r}")
     if "Evidence" not in text and "evidence" not in text:
         errors.append(f"{path}: lab should mention evidence expectations")
-    if path.name == "lab-00-environment-and-target-setup.md":
+    if path.name == "00-environment-and-target-setup.md":
         for term in REQUIRED_WORKSHOP_BOUNDARY_TERMS:
             if term not in text:
                 errors.append(f"{path}: missing workshop boundary term {term!r}")

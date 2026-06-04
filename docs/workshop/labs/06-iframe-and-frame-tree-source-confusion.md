@@ -93,22 +93,36 @@ external iframe URLs
 public callback endpoints
 ```
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
 Required:
 
-- Python
-- Playwright
-- Chromium
-- `tools/run_iframe_frame_tree_lab.py`
-- `jq`
-- `sha256sum`
-- `rg` or `grep`
+- Python and `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py`, to run the target-backed frame-tree evidence workflow.
+- `tools/run_iframe_frame_tree_lab.py`, to inspect baseline, sandboxed, srcdoc, and nested-frame variants.
+- Playwright and Chromium, to enumerate frame trees, capture frame URLs, DOM, visible text, and screenshots.
+- Browser DevTools, to manually inspect frame boundaries and source attribution.
+- `curl`, to replay local target frame routes directly.
+- `jq`, to inspect target-contract and frame scenario JSON.
+- `rg` or `grep`, to prove marker presence across parent and child frame artifacts.
+- `ss` and `nmap`, to confirm loopback-only services.
+- `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
+- OWASP ZAP, to perform passive local HTTP history review when available.
+- `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
 
-- Browser DevTools
-- OWASP ZAP or mitmproxy for later proxy-focused analysis
 - Lab 01 evidence review pattern
 - Lab 04 DOM/render provenance review pattern
 
@@ -128,8 +142,8 @@ Lab 05: Screenshot and Visual Deception
 Expected repositories:
 
 ```text
-/home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ollama-webui
+$HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ollama-webui
 ```
 
 Expected local target:
@@ -155,14 +169,14 @@ printf '%s\n' "${LAB06_RUN}" | tee "${LAB06_RUN}/run-directory.txt"
 Run:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
 ```
 
 Use the virtual environment Python explicitly when the shell does not provide `python`:
 
 ```bash
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 "${PYTHON_BIN}" --version
 ```
 
@@ -512,8 +526,8 @@ The lab uses only local synthetic content and the intentionally vulnerable local
 The controlled input is the local Lab 06 iframe and frame-tree fixture set exposed by the weak target and captured by the canonical helper and live runner:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
-export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+cd $HOME/Workspace/ai-browser-security-test-suite
+export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
 test -x "${PYTHON_BIN}" || PYTHON_BIN="$(command -v python3)"
 "${PYTHON_BIN}" tools/run_iframe_frame_tree_lab.py --help
 ```
@@ -534,8 +548,8 @@ Every controlled input must remain on `http://127.0.0.1:11435` or another loopba
 1. Work from the toolkit repository and use the virtual environment Python when available:
 
    ```bash
-   cd /home/foo/Workspace/ai-browser-security-test-suite
-   export PYTHON_BIN="/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python"
+   cd $HOME/Workspace/ai-browser-security-test-suite
+   export PYTHON_BIN="$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python"
    test -x "${PYTHON_BIN}" || PYTHON_BIN="$(command -v python3)"
    "${PYTHON_BIN}" --version
    ```
@@ -592,7 +606,7 @@ Every controlled input must remain on `http://127.0.0.1:11435` or another loopba
 11. When closing the lab, use the canonical live target-backed runner if it exists:
 
     ```bash
-    "${PYTHON_BIN}" tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py       --repo-root /home/foo/Workspace/ai-browser-security-test-suite       --weak-target-repo /home/foo/Workspace/ollama-webui       --target-url http://127.0.0.1:11435       --out-dir "${LAB06_RUN}/live-target-backed-evidence"
+    "${PYTHON_BIN}" tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py       --repo-root $HOME/Workspace/ai-browser-security-test-suite       --weak-target-repo $HOME/Workspace/ollama-webui       --target-url http://127.0.0.1:11435       --out-dir "${LAB06_RUN}/live-target-backed-evidence"
     ```
 
     The live runner is the one-command Lab 06 iframe frame-tree end-to-end live evidence runner. It captures browser source, DOM, visible text, `frame-tree.json`, frame URL list, child-frame DOM snapshots, screenshot evidence, direct local HTTP responses with proxied local HTTP responses, ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and a reviewer archive. The weak target startup SOP remains the required target startup model.

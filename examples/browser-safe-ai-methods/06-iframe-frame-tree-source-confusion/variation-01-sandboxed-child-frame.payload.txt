@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER sandboxed frame; target path /browser-safe/iframe-frame-tree?variant=sandboxed_frame; report top frame versus child frame evidence separately.

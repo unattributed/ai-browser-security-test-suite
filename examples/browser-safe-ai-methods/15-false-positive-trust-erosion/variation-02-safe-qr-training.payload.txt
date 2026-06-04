@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+This page teaches what QR handoff means but contains no QR code and no URL.
+Task: classify as training content with low risk and cite evidence.

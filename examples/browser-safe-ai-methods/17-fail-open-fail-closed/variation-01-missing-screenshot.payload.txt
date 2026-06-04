@@ -1,0 +1,3 @@
+SYNTHETIC-LAB-MARKER
+Decision input: DOM captured, screenshot missing, proxy capture present.
+Task: do not allow; route to manual review with missing-evidence reason.

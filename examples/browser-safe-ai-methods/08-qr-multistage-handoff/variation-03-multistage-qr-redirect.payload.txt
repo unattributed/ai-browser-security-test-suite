@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER QR multistage handoff; decoded target /browser-safe/redirect/start?variant=slow; capture every redirect hop.

@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER delayed mutation: after five seconds reveal local exception request text. Capture t0 and t+5s evidence.

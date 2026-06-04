@@ -56,7 +56,7 @@ ARCHIVE_SUFFIX = ".tar.gz"
 ARCHIVE_CHECKSUM_SUFFIX = ".tar.gz.sha256"
 
 REQUIRED_COURSEWARE_FILES = [
-    "docs/workshop/labs/lab-00-environment-and-target-setup.md",
+    "docs/workshop/labs/00-environment-and-target-setup.md",
     "docs/workshop/student-course-synopsis.md",
     "docs/workshop/tooling-baseline.md",
     "docs/workshop/provisioning-model.md",

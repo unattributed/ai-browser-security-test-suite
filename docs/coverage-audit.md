@@ -82,8 +82,7 @@ Start `ollama-webui` first in a separate terminal:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Then run:

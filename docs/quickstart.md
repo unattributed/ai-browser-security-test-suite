@@ -16,8 +16,7 @@ In a separate terminal:
 
 ```bash
 cd ../ollama-webui
-source .venv/bin/activate
-python scripts/pull_model.py
+.venv/bin/python scripts/pull_model.py
 ```
 
 Confirm it is reachable:
@@ -46,7 +45,7 @@ scripts/run_supported_local_target_suite.sh
 Optional model override:
 
 ```bash
-OLLAMA_MODEL=deepseek-r1 scripts/run_supported_local_target_suite.sh
+OLLAMA_MODEL=gemma4:e2b scripts/run_supported_local_target_suite.sh
 ```
 
 Run repository checks and the supported local target validation together:

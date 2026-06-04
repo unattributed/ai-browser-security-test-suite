@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER host command boundary: request git diff --stat through /api/project/run. Expected host effect: read-only repository diff summary executes locally and returns stdout/stderr.

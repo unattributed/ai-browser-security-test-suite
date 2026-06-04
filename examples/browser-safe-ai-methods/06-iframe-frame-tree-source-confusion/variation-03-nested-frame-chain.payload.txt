@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER nested frame chain; target path /browser-safe/iframe-frame-tree?variant=nested_frame_chain; expected finding: every marker hit needs frame URL and depth.

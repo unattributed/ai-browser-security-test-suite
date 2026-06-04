@@ -13,7 +13,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RUNNER = REPO_ROOT / "tools/run_workshop_lab_00_practical_environment_readiness.py"
-LAB00 = REPO_ROOT / "docs/workshop/labs/lab-00-environment-and-target-setup.md"
+LAB00 = REPO_ROOT / "docs/workshop/labs/00-environment-and-target-setup.md"
 README = REPO_ROOT / "docs/workshop/README.md"
 TOOLING = REPO_ROOT / "docs/workshop/tooling-baseline.md"
 PROVISIONING = REPO_ROOT / "docs/workshop/provisioning-model.md"
@@ -136,7 +136,7 @@ def test_runner_executes_in_controlled_temporary_directory(tmp_path, monkeypatch
     target.mkdir()
 
     for relative in [
-        "docs/workshop/labs/lab-00-environment-and-target-setup.md",
+        "docs/workshop/labs/00-environment-and-target-setup.md",
         "docs/workshop/student-course-synopsis.md",
         "docs/workshop/tooling-baseline.md",
         "docs/workshop/provisioning-model.md",

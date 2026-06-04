@@ -11,7 +11,7 @@ It is written for local classroom execution on Parrot OS, Kali Linux, or a Debia
 Check state:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 git status --short
 git branch --show-current
 git log --oneline -5
@@ -32,10 +32,10 @@ If the worktree is dirty, preserve the evidence first, then decide whether to re
 Check:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
-python --version
-python -m pytest
+python3 --version
+.venv/bin/python -m pytest
 ```
 
 If activation fails, recreate the virtual environment using the project setup instructions. Do not install ad hoc dependencies globally during class unless the instructor approves.
@@ -54,10 +54,10 @@ missing system libraries
 First response:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
+cd $HOME/Workspace/ai-browser-security-test-suite
 . .venv/bin/activate
-python -m playwright install chromium
-python -m playwright install-deps chromium
+.venv/bin/python -m playwright install chromium
+.venv/bin/python -m playwright install-deps chromium
 ```
 
 If the system cannot support browser automation during the session, use fixture-only labs and deterministic-placeholder mode, then record the limitation.

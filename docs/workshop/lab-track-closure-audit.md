@@ -107,7 +107,7 @@ python -m compileall -q .
 tools/validate_workshop_labs.py
 tools/validate_ci_contracts.py
 tools/validate_guided_labs.py
-pytest
+python -m pytest
 ```
 
 Generated evidence should include:

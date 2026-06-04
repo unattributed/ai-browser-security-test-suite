@@ -35,9 +35,21 @@ A browser-based AI workflow can mislead defenders when it collapses browser-obse
 
 This lab is local-only, synthetic-only, and authorized-only. Do not test third-party systems, production SaaS tenants, real users, real credentials, real tokens, real secrets, customer data, or regulated data. Do not expose the weak target to the Internet. Do not harden the weak target during this lab. Do not install packages, use snap, modify NVIDIA drivers, change CUDA, install DKMS modules, change kernels, or alter workstation package state.
 
+## Workspace path convention
+
+Use this portable workspace declaration in every terminal that runs lab commands:
+
+```bash
+export WORKSHOP_ROOT="${WORKSHOP_ROOT:-$HOME/Workspace}"
+export TOOLKIT_REPO="${TOOLKIT_REPO:-$WORKSHOP_ROOT/ai-browser-security-test-suite}"
+export WEAK_TARGET_REPO="${WEAK_TARGET_REPO:-$WORKSHOP_ROOT/ollama-webui}"
+```
+
+The prepared VirtualBox VM uses the same convention because its `$HOME` expands to `/home/foo`, so `$HOME/Workspace` resolves to `/home/foo/Workspace` on that VM. If your repositories live elsewhere, set `WORKSHOP_ROOT`, `TOOLKIT_REPO`, or `WEAK_TARGET_REPO` before running the lab.
+
 ## Tools used
 
-Required tools are the local toolkit repository, the toolkit virtual environment Python, the intentionally weak local workshop target when live validation is available, the Lab 10 fixture or runner discovered in the repository, a browser evidence workflow, local shell utilities, `sha256sum`, and a text editor. Optional evidence tools include loopback-only proxy capture when already available, browser DevTools, and repository-provided validation scripts.
+Required FOSS tools are the local toolkit repository, the toolkit virtual environment Python, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`, the intentionally weak local workshop target, Playwright/Chromium or browser DevTools for browser-observed evidence, `curl` for direct local replay, `jq` for JSON evidence review, `rg` or `grep` for marker provenance, `ss` and `nmap` for loopback service checks, and `sha256sum` plus `tar` for reviewer-verifiable evidence. Optional evidence tools include mitmdump or mitmproxy for loopback-only proxy capture and OWASP ZAP for passive local HTTP history review when available.
 
 ## Expected result
 
@@ -116,8 +128,8 @@ The marker must be inserted through a local controlled input, browser interactio
 Minimum command pattern, adjusted only for the actual runner discovered in the repository:
 
 ```bash
-cd /home/foo/Workspace/ai-browser-security-test-suite
-/home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py --out-dir ~/browser-safe-ai-workshop-development-evidence/lab10-local-run
+cd $HOME/Workspace/ai-browser-security-test-suite
+$HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py --out-dir ~/browser-safe-ai-workshop-development-evidence/lab10-local-run
 ```
 
 Do not install packages during the lab. If a tool is missing, record that as an environmental failure mode and continue with the evidence surfaces that are available.

@@ -74,7 +74,7 @@ def test_associated_documents_reference_synopsis_and_tooling() -> None:
 
 def test_lab00_promotes_full_workshop_tooling_gate() -> None:
     assert_contains(
-        "docs/workshop/labs/lab-00-environment-and-target-setup.md",
+        "docs/workshop/labs/00-environment-and-target-setup.md",
         [
             "Full-workshop tooling readiness gate",
             "media-authoring-readiness.json",

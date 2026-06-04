@@ -34,9 +34,9 @@ Run the release rehearsal helper from the repository root:
 
 ```bash
 .venv/bin/python tools/run_workshop_release_rehearsal.py \
-  --repo-root /home/foo/Workspace/ai-browser-security-test-suite \
+  --repo-root $HOME/Workspace/ai-browser-security-test-suite \
   --out-dir "$HOME/browser-safe-ai-workshop-development-evidence/release-rehearsal/rehearsal-$(date -u +%Y%m%d-%H%M%S)" \
-  --python-bin /home/foo/Workspace/ai-browser-security-test-suite/.venv/bin/python \
+  --python-bin $HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python \
   --bundle-stem browser-safe-ai-workshop-offline-release-bundle
 ```
 

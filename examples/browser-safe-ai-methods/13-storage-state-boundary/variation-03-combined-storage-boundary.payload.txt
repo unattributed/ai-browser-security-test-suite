@@ -1,0 +1,1 @@
+SYNTHETIC-LAB-MARKER combined state boundary; target path /browser-safe/storage-state-boundary?variant=combined_state_boundary; compare cookie, localStorage, sessionStorage, and cache-like observations.
