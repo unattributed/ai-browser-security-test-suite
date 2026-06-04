@@ -147,6 +147,22 @@ STALE_TOOLING_PHRASES = [
     "future target-backed",
 ]
 
+FOSS_PRACTICAL_CHECKPOINT_TERMS = [
+    "## FOSS practical interaction checkpoint",
+    "free and open-source path",
+    "hands-on use",
+    "canonical Python runner or documented shell commands",
+    "Playwright, Chromium, or browser DevTools",
+    "`curl` and `jq`",
+    "`rg` or `grep`",
+    "mitmdump, mitmproxy, or OWASP ZAP",
+    "`sha256sum`",
+    "Which FOSS tool did you personally operate",
+    "Which artifact proves the lab goal was exercised",
+    "Which evidence surface would be misleading if reviewed alone",
+    "What would make this lab incomplete or fail closed",
+]
+
 
 def validate() -> list[str]:
     errors: list[str] = []
@@ -187,6 +203,12 @@ def validate() -> list[str]:
             if token not in tools_section:
                 errors.append(
                     f"{path.relative_to(REPO_ROOT)} Tools used section must map FOSS tool or runner {token!r}"
+                )
+
+        for term in FOSS_PRACTICAL_CHECKPOINT_TERMS:
+            if term not in text:
+                errors.append(
+                    f"{path.relative_to(REPO_ROOT)} must include FOSS practical checkpoint term {term!r}"
                 )
 
         for reference in sorted(set(TOOL_REFERENCE_RE.findall(text))):

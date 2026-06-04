@@ -51,6 +51,29 @@ The prepared VirtualBox VM uses the same convention because its `$HOME` expands 
 
 Required FOSS tools are the local toolkit repository, the toolkit virtual environment Python, `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`, the intentionally weak local workshop target, Playwright/Chromium or browser DevTools for browser-observed evidence, `curl` for direct local replay, `jq` for JSON evidence review, `rg` or `grep` for marker provenance, `ss` and `nmap` for loopback service checks, and `sha256sum` plus `tar` for reviewer-verifiable evidence. Optional evidence tools include mitmdump or mitmproxy for loopback-only proxy capture and OWASP ZAP for passive local HTTP history review when available.
 
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
+
 ## Expected result
 
 A successful Lab 10 run produces a reviewer-grade artifact set showing the baseline controlled input, the student-authored variation, browser-observed evidence, model-bound or policy-simulator context, verdict-comparison evidence, an artifact manifest, `SHA256SUMS.txt`, a reviewer archive, and an archive checksum. The final finding must explain whether the verdict change is proven, merely correlated, or not supported by the artifacts.

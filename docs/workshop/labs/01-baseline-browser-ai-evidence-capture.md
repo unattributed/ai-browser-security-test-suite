@@ -158,6 +158,29 @@ Recommended tools:
 
 Optional proxy tooling is governed by `docs/workshop/proxy-tooling.md`. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
+
 ## Prerequisites
 
 Complete Lab 00 first.
