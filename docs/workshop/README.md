@@ -32,7 +32,7 @@ The intended target is the deliberately weak local `ollama-webui` lab applicatio
 
 ## Lab track
 
-The table below is the canonical student-facing workshop lab index. The required completion path remains free and open source. Optional Burp Suite use is an equivalent professional proxy workflow only where a lab uses proxy evidence.
+The table below is the canonical student-facing workshop lab index. Required baseline path: OWASP ZAP and mitmproxy. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools.
 
 | Lab | Title | Status |
 |---|---|---|
@@ -76,7 +76,7 @@ See `docs/workshop/tooling-baseline.md`, `docs/workshop/proxy-tooling.md`, `docs
 
 ## Optional tooling
 
-Burp Suite Community Edition or Burp Suite Professional may be used only as optional professional comparison tooling by students who already have it. Burp is not required, not exclusive, and not a validation gate. The FOSS path remains the required evidence path for every lab.
+Burp Suite Community Edition or Burp Suite Professional may be used only as optional professional comparison tooling by students who already have it. Burp is not required, not exclusive, and not a validation gate. All required evidence must remain reproducible with OWASP ZAP, mitmproxy or mitmdump, and the repository tooling.
 
 Optional QR, image, OCR, packet, and diagnostic tooling is lab-specific and must stay local-only and synthetic-only. An optional Burp Suite manual proxy path may be used only for professional comparison when the student already has Burp available.
 
@@ -134,7 +134,7 @@ Unless a lab names a fixture-specific file, the canonical reviewer artifact cont
 
 A completed student lab package must include the base method, a student-authored synthetic variation, browser evidence, HTTP or proxy evidence where relevant, model-bound context evidence, deterministic policy or reviewer decision evidence, `artifact-manifest.json`, `SHA256SUMS.txt`, an evidence archive `.tar.gz`, and an archive `.sha256` sidecar.
 
-The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, does not claim production security validation, and makes no production security validation claim.
+The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, and makes no production security validation claim.
 
 ## Instructor and reviewer material
 

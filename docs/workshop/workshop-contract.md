@@ -16,21 +16,17 @@ The workshop is for senior practitioners who need to validate browser-based AI w
 
 ## Non-Goals
 
-- Do not test third-party systems, production SaaS tenants, real users, real credentials, real customer data, real regulated data, public callback infrastructure, malware, persistence, token theft, or destructive behavior.
-- Do not harden the intentionally weak `ollama-webui` target during workshop execution.
-- Do not require commercial tools, closed-source tooling, account-based API clients, cloud scanners, or public OAST services.
-- Do not make production security validation claims from local synthetic evidence.
-- Do not install, reinstall, upgrade, downgrade, or modify NVIDIA drivers as part of workshop validation.
+This workshop does not harden the weak target, certify vendor products, test production SaaS, or provide exploit development training against real systems. It does not require commercial tools, account-based API clients, public OAST services, or NVIDIA driver changes.
 
 ## Safety and Authorization Boundary
 
-All labs and examples run only against local loopback services and local synthetic fixtures. The intentionally weak target is the local `ollama-webui` training application, normally available at `http://127.0.0.1:11435`.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Students must keep payloads synthetic, preserve `SYNTHETIC-LAB-MARKER` or lab-specific synthetic markers, and keep all evidence inside their local workshop evidence directory. Any result that depends on a third-party target, real credential, production tenant, public callback, or non-local service is out of scope and must not be submitted as workshop evidence.
+Keep payloads synthetic, preserve `SYNTHETIC-LAB-MARKER` or lab-specific synthetic markers, and keep evidence inside the local workshop evidence directory. Leave the intentionally weak target unchanged and do not claim production security validation from local workshop evidence.
 
 ## Required Tooling
 
-The required path uses FOSS and standard system tooling:
+The required baseline path uses free and open-source tooling where practical:
 
 - Python 3, Python venv, pip, and first-party repo tooling.
 - Playwright and Chromium.
@@ -41,7 +37,7 @@ The required path uses FOSS and standard system tooling:
 
 ## Optional Tooling
 
-Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional comparison workflow by students who already have it. Burp is never required, never exclusive, never a completion gate, and never a validation gate. Any Burp evidence must be equivalent to the required FOSS evidence path.
+Burp Suite Community Edition or Burp Suite Professional may be used only as an optional professional workflow by students who already use it. Burp is never required, never exclusive, never a completion gate, and never a validation gate. All required evidence must remain reproducible with OWASP ZAP, mitmproxy or mitmdump, and the repository tooling.
 
 Optional packet, QR, image, OCR, and diagnostic tools may be used when a lab calls for them, provided the required path remains complete with FOSS tooling and local synthetic evidence.
 

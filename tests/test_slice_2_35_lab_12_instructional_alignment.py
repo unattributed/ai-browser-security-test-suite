@@ -11,11 +11,11 @@ from typing import Dict, Iterable, List, Optional
 
 REQUIRED_HEADINGS = [
     "Method being taught",
-    "Real-world TTP being emulated",
+    "Real-world behavior being emulated",
     "Local-only PoC payload or controlled test input",
     "Step-by-step execution",
     "Required student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",

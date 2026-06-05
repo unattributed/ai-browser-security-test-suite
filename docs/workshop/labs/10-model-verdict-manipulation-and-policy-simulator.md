@@ -49,7 +49,9 @@ A browser-based AI workflow can mislead defenders when it collapses browser-obse
 
 ## Safety and authorization boundary
 
-This lab is local-only, synthetic-only, and authorized-only. Do not test third-party systems, production SaaS tenants, real users, real credentials, real tokens, real secrets, customer data, or regulated data. Do not expose the weak target to the Internet. Do not harden the weak target during this lab. Do not install packages, use snap, modify NVIDIA drivers, change CUDA, install DKMS modules, change kernels, or alter workstation package state.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
+
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -276,35 +278,8 @@ This local synthetic lab does not prove production exploitability, third-party e
 Separate browser-observed evidence from AI-generated interpretation, record model-bound context provenance, preserve artifacts with checksums, and require human-reviewable evidence before treating AI output as a security decision.
 ```
 
-## Safety and authorization boundary
-
-This lab must remain local, authorized, synthetic, and scoped to the intentionally weak workshop target. Do not harden the weak target as part of this lab.
-
-Do not test third-party systems. Do not use production SaaS tenants. Do not collect real credentials, real tokens, real secrets, real regulated data, or real customer data. Do not expose the lab target to the Internet. Do not add public callback infrastructure. Do not add malware behavior, persistence, destructive behavior, token theft, or production exploitation steps. Do not install packages, use snap, modify NVIDIA drivers, change CUDA, install DKMS modules, change kernels, or modify workstation package state during this lab.
-
-Model output is evidence to review, not a security decision. The acceptable result is an artifact-backed explanation of what happened locally and what can be safely claimed.
-Release-gate marker note: `SYNTHETIC-LAB-MARKER`, `BAI_EXECUTED_VERDICT_16`, and `BAI_EXECUTED_OUTPUT_CONTRACT_20` are synthetic workshop markers only. They must remain local and must not be replaced with real bypass strings, real secrets, real credentials, real tokens, or real customer data.
-
-<!-- slice-2.36-proxy-tooling-note:start -->
-
 ## Proxy tooling and evidence equivalence
 
-The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`.
-
-Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling and local browser evidence workflow named in this lab. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
-
-<!-- slice-2.36-proxy-tooling-note:end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

@@ -51,6 +51,7 @@ def test_removed_validator_phrase_dependency() -> None:
     lab00 = read(LAB00)
     validator = read(VALIDATOR)
     assert "Do not test third-party" in lab00
-    assert "Do not test third-party" not in validator
+    assert "workshop operating boundary" not in validator
+    assert "Do not test third-party systems, production services, real credentials, or customer data." in validator
     assert "REQUIRED_WORKSHOP_BOUNDARY_TERMS" in validator
     assert "workshop boundary term" in validator

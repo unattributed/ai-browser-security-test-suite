@@ -34,14 +34,14 @@ def test_lab_06_workshop_guide_declares_iframe_evidence_workflow() -> None:
         "model-bound-context.txt",
         "artifact-manifest.json",
         "evidence.jsonl",
-        "SHA256SUMS.txt",
-        "local-only",
-        "synthetic-only",
-        "authorized-only",
-        "no real credentials",
-        "no public callback endpoints",
-        "no production security validation",
-    ]
+            "SHA256SUMS.txt",
+            "local-only",
+            "synthetic-only",
+            "authorized-only",
+            "real credentials",
+            "provided local weak target",
+            "no production security validation",
+        ]
 
     for term in required_terms:
         assert term in text

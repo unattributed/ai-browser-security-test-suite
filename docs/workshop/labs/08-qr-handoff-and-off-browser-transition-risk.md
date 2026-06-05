@@ -69,46 +69,9 @@ A vulnerable browser-AI path may:
 
 ## Safety and authorization boundary
 
-Do not test third-party systems or third-party AI products.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no public callback endpoints
-no public URL payloads
-no third-party AI products
-no production SaaS targets
-```
-
-Allowed decoded destination prefixes:
-
-```text
-http://127.0.0.1
-http://localhost
-https://localhost
-```
-
-Disallowed targets:
-
-```text
-public websites
-real login pages
-real brands used as live impersonation targets
-credential collection flows
-token extraction flows
-MFA bypass flows
-malware delivery
-browser command and control
-public callback endpoints
-public QR destinations
-third-party QR decoders
-third-party vision models
-```
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -138,7 +101,7 @@ Required:
 - `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
 - OWASP ZAP, to perform passive local HTTP history review when available.
 
-Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 - `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
@@ -390,7 +353,6 @@ Answer these questions in `analyst-review-notes.md`:
 12. What should a reviewer require before accepting a model claim about QR handoff risk?
 ```
 
-
 ## One-command live evidence runner
 
 Lab 08 includes a one-command QR handoff and off-browser transition end-to-end live evidence runner:
@@ -521,12 +483,6 @@ which deterministic policy decision applied
 
 The policy should not be delegated to page content, QR content, decoded destination text, model-bound text, or a model response.
 
-<!-- slice-2.31-lab-08-instructional-alignment-start -->
-
-## Practical instructional alignment supplement
-
-This supplement standardizes Lab 08 as a practical, evidence-first lab for senior practitioners. It preserves the intentionally weak local target behavior needed for training.
-
 ### Scenario
 
 A browser-based AI workflow displays or references a QR or secondary-channel handoff. The security question is not whether the handoff looks harmless in the browser. The question is whether the encoded destination, visible representation, DOM/source evidence, proxy evidence, and model-bound context all tell the same story.
@@ -619,7 +575,7 @@ Expected failures are part of the lab. Record them instead of hiding them.
 7. The evidence archive lacks a manifest or SHA256 checksums.
 8. The student changes a value that does not affect the tested browser or model-bound behavior.
 
-## Defender interpretation
+### Defender interpretation note
 
 A defender, vendor reviewer, or product security engineer should interpret this lab as an evidence-chain validation exercise. The important result is not that the weak target can be made to show a marker. The important result is whether independent evidence surfaces prove what the browser displayed, what the local workflow encoded or exposed, what the model could have consumed, and where a reviewer should place trust.
 
@@ -658,23 +614,3 @@ What the evidence does not prove:
 Recommended defender action:
 Compare rendered, encoded, DOM/source, proxy, and model-bound evidence before accepting the AI workflow's interpretation. Add logging, review workflows, or control checks where the evidence chain is incomplete or inconsistent.
 ```
-
-## Safety and authorization boundary
-
-This lab must remain local, authorized, synthetic, and scoped to the intentionally weak local ollama-webui workshop target. Do not test third-party systems, production AI products, public callback infrastructure, real credentials, real customer data, malware behavior, persistence, destructive behavior, or unauthorized environments.
-
-Do not harden the weak target as part of this lab. The weak behavior is intentional and is required for training and evidence generation.
-
-<!-- slice-2.31-lab-08-instructional-alignment-end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

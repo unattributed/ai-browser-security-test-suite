@@ -147,11 +147,11 @@ def test_lab11_practical_student_facing_depth() -> None:
     doc_path = REPO_ROOT / metadata["canonical_lab11_document_path"]
     text = doc_path.read_text(encoding="utf-8")
     method = section_text(text, "Method being taught")
-    ttp = section_text(text, "Real-world TTP being emulated")
+    ttp = section_text(text, "Real-world behavior being emulated")
     controlled_input = section_text(text, "Local-only PoC payload or controlled test input")
     execution = section_text(text, "Step-by-step execution")
     variation = section_text(text, "Required student-authored variation")
-    evidence = section_text(text, "Evidence that proves the variation worked")
+    evidence = section_text(text, "Evidence to collect")
     failure_modes = section_text(text, "Expected failure modes")
     defender = section_text(text, "Defender interpretation")
     finding = section_text(text, "Reportable finding")
@@ -171,7 +171,7 @@ def test_lab11_practical_student_facing_depth() -> None:
     assert_contains_any(defender, ["defender", "soc", "incident", "vendor", "product security"], "defender section")
     assert_contains_any(finding, ["summary", "evidence", "what the evidence proves", "what the evidence does not prove", "recommended"], "finding section")
     lowered_safety = safety.lower()
-    for forbidden_boundary in ["third-party", "real credentials", "real tokens", "production saas", "nvidia"]:
+    for forbidden_boundary in ["third-party", "real credentials", "production services", "nvidia"]:
         assert forbidden_boundary in lowered_safety, f"safety boundary missing {forbidden_boundary!r}"
 
 

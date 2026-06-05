@@ -8,11 +8,11 @@ PRACTICAL_VALIDATOR = ROOT / "tools/validate_workshop_practical_labs.py"
 
 REQUIRED_HEADINGS = [
     "## Method being taught",
-    "## Real-world TTP being emulated",
+    "## Real-world behavior being emulated",
     "## Local-only PoC payload or controlled test input",
     "## Step-by-step execution",
     "## Required student-authored variation",
-    "## Evidence that proves the variation worked",
+    "## Evidence to collect",
     "## Expected failure modes",
     "## Defender interpretation",
     "## Reportable finding",
@@ -38,7 +38,7 @@ VALIDATOR_COMPATIBILITY_TERMS = [
 
 STUDENT_PRACTICAL_TERMS = [
     "student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",

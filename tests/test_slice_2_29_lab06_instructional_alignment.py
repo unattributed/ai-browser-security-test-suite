@@ -9,11 +9,11 @@ PRACTICAL_VALIDATOR = ROOT / "tools/validate_workshop_practical_labs.py"
 
 REQUIRED_HEADINGS = [
     "## Method being taught",
-    "## Real-world TTP being emulated",
+    "## Real-world behavior being emulated",
     "## Local-only PoC payload or controlled test input",
     "## Step-by-step execution",
     "## Required student-authored variation",
-    "## Evidence that proves the variation worked",
+    "## Evidence to collect",
     "## Expected failure modes",
     "## Defender interpretation",
     "## Reportable finding",
@@ -56,14 +56,12 @@ REQUIRED_TERMS = [
 ]
 
 SAFETY_TERMS = [
-    "local synthetic fixtures",
-    "intentionally vulnerable local `ollama-webui` workshop target",
-    "do not harden the target",
+    "provided local weak target",
+    "synthetic data",
+    "leave the intentionally weak target unchanged",
     "real credentials",
     "real customer data",
-    "third-party sites",
-    "external iframe urls",
-    "public callback infrastructure",
+    "third-party systems",
     "nvidia drivers",
 ]
 
@@ -97,7 +95,7 @@ def test_lab06_defines_student_variation_and_reportable_evidence() -> None:
     lower_text = text.casefold()
     assert "lab06_variation_frame_provenance_safe_marker" in lower_text
     assert "student must create one local-only variation" in lower_text
-    assert "evidence that proves the variation worked" in lower_text
+    assert "evidence to collect" in lower_text
     assert "reportable finding" in lower_text
     assert "defender recommendation" in lower_text
 
@@ -142,4 +140,4 @@ def test_lab06_safety_boundary_preserves_weak_target_and_driver_boundary() -> No
     lower_text = read_lab06().casefold()
     missing = [term for term in SAFETY_TERMS if term.casefold() not in lower_text]
     assert missing == []
-    assert "do not install, reinstall, upgrade, or modify nvidia drivers" in lower_text
+    assert "do not install or modify nvidia drivers" in lower_text

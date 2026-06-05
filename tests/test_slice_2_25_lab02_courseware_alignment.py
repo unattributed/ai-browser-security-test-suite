@@ -29,11 +29,11 @@ def test_lab02_contains_required_instructional_alignment_sections() -> None:
     text = LAB02_DOC.read_text(encoding="utf-8")
     for heading in [
         "## Method being taught",
-        "## Real-world TTP being emulated",
+        "## Real-world behavior being emulated",
         "## Local-only PoC payload or controlled test input",
         "## Step-by-step execution",
         "## Required student-authored variation",
-        "## Evidence that proves the variation worked",
+        "## Evidence to collect",
         "## Expected failure modes",
         "## Defender interpretation",
         "## Reportable finding",
@@ -49,7 +49,7 @@ def test_lab02_requires_student_authored_variation_and_evidence_proof() -> None:
         "student-variation/student-visible-text-variation.html",
         "student-variation/direct-student-visible-text-variation.http",
         "student-variation/proxied-student-visible-text-variation.http",
-        "Evidence that proves the variation worked",
+        "Evidence to collect",
         "The student must modify the variation again in their own words",
     ]:
         assert term in text

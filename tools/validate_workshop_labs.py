@@ -29,7 +29,8 @@ LAB_DIR = Path("docs/workshop/labs")
 
 
 REQUIRED_WORKSHOP_BOUNDARY_TERMS = [
-    "workshop operating boundary",
+    "Use only the provided local weak target and synthetic data.",
+    "Do not test third-party systems, production services, real credentials, or customer data.",
     "local-only",
     "synthetic-only",
     "authorized-only",

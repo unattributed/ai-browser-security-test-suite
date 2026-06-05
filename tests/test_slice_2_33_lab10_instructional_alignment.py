@@ -9,11 +9,11 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_SECTIONS = [
     "Method being taught",
-    "Real-world TTP being emulated",
+    "Real-world behavior being emulated",
     "Local-only PoC payload or controlled test input",
     "Step-by-step execution",
     "Required student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",
@@ -159,15 +159,15 @@ def test_lab10_sections_have_practical_student_facing_depth() -> None:
     text = canonical_lab10_document().read_text(encoding="utf-8")
     expectations = {
         "Method being taught": ["evidence", "browser", "model", "compare"],
-        "Real-world TTP being emulated": ["trust-boundary", "verdict", "local", "synthetic"],
+        "Real-world behavior being emulated": ["trust-boundary", "verdict", "local", "synthetic"],
         "Local-only PoC payload or controlled test input": ["controlled", "marker", "local", "synthetic"],
         "Step-by-step execution": ["run", "capture", "manifest", "sha256"],
         "Required student-authored variation": ["student-authored", "variation", "marker", "artifact"],
-        "Evidence that proves the variation worked": ["http", "dom", "visible text", "model-bound", "checksum"],
+        "Evidence to collect": ["http", "dom", "visible text", "model-bound", "checksum"],
         "Expected failure modes": ["failure", "proxy", "target", "correlation"],
         "Defender interpretation": ["defender", "browser-observed", "ai-generated", "vendor"],
         "Reportable finding": ["finding", "scope", "evidence", "does not prove"],
-        "Safety and authorization boundary": ["local", "authorized", "synthetic", "third-party", "nvidia"],
+        "Safety and authorization boundary": ["local", "synthetic", "third-party", "nvidia"],
     }
     for section, terms in expectations.items():
         body = section_body(text, section).lower()

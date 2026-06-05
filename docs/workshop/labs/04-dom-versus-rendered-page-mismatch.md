@@ -64,41 +64,9 @@ A vulnerable browser-AI path may:
 
 ## Safety and authorization boundary
 
-Do not test third-party systems or third-party AI products.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no public callback endpoints
-no third-party AI products
-no production SaaS targets
-```
-
-Allowed targets:
-
-```text
-http://127.0.0.1
-http://localhost
-https://localhost
-```
-
-Disallowed targets:
-
-```text
-public websites
-real login pages
-real brands used as live impersonation targets
-credential collection flows
-token extraction flows
-MFA bypass flows
-malware delivery
-browser command and control
-```
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -407,12 +375,6 @@ Use the shared proxy workflow and repository-wide proxy tooling policy when prox
 - docs/workshop/local-proxy-evidence-workflow.md
 - docs/workshop/proxy-tooling.md
 
-<!-- slice-2.27-lab-04-practical-method-alignment:start -->
-
-### Lab 04 student-facing practical method alignment
-
-This section gives students the practical Lab 04 method, evidence workflow, student-authored variation, and completion criteria without relying on instructor-only notes.
-
 ## Lab title and purpose
 
 Lab 04 teaches `DOM rendered page mismatch validation`.
@@ -603,7 +565,7 @@ Common failure modes include:
 
 When a failure occurs, do not overwrite the failed evidence. Save it, describe the failure, correct the workflow, and rerun the lab so the final evidence is reviewable.
 
-## Defender interpretation
+### Defender interpretation note
 
 A defender should read the Lab 04 evidence as a control validation result. The finding is meaningful when the artifacts show that a browser-based AI workflow or analyst workflow could observe inconsistent content across evidence surfaces. The defender should ask:
 
@@ -641,10 +603,6 @@ Recommend evidence cross-checks, capture ordering, reviewer workflow improvement
 State that the test was local, authorized, synthetic, and conducted against an intentionally weak training target.
 ```
 
-## Safety and authorization boundary
-
-This lab is local, authorized, synthetic, and scoped to the intentionally vulnerable workshop target. Do not test third-party systems, production AI products, customer data, real credentials, public callback infrastructure, persistence, malware behavior, destructive behavior, or unauthorized environments. Do not modify NVIDIA drivers. Do not harden the weak target during the lab.
-
 ## Evidence collection checklist
 
 Before closing the lab, confirm that you have:
@@ -673,57 +631,3 @@ If a command fails, save the command output in your evidence folder. Verify the 
 ## Completion criteria
 
 Lab 04 is complete when your evidence proves the baseline method and your student-authored variation, your manifest and checksums are present, your reportable finding is reviewer-readable, and any canonical live target-backed runner has passed when available.
-
-<!-- slice-2.27-lab-04-practical-method-alignment:end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.
-
-## 1. Method being taught
-
-See the canonical Method being taught section. The method is evidence-first browser-AI validation using local synthetic artifacts, student-authored variation, manifest, SHA256, and reportable finding.
-
-## 2. Real-world TTP being emulated
-
-See the canonical real-world behavior section. The TTP is safe local emulation of browser-based AI evidence confusion, model-bound context risk, review triage pressure, and artifact-backed validation.
-
-## 3. Local-only PoC payload or controlled test input
-
-Use only the local synthetic payloads and controlled fixture inputs described above. Preserve SYNTHETIC-LAB-MARKER and avoid real credentials, real customer data, public callbacks, or third-party systems.
-
-## 4. Step-by-step execution
-
-Follow the canonical execution workflow above: prepare the evidence directory, run the local target or fixture, capture browser and HTTP evidence, create the student-authored variation, build the manifest, verify SHA256 hashes, and archive reviewer evidence.
-
-## 5. Required student-authored variation
-
-Create a local-only student-authored variation with a unique synthetic marker. The variation must change the payload, fixture, timing, presentation, or browser interaction and produce reviewable evidence.
-
-## 6. Evidence that proves the variation worked
-
-Collect direct HTTP, proxied HTTP where available, browser screenshot, DOM or source, visible text, model-bound context, Synthetic marker provenance, marker provenance, artifact-manifest.json, SHA256SUMS.txt, archive, and archive checksum evidence.
-
-## 7. Expected failure modes
-
-Expected failure modes include missing target, missing Playwright or Chromium, missing proxy tooling, empty captures, missing synthetic markers, incomplete manifest, checksum mismatch, or unsupported production claims.
-
-## 8. Defender interpretation
-
-Treat model output as an observation, not a security decision. Defender interpretation must come from artifact comparison, provenance, deterministic policy or reviewer analysis, and stated limits of proof.
-
-## 9. Reportable finding
-
-A reportable finding identifies the local synthetic condition, affected browser-AI evidence surface, supporting artifacts, defensive interpretation, and limitations without claiming production validation.
-
-## 10. Safety and authorization boundary
-
-Use only local, authorized, synthetic targets. Do not harden the weak target, install packages from the lab, change NVIDIA drivers, use real data, contact third parties, or claim production security validation.

@@ -471,7 +471,7 @@ def check_workshop_readme(repo_root: Path) -> GateCheck:
         "docs/workshop/offline-release-bundle.md",
         "docs/workshop/release-rehearsal-and-timing.md",
         "docs/workshop/release-candidate-acceptance-gate.md",
-        "does not claim production security validation",
+        "makes no production security validation claim",
     ]
     failures = [f"docs/workshop/README.md missing term: {term}" for term in required_terms if term not in text]
     return make_check("workshop README links", "workshop README links the release-candidate acceptance chain", ["docs/workshop/README.md"], failures)

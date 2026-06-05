@@ -75,6 +75,52 @@ TARGET_START_RE = re.compile(r"(?<![/.\w-])(?:python|python3|\.venv/bin/python) 
 STANDALONE_PYTEST_RE = re.compile(r"^pytest$", re.MULTILINE)
 HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 CONFERENCE_RE = re.compile(r"\b(?:DEF CON|Defcon|Black Hat|BSides)\b")
+HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
+
+LAB_FORBIDDEN_FINAL_COURSEWARE_PHRASES = [
+    "Legacy heading alias",
+    "canonical alias",
+    "alias section",
+    "slice-era",
+    "slice-2.",
+    "instructional-alignment",
+    "practical-method-alignment",
+    "practical-courseware",
+    "practical-standard",
+    "proxy-tooling-note",
+]
+
+LAB_FORBIDDEN_STUDENT_SECTION_LABELS = [
+    "practical supplement",
+    "courseware supplement",
+    "instructional alignment supplement",
+]
+
+CANONICAL_LAB_H2_SECTIONS = [
+    "Purpose",
+    "Learning objectives",
+    "Method being taught",
+    "Real-world behavior being emulated",
+    "Safety and authorization boundary",
+    "Tools used",
+    "Lab topology",
+    "Student workflow",
+    "Step-by-step execution",
+    "Evidence to collect",
+    "Required student-authored variation",
+    "Expected failure modes",
+    "Defender interpretation",
+    "Reportable finding",
+    "Completion criteria",
+    "Cleanup",
+]
+
+CONCISE_BOUNDARY_SENTENCE = (
+    "Use only the provided local weak target and synthetic data. Do not test third-party systems, "
+    "production services, real credentials, or customer data."
+)
+PROXY_BASELINE_SENTENCE = "Required baseline path: OWASP ZAP and mitmproxy"
+BURP_OPTIONAL_SENTENCE = "Optional professional path: Burp Suite may be used"
 
 
 def read(path: Path) -> str:
@@ -83,6 +129,29 @@ def read(path: Path) -> str:
 
 def strip_html_comments(text: str) -> str:
     return HTML_COMMENT_RE.sub("", text)
+
+
+def markdown_headings(text: str) -> list[tuple[int, int, str]]:
+    headings: list[tuple[int, int, str]] = []
+    in_fence = False
+    fence: str | None = None
+    for line_number, line in enumerate(text.splitlines(), start=1):
+        stripped = line.lstrip()
+        if stripped.startswith("```") or stripped.startswith("~~~"):
+            token = stripped[:3]
+            if not in_fence:
+                in_fence = True
+                fence = token
+            elif fence == token:
+                in_fence = False
+                fence = None
+            continue
+        if in_fence:
+            continue
+        match = HEADING_RE.match(line)
+        if match:
+            headings.append((line_number, len(match.group(1)), match.group(2).strip()))
+    return headings
 
 
 def validate() -> list[str]:
@@ -114,6 +183,29 @@ def validate() -> list[str]:
             for phrase in STUDENT_DOC_CONTAMINATION_PHRASES:
                 if phrase in student_text:
                     errors.append(f"{rel_path} contains student-facing implementation artifact wording: {phrase!r}")
+            for phrase in LAB_FORBIDDEN_FINAL_COURSEWARE_PHRASES:
+                if phrase in text:
+                    errors.append(f"{rel_path} contains legacy courseware residue: {phrase!r}")
+            lowered_student_text = student_text.lower()
+            for phrase in LAB_FORBIDDEN_STUDENT_SECTION_LABELS:
+                if phrase in lowered_student_text:
+                    errors.append(f"{rel_path} contains student-facing supplement label: {phrase!r}")
+
+            headings = markdown_headings(text)
+            h1s = [line for line, level, _ in headings if level == 1]
+            if len(h1s) != 1:
+                errors.append(f"{rel_path} must contain exactly one H1 heading, found {len(h1s)}")
+            for section in CANONICAL_LAB_H2_SECTIONS:
+                lines = [line for line, level, title in headings if level == 2 and title == section]
+                if len(lines) > 1:
+                    errors.append(
+                        f"{rel_path} duplicates canonical H2 section {section!r} at lines {lines}"
+                    )
+            if CONCISE_BOUNDARY_SENTENCE not in text:
+                errors.append(f"{rel_path} must contain the concise safety and authorization boundary sentence")
+            for artifact_name in ["artifact-manifest.json", "SHA256SUMS.txt"]:
+                if artifact_name not in text:
+                    errors.append(f"{rel_path} must preserve canonical artifact name {artifact_name!r}")
 
     model_doc = read(Path("docs/workshop/model-runtime-modes.md"))
     if "gemma4:e2b" not in model_doc or "ministral-3:8b" not in model_doc:
@@ -155,6 +247,12 @@ def validate() -> list[str]:
     ]:
         if required not in contract:
             errors.append(f"{WORKSHOP_CONTRACT} missing workshop contract term: {required!r}")
+    if (
+        "This workshop does not harden the weak target, certify vendor products, test production SaaS, "
+        "or provide exploit development training against real systems."
+        not in contract
+    ):
+        errors.append(f"{WORKSHOP_CONTRACT} must keep non-goals concise")
 
     examples = read(EXAMPLES_README)
     for required in [
@@ -182,6 +280,21 @@ def validate() -> list[str]:
         for forbidden in ["Burp is required", "Burp Suite is required", "required Burp"]:
             if forbidden in text:
                 errors.append(f"{rel_path} contains non-optional Burp wording: {forbidden!r}")
+        if "Burp" in text and "optional" not in text.lower():
+            errors.append(f"{rel_path} mentions Burp without optional framing")
+
+    proxy_corpus = "\n".join(
+        read(path)
+        for path in [
+            Path("docs/workshop/README.md"),
+            WORKSHOP_CONTRACT,
+            Path("docs/workshop/practical-adversarial-lab-standard.md"),
+            Path("docs/workshop/proxy-tooling.md"),
+        ]
+    )
+    for required in [PROXY_BASELINE_SENTENCE, BURP_OPTIONAL_SENTENCE, "all required evidence must remain reproducible"]:
+        if required not in proxy_corpus:
+            errors.append(f"workshop proxy policy corpus missing required framing: {required!r}")
 
     return errors
 

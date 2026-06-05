@@ -9,14 +9,14 @@ def test_lab03_student_courseware_sections_and_legacy_validator_anchors_present(
         "## Learning objectives",
         "## Attack vector",
         "## Risk and impact",
-        "## Safety boundary",
+        "## Safety and authorization boundary",
         "## Tools used",
         "## Method being taught",
-        "## Real-world TTP being emulated",
+        "## Real-world behavior being emulated",
         "## Local-only PoC payload or controlled test input",
         "## Step-by-step execution",
         "## Required student-authored variation",
-        "## Evidence that proves the variation worked",
+        "## Evidence to collect",
         "## Expected failure modes",
         "## Expected result",
         "## Failure conditions",
@@ -52,6 +52,6 @@ def test_lab03_courseware_orders_proxy_capture_before_interaction():
 def test_lab03_courseware_preserves_student_variation_and_reportable_finding():
     text = LAB_DOC.read_text(encoding="utf-8")
     assert "Required student-authored variation" in text
-    assert "Evidence that proves the variation worked" in text
+    assert "Evidence to collect" in text
     assert "Finding: Lab 03 browser content provenance mismatch" in text
     assert "local-only, synthetic-only, authorized workshop evidence" in text

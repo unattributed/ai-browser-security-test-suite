@@ -71,43 +71,9 @@ A vulnerable browser-AI path may:
 
 ## Safety and authorization boundary
 
-Do not test third-party systems or third-party AI products.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no public callback endpoints
-no third-party AI products
-no production SaaS targets
-```
-
-Allowed target prefixes:
-
-```text
-http://127.0.0.1
-http://localhost
-https://localhost
-```
-
-Disallowed targets:
-
-```text
-public websites
-real login pages
-real brands used as live impersonation targets
-credential collection flows
-token extraction flows
-MFA bypass flows
-malware delivery
-browser command and control
-external iframe URLs
-public callback endpoints
-```
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -542,12 +508,6 @@ The intentionally weak target must remain vulnerable. This runner records eviden
 
 This lab remains local-only, synthetic-only, and authorized-only. It does not test third-party systems and makes no production security validation claim.
 
-<!-- slice-2.29-lab06-instructional-alignment-start -->
-
-### Lab 06 Practical Courseware Supplement
-
-This supplement makes Lab 06 usable as practical student courseware. Lab 06 teaches iframe and frame-tree source confusion as an evidence-first browser security method. Students must prove which frame supplied which content before accepting model-bound context, analyst notes, or a report as security evidence.
-
 ## Method being taught
 
 Lab 06 teaches iframe and frame-tree provenance validation. The practical method is to capture the top page, every browser-observed child frame, frame URLs, sandbox attributes, `srcdoc` evidence, cross-frame rendered text, browser source, DOM, visible text, screenshot evidence, direct local HTTP responses with proxied local HTTP responses, marker provenance, model-bound context review, artifact manifests, and checksums before writing a finding.
@@ -686,7 +646,7 @@ Expected failure modes include the weak target not running on `127.0.0.1:11435`,
 
 Do not overwrite failed evidence. Preserve the failed run, explain what failed, correct the workflow, and rerun so the final evidence is reviewable.
 
-## Defender interpretation
+### Defender interpretation note
 
 A defender should interpret Lab 06 as a control validation for frame provenance. A browser-based AI control, analyst workflow, or evidence collector is weak if it cannot tell which frame supplied each content item, whether the frame was top-level, same-origin, sandboxed, `srcdoc`, or nested, and whether model-bound context preserved that ancestry.
 
@@ -701,21 +661,3 @@ Finding summary: In a local authorized Lab 06 test, a synthetic iframe or nested
 Evidence to attach: baseline and variation screenshots, browser source, DOM, visible text, `frame-tree.json`, `frame-url-list.txt`, top-page DOM snapshot, child-frame DOM snapshots, sandbox findings, `srcdoc` findings, cross-frame rendered text, direct local HTTP responses with proxied local HTTP responses when available, ZAP passive notes when available, `artifact-manifest.json`, `SHA256SUMS.txt`, reviewer archive checksum, and student-authored variation notes.
 
 Defender recommendation: Require frame-aware browser evidence collection and reviewer workflow checks that preserve top-page, child-frame, sandbox, `srcdoc`, nested frame, HTTP, proxy, marker, and model-bound context provenance. Do not accept model output or flattened page text as the policy decision.
-
-## Safety and authorization boundary
-
-Conduct this lab only against local synthetic fixtures and the intentionally vulnerable local `ollama-webui` workshop target. Do not harden the target. The intentionally weak target must remain vulnerable so the training evidence remains valid. Do not use real credentials, real customer data, third-party sites, production tenants, external iframe URLs, public callback infrastructure, malware behavior, persistence, destructive behavior, or unauthorized systems. Keep proxy listeners on loopback. Keep evidence inside the lab run directory. Do not install, reinstall, upgrade, or modify NVIDIA drivers. This lab is a training and validation exercise with no production security validation claim.
-
-<!-- slice-2.29-lab06-instructional-alignment-end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

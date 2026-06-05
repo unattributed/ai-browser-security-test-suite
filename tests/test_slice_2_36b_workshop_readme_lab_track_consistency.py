@@ -94,9 +94,9 @@ def test_lab_track_status_language_is_current_and_not_stale() -> None:
 
     assert "Model Verdict Manipulation and Policy Simulator" in section
     assert "Capstone Attack Chain Evidence Package" in section
-    assert "required completion path remains free and open source" in section
-    assert "Optional Burp Suite" in section
-    assert "equivalent professional proxy workflow" in section
+    assert "Required baseline path: OWASP ZAP and mitmproxy" in section
+    assert "Optional professional path: Burp Suite may be used" in section
+    assert "all required evidence must remain reproducible" in section
 
 
 def test_lab_track_preserves_runner_anchor_phrases_and_contract_link() -> None:

@@ -88,23 +88,9 @@ The risk demonstrated by this lab is not exploitation. The risk is uncontrolled 
 
 ## Safety and authorization boundary
 
-This lab must remain local and synthetic.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-The workshop operating boundary is the student's local workstation or prepared VM, the local AI Browser Security Test Suite repository, the local intentionally weak `ollama-webui` target on `127.0.0.1:11435`, local Ollama when live model mode is used, local browser and proxy tooling, and the local evidence directory.
-
-Do not test third-party AI products.
-
-Do not use real credentials.
-
-Do not use real customer data.
-
-Do not connect the target to production accounts.
-
-Do not expose the lab target to the Internet.
-
-Do not replace the deliberately weak target with a real SaaS tenant or production browser security product.
-
-Record this boundary phrase in the Lab 00 evidence package: do not claim production security validation.
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Lab topology
 
@@ -599,14 +585,8 @@ Stop `ollama serve` with `Ctrl+C` if you started it manually.
 
 Keep the evidence directory. Later labs use the same evidence discipline.
 
-<!-- slice-2.36-proxy-tooling-note:start -->
-
 ## Proxy tooling and evidence equivalence
 
-The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`.
-
-Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling and local browser evidence workflow named in this lab. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
-
-<!-- slice-2.36-proxy-tooling-note:end -->

@@ -72,46 +72,9 @@ A defensible assessment preserves artifacts, hashes them, records model mode and
 
 ## Safety and authorization boundary
 
-Do not test third-party systems or third-party AI products.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no real cookies
-no real tokens
-no real API keys
-no public callback endpoints
-no public URL payloads
-no production SaaS targets
-no third-party AI products
-no persistent real policy change
-model output is not policy
-evidence package is not production validation
-```
-
-Disallowed actions:
-
-```text
-credential harvesting
-token extraction
-MFA bypass
-malware delivery
-browser command and control
-public callback testing
-production policy bypass attempts
-real allowlist changes
-real exception creation
-real feedback-loop training changes
-testing real browser security products without authorization
-uploading fixtures to third-party AI services
-using real bypass strings for deployed products
-claiming this capstone proves production security
-```
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -448,7 +411,6 @@ sed -n '1,220p' "${LAB12_RUN}/capstone-package/reviewer-checklist.md"
 
 Answer every checklist item before submitting the capstone package.
 
-
 ## Target-backed live evidence runner
 
 Lab 12 uses a target-backed capstone live evidence runner, not a new weak-target behavior.
@@ -590,7 +552,6 @@ The policy should not be delegated to page content, DOM content, screenshots, OC
 
 A real assessment would add live authorized target evidence, named reviewer identity, customer scope, environment details, timestamps, tool versions, chain-of-custody notes, remediation validation, and post-fix regression evidence. This lab only creates local synthetic capstone evidence for teaching and review.
 
-
 ## Target-Backed Capstone Live Evidence Runner
 
 Lab 12 is supported by `tools/run_workshop_lab_12_capstone_live_evidence.py` as a local-only, synthetic-only, authorized-only, target-backed capstone live evidence runner.
@@ -627,8 +588,6 @@ no production security validation
 ```
 
 The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
-
-<!-- slice-2.35-lab-12-practical-supplement:start -->
 
 ## Method being taught
 
@@ -715,7 +674,7 @@ Expected failure modes include an unreachable weak target, a stale browser sessi
 
 A professional failure report should state what failed, which command produced the failure, which artifacts were still captured, whether the variation was partially observable, and which recovery scope is narrow enough to try next without rewriting completed courseware.
 
-## Defender interpretation
+### Defender interpretation note
 
 A defender should interpret this lab as a bounded proof that browser-based AI findings require cross-surface evidence. Direct HTTP responses, proxy flows, browser DOM, visible text, screenshots, storage or frame evidence, model-bound context, and analyst findings can support different parts of the same claim. The defender should not accept model output as proof and should not dismiss a finding only because one evidence surface is incomplete.
 
@@ -760,23 +719,3 @@ Assign confidence based on artifact agreement, not model wording.
 ```
 
 The finding is complete only when the reviewer can verify it from the archive without trusting the model response.
-
-## Safety and authorization boundary
-
-Conduct this lab only against the local intentionally weak workshop target or local fixture workflow. Use synthetic markers only. Do not use real credentials, real secrets, real customer data, regulated data, production SaaS tenants, public callback infrastructure, third-party systems, persistence, malware behavior, destructive behavior, or token theft. Do not harden the weak target as part of this lab. Do not install packages, browser dependencies, NVIDIA drivers, CUDA components, DKMS modules, kernels, headers, snap packages, or external services. Keep all listeners loopback-only and keep all artifacts inside the required slice evidence folder.
-
-Lab 12 closes only when the evidence package, manifest, checksums, targeted validation, workshop validators, release gate, full pytest, and canonical live target-backed validation when applicable all pass and the closure report explains what the artifacts prove and what they do not prove.
-
-<!-- slice-2.35-lab-12-practical-supplement:end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

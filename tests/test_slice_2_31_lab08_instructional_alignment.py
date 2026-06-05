@@ -1,24 +1,4 @@
-"""Validate Slice 2.31 Lab 08 instructional alignment.
-
-File path:
-  tests/test_slice_2_31_lab08_instructional_alignment.py
-
-File name:
-  test_slice_2_31_lab08_instructional_alignment.py
-
-Action taken:
-  Adds targeted Slice 2.31 validation for Lab 08 student-facing courseware.
-
-Change description:
-  Confirms the canonical Lab 08 document is identifiable from repository
-  contents, includes the required practical instructional alignment sections,
-  teaches a local synthetic QR or secondary-channel handoff evidence method,
-  requires a meaningful student-authored variation, and preserves neighboring
-  lab documents from Slice 2.31 edits.
-
-Git commit comment:
-  align lab 08 student courseware with practical method standard
-"""
+"""Validate Lab 08 final student-facing courseware."""
 
 from __future__ import annotations
 
@@ -27,15 +7,19 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LABS_DIR = REPO_ROOT / "docs" / "workshop" / "labs"
-SLICE_MARKER = "slice-2.31-lab-08-instructional-alignment"
+LEGACY_MARKERS = [
+    "slice-2.",
+    "instructional-alignment",
+    "instructional alignment supplement",
+]
 
 REQUIRED_SECTIONS = [
     "Method being taught",
-    "Real-world TTP being emulated",
+    "Real-world behavior being emulated",
     "Local-only PoC payload or controlled test input",
     "Step-by-step execution",
     "Required student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",
@@ -105,17 +89,18 @@ def test_lab08_reportable_finding_is_professional_and_bounded() -> None:
         "Impact:",
         "Recommended defender action:",
         "Do not test third-party systems",
-        "Do not harden the weak target",
+        "leave the intentionally weak target unchanged",
     ]
     for item in required:
         assert item in text, item
 
 
-def test_slice_231_did_not_mark_neighboring_lab_documents() -> None:
+def test_lab08_legacy_markers_do_not_appear_in_neighboring_lab_documents() -> None:
     neighboring_patterns = ["07*.md", "09*.md", "10*.md", "12*.md"]
     touched = []
     for pattern in neighboring_patterns:
         for path in LABS_DIR.glob(pattern):
-            if SLICE_MARKER in path.read_text(encoding="utf-8"):
+            text = path.read_text(encoding="utf-8").lower()
+            if any(marker in text for marker in LEGACY_MARKERS):
                 touched.append(path.relative_to(REPO_ROOT).as_posix())
     assert touched == []

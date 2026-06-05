@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Slice 2.36 final student readiness and proxy tooling consistency tests.
-
-File path: tests/test_slice_2_36_final_student_readiness_and_proxy_consistency.py
-Change description: Validates final workshop readiness defects, FOSS baseline, optional Burp workflow wording, and all-lab readiness allowances.
-Git commit comment: finalize workshop lab readiness and proxy tooling consistency
-"""
+"""Final student readiness and proxy tooling consistency tests."""
 from __future__ import annotations
 
 import re
@@ -93,23 +88,64 @@ def test_markdown_heading_parser_ignores_code_fences() -> None:
     assert [heading.text for heading in markdown_headings(sample)] == ["Real heading", "Visible heading"]
 
 
-def test_lab05_practical_supplement_renders_as_markdown_not_code_block() -> None:
-    path = LAB_DIR / "05-screenshot-and-visual-deception.md"
-    text = read(path)
-    assert "slice-2.28-lab05-instructional-alignment-start" in text
-    start = text.index("<!-- slice-2.28-lab05-instructional-alignment-start -->")
-    end = text.index("<!-- slice-2.28-lab05-instructional-alignment-end -->")
-    block = text[start:end]
-    bad = [
-        (idx, line)
-        for idx, line in enumerate(block.splitlines(), start=1)
-        if re.match(r"^ {4,}#{1,6}\s+", line)
+def test_lab_docs_have_final_courseware_structure_without_slice_residue() -> None:
+    canonical_h2 = {
+        "purpose",
+        "learning objectives",
+        "method being taught",
+        "real world behavior being emulated",
+        "safety and authorization boundary",
+        "tools used",
+        "lab topology",
+        "student workflow",
+        "step by step execution",
+        "evidence to collect",
+        "required student authored variation",
+        "expected failure modes",
+        "defender interpretation",
+        "reportable finding",
+        "completion criteria",
+        "cleanup",
+    }
+    forbidden = [
+        "Legacy heading alias",
+        "canonical alias",
+        "alias section",
+        "slice-era",
+        "slice-2.",
+        "instructional-alignment",
+        "practical-method-alignment",
+        "practical-courseware",
+        "practical-standard",
+        "proxy-tooling-note",
+        "practical supplement",
+        "courseware supplement",
+        "instructional alignment supplement",
     ]
-    assert not bad, f"Lab 05 has indented markdown headings that render as code: {bad[:5]}"
-    headings = {heading.normalized for heading in markdown_headings(block)}
-    assert "lab 05 practical courseware supplement" in headings
-    assert "method being taught" in headings
-    assert "required student authored variation" in headings
+    concise_boundary = (
+        "Use only the provided local weak target and synthetic data. Do not test third-party systems, "
+        "production services, real credentials, or customer data."
+    )
+    for path in LAB_FILES:
+        text = read(path)
+        headings = markdown_headings(text)
+        assert sum(1 for heading in headings if heading.level == 1) == 1, f"{path} must have exactly one H1"
+        h2_counts = {
+            heading.normalized: sum(1 for item in headings if item.level == 2 and item.normalized == heading.normalized)
+            for heading in headings
+            if heading.level == 2
+        }
+        duplicated = {
+            heading: count
+            for heading, count in h2_counts.items()
+            if count > 1 and heading in canonical_h2
+        }
+        assert not duplicated, f"{path} duplicates canonical H2 sections: {duplicated}"
+        for phrase in forbidden:
+            assert phrase.lower() not in text.lower(), f"{path} contains legacy residue {phrase!r}"
+        assert concise_boundary in text, f"{path} missing concise safety boundary"
+        assert "artifact-manifest.json" in text
+        assert "SHA256SUMS.txt" in text
 
 
 def test_lab00_has_one_canonical_student_setup_path() -> None:
@@ -158,6 +194,17 @@ def test_proxy_tooling_policy_exists_and_preserves_foss_required_path_with_optio
     assert "burp suite" in policy
     assert "optional and never mandatory" in policy
     assert "evidence equivalent" in policy or "equivalent evidence" in policy
+    corpus = "\n".join(
+        read(path)
+        for path in [
+            Path("docs/workshop/README.md"),
+            Path("docs/workshop/workshop-contract.md"),
+            Path("docs/workshop/practical-adversarial-lab-standard.md"),
+        ]
+    ).lower()
+    assert "required baseline path: owasp zap and mitmproxy" in corpus
+    assert "optional professional path: burp suite may be used" in corpus
+    assert "all required evidence must remain reproducible" in corpus
 
 
 def test_burp_is_never_required_or_exclusive_in_student_facing_docs() -> None:

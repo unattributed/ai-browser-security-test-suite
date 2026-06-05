@@ -36,7 +36,9 @@ The risk is that untrusted browser content can influence model-bound context, re
 
 ## Safety and authorization boundary
 
-This lab stays inside the workshop operating boundary: local-only, synthetic-only, authorized-only, against `ollama-webui` on loopback. Do not use real credentials, real tokens, real cookies, real customer data, public callback endpoints, third-party targets, production SaaS tenants, malware behavior, persistence, destructive behavior, or production hardening of the weak target. Do not install, reinstall, upgrade, or modify NVIDIA drivers.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
+
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -1310,44 +1312,6 @@ Lab 02 is complete when the student can show:
 16. The student can explain why model output is evidence rather than policy.
 17. The student can explain why the result is no production security validation.
 
-## Safety and authorization boundary
-
-All Lab 02 activity must remain inside the authorized local workshop environment.
-
-Allowed:
-
-```text
-local intentionally vulnerable ollama-webui target
-loopback fixture server
-synthetic HTML fixtures
-SYNTHETIC-LAB-MARKER
-student-authored local variation
-browser evidence
-local proxy evidence
-local model-bound context review
-manifest and checksum evidence
-```
-
-Not allowed:
-
-```text
-third-party targeting
-public callback infrastructure
-real credential collection
-real token collection
-real cookie collection
-real customer data
-malware behavior
-persistence
-destructive behavior
-production SaaS testing
-production hardening of the weak target
-NVIDIA driver installation, reinstallation, upgrade, or modification
-snap-based tooling requirements
-```
-
-This boundary is the rules-of-engagement statement for the lab. It does not make the technique less real. It keeps the exercise authorized, reproducible, reviewable, and safe for a hands-on training environment.
-
 ## Automated End-to-End Evidence Runner
 
 Lab 02 includes a one-command end-to-end live evidence runner:
@@ -1418,15 +1382,3 @@ student did not retain mitmproxy CA private material in the final evidence archi
 Partial credit may be appropriate when a required tool is missing but the student records the missing-tool status honestly and completes all non-proxy evidence paths. Missing required proxy tooling is still a workstation readiness failure for this lab.
 
 Fail the submission if the student fabricates evidence, targets anything outside loopback, uses real credentials or real customer data, runs broad active scanning, omits model-bound context comparison, omits proxy comparison, omits marker provenance, omits the student-authored variation, or makes an unsupported production claim.
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

@@ -6,7 +6,7 @@ This document defines the practical lab-construction standard for the Browser-Sa
 
 The workshop is designed for experienced security practitioners. A lab is not workshop-ready merely because it has prose, a fixture generator, or a passing unit test. A workshop-ready lab must make the student execute a bounded local adversarial exercise, capture evidence, compare artifacts, and defend the conclusion.
 
-This standard is local-only, synthetic-only, and authorized-only. It does not authorize testing third-party systems, production SaaS tenants, real users, real credentials, real customer data, public callback endpoints, malware, token theft, credential theft, MFA bypass, persistence, browser command and control, or production policy changes.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
 Required exact non-claim phrase for validation and reviewer review: no production security validation.
 
@@ -90,7 +90,7 @@ broad community-template scans without local guardrails
 GraphQL-specific tools unless the local target is proven to expose GraphQL
 ```
 
-Burp Suite Community or Professional may be mentioned only as optional professional comparison tooling. Burp must not be a required gate for this project because the required lab toolchain must remain free, open source, local, and reproducible without accounts.
+Burp Suite Community or Professional may be mentioned only as optional professional comparison tooling. Required baseline path: OWASP ZAP and mitmproxy. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools.
 
 ## Safe adversarial fixture rule
 

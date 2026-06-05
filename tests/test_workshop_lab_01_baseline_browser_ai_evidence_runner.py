@@ -94,6 +94,6 @@ def test_lab01_doc_references_canonical_runner_and_student_variation() -> None:
         "browser source, DOM, visible text, and screenshot evidence",
         "student-authored variation",
         "docs/workshop/proxy-tooling.md",
-        "Burp Suite is optional and never required for this lab",
+            "Optional professional path: Burp Suite may be used by students who already use it",
     ]:
         assert term in text

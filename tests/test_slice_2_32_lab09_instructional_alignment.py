@@ -7,11 +7,11 @@ LAB09_DOC = LABS_DIR / "09-synthetic-sensitive-data-handling.md"
 
 REQUIRED_SECTIONS = [
     "Method being taught",
-    "Real-world TTP being emulated",
+    "Real-world behavior being emulated",
     "Local-only PoC payload or controlled test input",
     "Step-by-step execution",
     "Required student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",
@@ -94,8 +94,8 @@ def test_lab09_teaches_a_practical_evidence_first_method() -> None:
         ["evidence-first", "synthetic", "direct HTTP", "browser", "model-bound context", "finding"],
     )
     assert_terms(
-        "Real-world TTP being emulated",
-        sections["Real-world TTP being emulated"],
+        "Real-world behavior being emulated",
+        sections["Real-world behavior being emulated"],
         ["browser-based AI", "sensitive-looking", "summarization", "artifacts"],
     )
     assert_terms(
@@ -123,8 +123,8 @@ def test_lab09_execution_requires_multiple_evidence_surfaces() -> None:
         ],
     )
     assert_terms(
-        "Evidence that proves the variation worked",
-        sections["Evidence that proves the variation worked"],
+        "Evidence to collect",
+        sections["Evidence to collect"],
         [
             "direct local HTTP response",
             "proxy flow",
@@ -194,13 +194,12 @@ def test_lab09_safety_boundary_preserves_authorized_synthetic_scope() -> None:
         sections["Safety and authorization boundary"],
         [
             "local",
-            "authorized",
             "synthetic",
-            "intentionally vulnerable workshop target",
+            "provided local weak target",
             "Do not test third-party systems",
-            "Do not use real credentials",
-            "Do not harden the weak target",
-            "Model output is not a security decision",
+            "real credentials",
+            "leave the intentionally weak target unchanged",
+            "do not claim production security validation",
         ],
     )
 

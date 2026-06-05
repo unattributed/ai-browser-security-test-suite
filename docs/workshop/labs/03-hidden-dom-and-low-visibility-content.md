@@ -64,29 +64,9 @@ A vulnerable browser-AI path may:
 
 ## Safety and authorization boundary
 
-This lab must remain local, authorized, synthetic, and scoped to the intentionally vulnerable workshop target.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Allowed:
-
-1. Local loopback targets.
-2. Synthetic markers.
-3. Local controlled inputs.
-4. The intentionally vulnerable `ollama-webui` target.
-5. Reviewer-grade evidence collection inside the workshop scope.
-
-Not allowed:
-
-1. Third-party targets.
-2. Public callback infrastructure.
-3. Real credential collection.
-4. Token theft.
-5. Malware behavior.
-6. Persistence.
-7. Destructive behavior.
-8. Production SaaS testing.
-9. Production hardening of the weak target.
-10. NVIDIA driver installation, reinstallation, upgrade, or modification.
-11. Snap-based setup instructions.
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -624,15 +604,3 @@ Students must explain which evidence source proves that the `SYNTHETIC-LAB-MARKE
 Practical proxy evidence exercise coverage for Lab 03 is provided by the hidden DOM end-to-end live evidence runner and must be reviewed alongside `docs/workshop/local-proxy-evidence-workflow.md` and `docs/workshop/proxy-tooling.md`.
 
 This cross-reference keeps Lab 03 aligned with the practical adversarial lab standard: direct HTTP capture, proxied HTTP capture, browser source, parsed DOM, visible text, screenshot, marker provenance, model-bound context review, manifest, checksums, and reviewer archive output are required before the lab can be treated as closed for workshop release-candidate purposes.
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

@@ -32,13 +32,14 @@ REQUIRED_PHRASES = {
 }
 
 WORKSHOP_BOUNDARY_PHRASES = [
-    "workshop operating boundary",
+    "Use only the provided local weak target and synthetic data.",
+    "Do not test third-party systems, production services, real credentials, or customer data.",
     "local-only",
     "synthetic-only",
     "authorized-only",
     "ollama-webui",
     "127.0.0.1:11435",
-    "Do not install packages",
+    "do not install or modify NVIDIA drivers",
     "do not claim production security validation",
 ]
 

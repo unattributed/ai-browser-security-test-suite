@@ -41,13 +41,13 @@ def test_lab00_document_preserves_practical_poc_and_reporting_contract():
 def test_lab00_document_preserves_workshop_boundary_without_phrase_dependency():
     content = Path("docs/workshop/labs/00-environment-and-target-setup.md").read_text(encoding="utf-8")
     required = [
-        "This lab must remain local and synthetic",
         "local-only",
         "synthetic-only",
         "authorized-only",
         "ollama-webui",
         "127.0.0.1:11435",
-        "without installing system packages or changing the target",
+        "Use only the provided local weak target and synthetic data.",
+        "Do not test third-party systems, production services, real credentials, or customer data.",
         "do not claim production security validation",
     ]
     missing = [phrase for phrase in required if phrase not in content]

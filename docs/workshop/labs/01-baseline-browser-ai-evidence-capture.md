@@ -60,47 +60,9 @@ The risk demonstrated by this lab is unsupported conclusion-making.
 
 ## Safety and authorization boundary
 
-This section defines the rules of engagement for the lab environment. The workshop teaches practical adversarial browser and AI security testing methods, but every exercise must remain inside the intentionally vulnerable local target so the evidence is reproducible, reviewable, and safe for a hands-on training setting.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-These restrictions are not meant to reduce the realism of the exercise. They define the authorized range where students may execute the method, modify the method, and collect evidence without involving systems, users, credentials, or services outside the workshop.
-
-This lab must remain local and synthetic.
-
-Do not test third-party systems.
-
-Do not test third-party AI products.
-
-Do not use real credentials.
-
-Do not use real customer data.
-
-Do not expose the lab target to the Internet.
-
-Do not replace `ollama-webui` with a production SaaS tenant.
-
-Do not treat model output as a security decision.
-
-Do not install, reinstall, upgrade, or modify NVIDIA drivers.
-
-Out-of-scope activity for this lab includes:
-
-* Third-party targeting
-* Public callback infrastructure
-* Real credential collection
-* Token theft
-* Malware behavior
-* Persistence
-* Destructive behavior
-* Production SaaS testing
-* NVIDIA driver installation
-
-## Safety and authorization boundary
-
-All activity in this lab must stay inside the authorized local workshop target and the local student workstation or workshop-provided VM.
-
-This boundary functions as the lab rules of engagement. It tells students what they are authorized to test, what evidence they are expected to collect, and where the exercise stops. Students may construct and execute the local proof-of-concept method, create their own synthetic variation, and document the result as a security finding only inside the provided local lab scope.
-
-The two safety headings are both retained intentionally. The short safety boundary gives students a plain-language checklist before they begin the exercise. The authorization boundary explains why the checklist exists and how it applies to practical adversarial testing in a training environment.
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Lab topology
 
@@ -164,7 +126,7 @@ Recommended tools:
 3. `tree` for evidence directory review.
 4. `tcpdump` or `tshark` for instructor-led packet-level locality evidence.
 
-Optional proxy tooling is governed by `docs/workshop/proxy-tooling.md`. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Optional proxy tooling is governed by `docs/workshop/proxy-tooling.md`. Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 ## FOSS practical interaction checkpoint
 
@@ -1067,7 +1029,6 @@ Ask the student:
 
 The student is ready for Lab 02 only after they can explain why evidence capture must begin before the first test interaction and can show a complete evidence directory with manifest and checksums.
 
-
 For manual ZAP browser proxy configuration, use these exact values:
 
 ```text
@@ -1077,17 +1038,4 @@ HTTPS proxy: 127.0.0.1
 Port: 8080
 ```
 
-
 For this Practical proxy evidence exercise, the student must explain that the proxy evidence proves the student used the local target, the interaction stayed inside the authorized local lab boundary, the baseline prompt was submitted, the student-authored variation was submitted, and the browser-visible result can be correlated with captured HTTP evidence.
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

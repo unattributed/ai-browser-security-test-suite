@@ -141,9 +141,9 @@ Explain how defenders, vendors, and incident responders should review similar cl
 
 ## Safety and authorization boundary
 
-This lab must remain local, authorized, synthetic, and scoped to the intentionally vulnerable workshop target. Do not test third-party systems. Do not test production SaaS tenants. Do not use real credentials, real API keys, real tokens, real customer data, real regulated data, or real incident data. Do not expose the local target to the Internet. Do not collect credential material. Do not add persistence, malware behavior, destructive behavior, or public callback infrastructure. Do not harden the weak target as part of this lab.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Model output is not a security decision. The report must be based on collected artifacts, manifests, checksums, and reviewer-verifiable evidence.
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Completion criteria
 
@@ -157,7 +157,6 @@ Lab 09 is complete only when the student can provide:
 6. A manifest and SHA256SUMS file.
 7. A reviewer archive and checksum.
 8. A short explanation of what the evidence proves and what it does not prove.
-
 
 ---
 
@@ -233,42 +232,6 @@ A vulnerable workflow may:
 - Fail to distinguish a true seeded-value hit from a negative control.
 - Produce a report that cannot prove which artifacts contained the raw values.
 
-## Safety and authorization boundary
-
-Do not test third-party systems or third-party AI products.
-
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no real cookies
-no real tokens
-no real API keys
-no public callback endpoints
-no public URL payloads
-no third-party AI products
-no production SaaS targets
-```
-
-Disallowed actions:
-
-```text
-secret hunting in uncontrolled repositories
-collection of production browser state
-collection of production cookies
-credential harvesting
-token extraction
-MFA bypass
-malware delivery
-browser command and control
-public callback testing
-uploading fixtures to third-party AI services
-```
-
 ## Workspace path convention
 
 Use this portable workspace declaration in every terminal that runs lab commands:
@@ -295,7 +258,7 @@ Required:
 - `mitmdump` or mitmproxy, to capture loopback HTTP traffic when proxy evidence is required.
 - OWASP ZAP, to perform passive local HTTP history review when available.
 
-Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Use `docs/workshop/proxy-tooling.md` for the repository-wide proxy tooling policy. Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 - `sha256sum` and `tar`, to preserve reviewer-verifiable evidence.
 
 Recommended:
@@ -591,7 +554,7 @@ public URLs or public callback endpoints are introduced
 third-party AI, DLP, or secret-scanning services are used
 ```
 
-## Defender interpretation
+### Defender interpretation note
 
 A secure browser-AI evidence pipeline should not treat raw evidence, redacted evidence, model-bound context, model output, and analyst reporting as the same trust tier.
 
@@ -669,15 +632,3 @@ no production security validation claim
 ```
 
 This runner does not prove production DLP, production secret detection, tenant isolation, real credential protection, real customer-data protection, or production browser-AI security. It teaches evidence handling boundaries using seeded local synthetic markers and preserves the intentionally weak target behavior needed for the workshop.
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

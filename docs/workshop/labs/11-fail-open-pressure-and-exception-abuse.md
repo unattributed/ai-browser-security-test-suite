@@ -75,45 +75,9 @@ A defensible workflow treats missing evidence and exception requests as evidence
 
 ## Safety and authorization boundary
 
-Do not test third-party systems or third-party AI products.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Required safety boundaries:
-
-```text
-local-only
-synthetic-only
-authorized-only
-no real credentials
-no real customer data
-no real cookies
-no real tokens
-no real API keys
-no public callback endpoints
-no public URL payloads
-no production SaaS targets
-no third-party AI products
-no persistent real policy change
-missing evidence must not allow
-```
-
-Disallowed actions:
-
-```text
-credential harvesting
-token extraction
-MFA bypass
-malware delivery
-browser command and control
-public callback testing
-production policy bypass attempts
-real allowlist changes
-real exception creation
-real feedback-loop training changes
-testing real browser security products without authorization
-uploading fixtures to third-party AI services
-using real bypass strings for deployed products
-claiming this simulator is a production exception system
-```
+Keep listeners on loopback, leave the intentionally weak target unchanged, do not install or modify NVIDIA drivers, and do not claim production security validation from local workshop evidence.
 
 ## Workspace path convention
 
@@ -503,8 +467,6 @@ The policy should not be delegated to page content, DOM content, screenshots, OC
 
 A real exception system must require explicit scope, owner, expiry, evidence references, reviewer identity, audit logging, rollback, and post-expiry verification. This lab only creates local synthetic evidence for teaching and review.
 
-<!-- slice-2.34-lab-11-practical-standard:start -->
-
 ### Lab 11 practical execution standard
 
 This supplement operationalizes the confirmed Lab 11 topic from the existing repository content: **Fail-Open Pressure and Exception Abuse; analyst evidence triage; vendor-risk evidence review; model trust-boundary review**. It preserves the original Lab 11 material above and turns the lab into an artifact-backed exercise the student can execute locally against the intentionally weak workshop workflow.
@@ -611,7 +573,7 @@ Common professional failure modes in this lab include:
 7. Leaving private proxy CA material in a live output directory or evidence archive when proxy tooling is used.
 8. Failing to record why live target-backed validation was not applicable when the canonical Lab 11 live runner cannot be executed safely in the local environment.
 
-## Defender interpretation
+### Defender interpretation note
 
 A defender should interpret a passing Lab 11 result as evidence that the student can distinguish browser-observed facts from AI interpretation. The key defensive question is not whether the model produced a confident response. The key question is whether independent artifacts prove the browser state, the model-bound context, the synthetic marker path, and the final analyst conclusion.
 
@@ -648,16 +610,6 @@ Defenders and vendors should require artifact provenance, model-bound context re
 Add provenance-aware review gates, preserve raw browser evidence, label model interpretation separately from browser truth, and require reviewer-grade manifests and checksums for AI-assisted browser security findings.
 ```
 
-## Safety and authorization boundary
-
-This lab must remain local, authorized, synthetic, and scoped to the intentionally weak workshop target or local fixture workflow. Do not test third-party systems. Do not use real credentials, real tokens, real customer data, real regulated data, production SaaS tenants, public callback infrastructure, malware behavior, persistence, destructive actions, or production hardening. Do not install, reinstall, upgrade, or modify NVIDIA drivers. Do not use snap-based instructions. Do not install packages from this lab. Use only free and open-source tooling already available in the prepared workshop environment or purpose-built local tools provided by the repository.
-
-Lab 11 is complete only when the student can hand a reviewer a local evidence archive, a checksum sidecar, a manifest, the controlled input, the student-authored variation, the cross-surface review, and a reportable finding that separates browser-observed evidence from model interpretation.
-
-<!-- slice-2.34-lab-11-practical-standard:end -->
-
-<!-- slice-2.36-lab11-runner-note:start -->
-
 ## Canonical live evidence runner
 
 The repository includes a Lab 11 live evidence runner. Use it when live target-backed validation is safe and applicable in the local environment:
@@ -669,28 +621,8 @@ $HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python tools/run_worksh
 
 If the runner cannot be executed in a specific local environment, record the concrete blocker in the evidence notes. Student-facing Lab 11 documentation must reflect the current repository runner state.
 
-<!-- slice-2.36-lab11-runner-note:end -->
-
-<!-- slice-2.36-proxy-tooling-note:start -->
-
 ## Proxy tooling and evidence equivalence
 
-The required completion path for this lab uses free and open source tooling. Use OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg or grep, ss, nmap, and sha256sum where the lab workflow calls for those evidence surfaces. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`.
-
-Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
+Required baseline path: OWASP ZAP and mitmproxy or mitmdump for proxy evidence, plus the repository Python tooling and local browser evidence workflow named in this lab. Optional professional path: Burp Suite may be used by students who already use it, but all required evidence must remain reproducible with the baseline tools. The repository-wide proxy policy is `docs/workshop/proxy-tooling.md`. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
-
-<!-- slice-2.36-proxy-tooling-note:end -->
-
-## Real-world TTP being emulated
-
-Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
-
-## Evidence that proves the variation worked
-
-Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
-
-## Safety boundary
-
-Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

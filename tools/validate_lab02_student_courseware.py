@@ -24,11 +24,11 @@ LAB02_RUNNER_TEST = Path("tests/test_workshop_lab_02_live_evidence_runner.py")
 
 REQUIRED_SECTIONS = [
     "Method being taught",
-    "Real-world TTP being emulated",
+    "Real-world behavior being emulated",
     "Local-only PoC payload or controlled test input",
     "Step-by-step execution",
     "Required student-authored variation",
-    "Evidence that proves the variation worked",
+    "Evidence to collect",
     "Expected failure modes",
     "Defender interpretation",
     "Reportable finding",
