@@ -32,7 +32,22 @@ DOC_PATHS = [
     Path("docs/workshop/troubleshooting.md"),
 ]
 
-LAB_DOCS = sorted(Path("docs/workshop/labs").glob("*.md"))
+CANONICAL_LAB_FILES = [
+    "00-environment-and-target-setup.md",
+    "01-baseline-browser-ai-evidence-capture.md",
+    "02-indirect-prompt-injection-through-browser-content.md",
+    "03-hidden-dom-and-low-visibility-content.md",
+    "04-dom-versus-rendered-page-mismatch.md",
+    "05-screenshot-and-visual-deception.md",
+    "06-iframe-and-frame-tree-source-confusion.md",
+    "07-delayed-content-and-state-transition-risk.md",
+    "08-qr-handoff-and-off-browser-transition-risk.md",
+    "09-synthetic-sensitive-data-handling.md",
+    "10-model-verdict-manipulation-and-policy-simulator.md",
+    "11-fail-open-pressure-and-exception-abuse.md",
+    "12-capstone-attack-chain-evidence-package.md",
+]
+LAB_DOCS = [Path("docs/workshop/labs") / name for name in CANONICAL_LAB_FILES]
 EXAMPLES_README = Path("examples/browser-safe-ai-methods/README.md")
 WORKSHOP_CONTRACT = Path("docs/workshop/workshop-contract.md")
 STUDENT_FACING_DOCS = [
