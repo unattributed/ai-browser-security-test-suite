@@ -1,0 +1,33 @@
+{
+  "authorized_only": true,
+  "case_id": "23-ollama-service-exposure-boundary/variation-02-localhost-generation-compute",
+  "expected_boundary": "Execute the paired local synthetic Browser-Safe AI method payload and preserve replayable evidence.",
+  "local_only": true,
+  "method_dir": "23-ollama-service-exposure-boundary",
+  "no_destructive_commands": true,
+  "no_host_escape_payloads": true,
+  "payload_file": "variation-02-localhost-generation-compute.payload.txt",
+  "schema_version": "browser-safe-ai-method-request/v1",
+  "steps": [
+    {
+      "artifact": "health.json",
+      "endpoint": "/health",
+      "method": "GET",
+      "name": "weak-target-health"
+    },
+    {
+      "artifact": "model-stream.ndjson",
+      "body": {
+        "model": "$MODEL",
+        "prompt_file": "variation-02-localhost-generation-compute.payload.txt"
+      },
+      "endpoint": "/api/generate",
+      "method": "POST",
+      "name": "model-generation",
+      "stream": true
+    }
+  ],
+  "synthetic_only": true,
+  "variation": "variation-02-localhost-generation-compute",
+  "variation_doc": "variation-02-localhost-generation-compute.md"
+}

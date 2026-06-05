@@ -37,6 +37,25 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/tags" | jq .
 ```
 
+## Executable replay
+
+This folder includes concrete request examples, not only payload contracts:
+
+- `variation-01-model-inventory-exposure.request.json`
+- `variation-02-localhost-generation-compute.request.json`
+- `variation-03-service-bind-and-proxy-metadata.request.json`
+
+Replay one safely against the weak local target:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+.venv/bin/python examples/browser-safe-ai-methods/replay_local_method.py \
+  --case 23-ollama-service-exposure-boundary/variation-01-model-inventory-exposure \
+  --target-url http://127.0.0.1:11435
+```
+
+The replay demonstrates that model inventory, local generation compute, and helper metadata are exposed service boundaries. It records direct local responses, manifest, and checksums. It does not use external services, real credentials, destructive commands, persistence, target hardening, or host escape.
+
 ## Variations
 - [Variation 1: model-inventory-exposure](variation-01-model-inventory-exposure.md)
 - [Variation 2: localhost-generation-compute](variation-02-localhost-generation-compute.md)

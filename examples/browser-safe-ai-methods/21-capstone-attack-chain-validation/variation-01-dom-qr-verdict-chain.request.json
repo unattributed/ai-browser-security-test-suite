@@ -1,0 +1,45 @@
+{
+  "authorized_only": true,
+  "case_id": "21-capstone-attack-chain-validation/variation-01-dom-qr-verdict-chain",
+  "expected_boundary": "Execute the paired local synthetic Browser-Safe AI method payload and preserve replayable evidence.",
+  "local_only": true,
+  "method_dir": "21-capstone-attack-chain-validation",
+  "no_destructive_commands": true,
+  "no_host_escape_payloads": true,
+  "payload_file": "variation-01-dom-qr-verdict-chain.payload.txt",
+  "schema_version": "browser-safe-ai-method-request/v1",
+  "steps": [
+    {
+      "artifact": "health.json",
+      "endpoint": "/health",
+      "method": "GET",
+      "name": "weak-target-health"
+    },
+    {
+      "artifact": "target-contract.json",
+      "endpoint": "/api/browser-safe/target-contract",
+      "method": "GET",
+      "name": "target-contract"
+    },
+    {
+      "artifact": "route-browser-safe-redirect-start-variant-encoded.http",
+      "endpoint": "/browser-safe/redirect/start?variant=encoded",
+      "method": "GET",
+      "name": "route-probe"
+    },
+    {
+      "artifact": "model-stream.ndjson",
+      "body": {
+        "model": "$MODEL",
+        "prompt_file": "variation-01-dom-qr-verdict-chain.payload.txt"
+      },
+      "endpoint": "/api/generate",
+      "method": "POST",
+      "name": "model-generation",
+      "stream": true
+    }
+  ],
+  "synthetic_only": true,
+  "variation": "variation-01-dom-qr-verdict-chain",
+  "variation_doc": "variation-01-dom-qr-verdict-chain.md"
+}

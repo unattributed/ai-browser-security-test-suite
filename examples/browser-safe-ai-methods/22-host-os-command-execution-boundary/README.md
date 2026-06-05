@@ -37,6 +37,26 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/project/defaults" | jq .
 ```
 
+## Executable replay
+
+This folder includes concrete request examples, not only payload contracts:
+
+- `variation-01-git-status-host-command.request.json`
+- `variation-02-python-compile-host-command.request.json`
+- `variation-03-git-diff-stat-host-command.request.json`
+
+Replay one safely against the weak local target:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+.venv/bin/python examples/browser-safe-ai-methods/replay_local_method.py \
+  --case 22-host-os-command-execution-boundary/variation-01-git-status-host-command \
+  --target-url http://127.0.0.1:11435 \
+  --project-root "$HOME/Workspace/ai-browser-security-test-suite"
+```
+
+The replay demonstrates that `/api/project/run` crosses into host command execution for allowlisted read-only commands. It records command, argv, cwd-derived scope, stdout, stderr, exit code, manifest, and checksums. It deliberately does not attempt shell breakout, persistence, credential access, target hardening, or host escape.
+
 ## Variations
 - [Variation 1: git-status-host-command](variation-01-git-status-host-command.md)
 - [Variation 2: python-compile-host-command](variation-02-python-compile-host-command.md)

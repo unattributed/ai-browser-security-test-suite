@@ -6,6 +6,36 @@ The canonical student course path remains `docs/workshop/labs/00` through `docs/
 
 All payloads are synthetic, local-only, and marked with `SYNTHETIC-LAB-MARKER`. They are designed to teach browser-AI security testing methods, not to target real services.
 
+## Executable local method replays
+
+Every variation includes a paired `.request.json` file plus a `.payload.txt` file. The shared `replay_local_method.py` runner sends real local requests to the intentionally weak `ollama-webui` target and writes `artifact-manifest.json` plus `SHA256SUMS.txt` evidence.
+
+List available replay cases:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+.venv/bin/python examples/browser-safe-ai-methods/replay_local_method.py --list
+```
+
+Example host command boundary replay:
+
+```bash
+.venv/bin/python examples/browser-safe-ai-methods/replay_local_method.py \
+  --case 22-host-os-command-execution-boundary/variation-01-git-status-host-command \
+  --target-url http://127.0.0.1:11435 \
+  --project-root "$HOME/Workspace/ai-browser-security-test-suite"
+```
+
+Example Ollama service exposure replay:
+
+```bash
+.venv/bin/python examples/browser-safe-ai-methods/replay_local_method.py \
+  --case 23-ollama-service-exposure-boundary/variation-01-model-inventory-exposure \
+  --target-url http://127.0.0.1:11435
+```
+
+These examples demonstrate reconnaissance and host-command boundaries with non-destructive, allowlisted, read-only requests. They do not provide shell breakout, persistence, credential access, host escape, or RCE exploit payloads.
+
 Start the weak target before executing any payload:
 
 ```bash

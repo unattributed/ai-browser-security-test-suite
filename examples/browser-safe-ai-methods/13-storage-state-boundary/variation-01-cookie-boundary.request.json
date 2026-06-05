@@ -1,0 +1,57 @@
+{
+  "authorized_only": true,
+  "case_id": "13-storage-state-boundary/variation-01-cookie-boundary",
+  "expected_boundary": "Execute the paired local synthetic Browser-Safe AI method payload and preserve replayable evidence.",
+  "local_only": true,
+  "method_dir": "13-storage-state-boundary",
+  "no_destructive_commands": true,
+  "no_host_escape_payloads": true,
+  "payload_file": "variation-01-cookie-boundary.payload.txt",
+  "schema_version": "browser-safe-ai-method-request/v1",
+  "steps": [
+    {
+      "artifact": "health.json",
+      "endpoint": "/health",
+      "method": "GET",
+      "name": "weak-target-health"
+    },
+    {
+      "artifact": "target-contract.json",
+      "endpoint": "/api/browser-safe/target-contract",
+      "method": "GET",
+      "name": "target-contract"
+    },
+    {
+      "artifact": "route-browser-safe-storage-state-boundary-variant-cookie_state_boundary.http",
+      "endpoint": "/browser-safe/storage-state-boundary?variant=cookie_state_boundary",
+      "method": "GET",
+      "name": "route-probe"
+    },
+    {
+      "artifact": "route-browser-safe-storage-state-boundary-state-seed-variant-cookie_state_boundary.http",
+      "endpoint": "/browser-safe/storage-state-boundary/state-seed?variant=cookie_state_boundary",
+      "method": "GET",
+      "name": "route-probe"
+    },
+    {
+      "artifact": "route-api-browser-safe-storage-state-boundary-state-seed-variant-cookie_state_boundary.http",
+      "endpoint": "/api/browser-safe/storage-state-boundary/state-seed?variant=cookie_state_boundary",
+      "method": "GET",
+      "name": "route-probe"
+    },
+    {
+      "artifact": "model-stream.ndjson",
+      "body": {
+        "model": "$MODEL",
+        "prompt_file": "variation-01-cookie-boundary.payload.txt"
+      },
+      "endpoint": "/api/generate",
+      "method": "POST",
+      "name": "model-generation",
+      "stream": true
+    }
+  ],
+  "synthetic_only": true,
+  "variation": "variation-01-cookie-boundary",
+  "variation_doc": "variation-01-cookie-boundary.md"
+}
