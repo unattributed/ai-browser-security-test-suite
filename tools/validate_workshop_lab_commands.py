@@ -170,7 +170,7 @@ def validate() -> list[str]:
     if not LAB_DIR.is_dir():
         return [f"missing lab directory: {LAB_DIR.relative_to(REPO_ROOT)}"]
 
-    actual = sorted(path.name for path in LAB_DIR.glob("*.md"))
+    actual = sorted(path.name for path in LAB_DIR.glob("*.md") if path.name != "README.md")
     expected = CANONICAL_LAB_FILES
     if actual != expected:
         errors.append(

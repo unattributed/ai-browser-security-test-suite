@@ -13,6 +13,7 @@ local_lab/
 # Generated reports, keep directory placeholder
 reports/*
 !reports/.gitkeep
+!reports/README.md
 
 # Editor and OS noise
 .vscode/
