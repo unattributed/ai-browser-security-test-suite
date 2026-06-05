@@ -68,7 +68,7 @@ def main() -> int:
         print(f"[error] missing {LAB_DIR}", file=sys.stderr)
         return 1
 
-    labs = sorted(LAB_DIR.glob("*.md"))
+    labs = sorted(path for path in LAB_DIR.glob("*.md") if path.name != "README.md")
     if not labs:
         print(f"[error] no lab markdown files found under {LAB_DIR}", file=sys.stderr)
         return 1

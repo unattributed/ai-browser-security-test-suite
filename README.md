@@ -1,892 +1,192 @@
 # AI Browser Security Test Suite
 
-AI Browser Security Test Suite is a Python-based validation framework for browser-based AI ecosystems.
+AI Browser Security Test Suite is a local validation toolkit and workshop track for browser-based AI security testing.
 
-The public test suite is now centered on one supported local target:
+It pairs a Python evidence harness with the deliberately weak local [`ollama-webui`](https://github.com/unattributed/ollama-webui) target so practitioners can run repeatable browser-AI security exercises without testing third-party systems.
 
-```text
-https://github.com/unattributed/ollama-webui
-```
+## What this is
 
-`ollama-webui` is used as the suite's deliberately weak, locally runnable browser-based LLM app for testing, prototyping, and demonstrating browser-AI security weaknesses safely. The goal is to give blue teams, security engineers, product security teams, penetration testers, and organizations a reproducible target that does not require testing against third-party systems.
+This repository provides:
 
-## Research basis
+- safe synthetic browser-AI test cases
+- local lab runners for Labs 00 through 12
+- Playwright-backed browser evidence collection
+- proxy and HTTP evidence workflows
+- structured JSON and JSONL evidence
+- deterministic artifact hashing and manifests
+- courseware, reviewer material, and validation checks
 
-This repository is the executable validation layer for the Browser-Safe AI Systems research series:
+The project is the executable lab and evidence layer for the Browser-Safe AI Systems research series:
 
 ```text
 https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
 ```
 
-The series argues that browser-based AI systems must treat webpage content, rendered text, hidden DOM, metadata, screenshots, QR handoffs, delayed content, user feedback, and exception requests as adversarial inputs.
+## Who this is for
 
-This repository turns those claims into repeatable tests against a controlled local target. The public workflow intentionally uses `unattributed/ollama-webui` as a deliberately weak local browser-based LLM app so the test suite can demonstrate risk patterns without encouraging testing against third-party systems.
+This project is written for cyber security professionals who need reproducible browser-AI validation rather than screenshots, anecdotes, or model-only claims.
 
-The intended review model is:
+Primary users include:
 
-```text
-research claim -> safe synthetic probe -> browser evidence -> model response -> structured report -> analyst review
-```
+- red teamers
+- product security engineers
+- AI security engineers
+- browser security researchers
+- SOC and detection engineers
+- incident responders
+- vendor-risk and assurance reviewers
+- instructors running the local workshop track
 
-## Core thesis
+## What it tests
 
-Browser-based AI systems should be treated as controlled security pipelines, not as magic models.
+The toolkit validates browser-based AI workflows against local synthetic cases, including:
 
-This project follows four principles:
+- indirect prompt injection through browser content
+- hidden DOM and low-visibility content
+- DOM versus rendered-page mismatch
+- screenshot and visual deception cases
+- iframe and frame-tree source confusion
+- delayed content and state-transition risk
+- QR handoff and off-browser transition risk
+- synthetic sensitive-data handling
+- model verdict manipulation and policy simulation
+- fail-open pressure and exception abuse
+- capstone attack-chain evidence packaging
 
-```text
-browser content = untrusted input
-AI verdict = advisory signal
-policy decision = deterministic control
-evidence = mandatory output
-```
-
-Hostile browser content can include visible text, hidden DOM, metadata, screenshots, QR codes, Unicode lookalikes, delayed content, file names, user feedback, and exception requests.
-
-The model must not become the policy authority.
-
-## Supported target model
-
-The default and recommended test target is:
-
-```text
-unattributed/ollama-webui
-```
-
-Expected local target:
+The supported public target is the local weak target repository:
 
 ```text
+https://github.com/unattributed/ollama-webui
 http://127.0.0.1:11435/
 ```
 
-Expected local Ollama backend:
-
-```text
-http://127.0.0.1:11434
-```
-
-Why this target is used:
-
-```text
-public repository
-local-only execution
-browser-based AI workflow
-Ollama-backed LLM behavior
-stable selectors for Playwright testing
-safe environment for repeatable proof-of-concept validation
-no third-party target required
-```
-
-All public scripts are written to focus on this local target or on local generated lab pages. Any broader black-box testing must be driven by an explicit client-provided scope file and written authorization.
-
 ## Safety boundary
 
-This repository is for authorized testing, local validation, defensive research, and professional due diligence.
+Use only the provided local weak target and synthetic data. Do not test third-party systems, production services, real credentials, or customer data.
 
-Do not use this suite for:
+This workshop does not harden the weak target, certify vendor products, test production SaaS, or provide exploit development training against real systems.
 
-```text
-unauthorized scanning
-credential theft
-cookie theft
-token extraction
-browser C2
-MFA bypass tooling
-destructive tests
-exploit automation
-third-party testing without written authorization
-```
+## Quick start
 
-The included probes use synthetic markers and local test cases. They are designed to demonstrate weakness patterns without collecting real credentials, real tokens, real cookies, or real personal data.
-
-## What this project provides
-
-The current release provides:
-
-```text
-safe browser-AI test case definitions
-local HTML lab generation
-playable local browser-safe AI examples mapped to the series
-Ollama Web UI local target validation
-Playwright browser evidence capture
-structured JSONL evidence
-deterministic artifact manifest with SHA256 hashing
-explicit evidence and artifact manifest schema contracts
-Markdown reporting
-article-series mapping
-coverage auditing against the research series
-guided lab manifest validation for professional lab exercises
-free and open source tooling requirement for guided labs with purpose-built Python fallback
-artifact-backed browser tests for visual deception, DOM/render mismatch, QR handoff, delayed DOM mutation, iframe frame-tree evidence, and storage-state boundary evidence
-deterministic uploaded-file analysis tests for the local Ollama Web UI target
-deterministic Project Agent tests for local project guardrails, file reads, search, model type controls, copy controls, and allowlisted tool execution
-playground files for safe local ollama-webui upload practice
-authorized scope-file structure for exceptional client engagements
-```
-
-The suite validates:
-
-```text
-local generated test pages
-the local ollama-webui target
-browser-based AI behavior against synthetic unsafe markers
-artifact-backed browser evidence for selected attack classes
-uploaded-file prompt construction, untrusted-content boundaries, redaction risk, and size-limit handling
-local project context handling, tool-output boundaries, model type filtering, and chat copy-control placement
-evidence quality for analysts and product-security review
-browser storage boundary evidence for cookies, localStorage, sessionStorage, cache-like state, and model-bound context separation
-artifact path, size, SHA256, timestamp, source tool, and source test traceability
-evidence record and artifact manifest contract validation
-```
-
-
-## Guided redirect-chain lab
-
-The toolkit includes an implemented Guided Lab Mode slice for local redirect-chain evidence.
-
-```text
-guided.redirect_chain_evidence
-```
-
-Target scenario:
-
-```text
-browser.redirect_chain
-```
-
-Purpose-built free and open-source helper:
+Clone the toolkit and weak target side by side:
 
 ```bash
-python tools/run_redirect_chain_lab.py \
-  --base-url http://127.0.0.1:11435 \
-  --variant all \
-  --out-dir /tmp/browser-safe-redirect-chain-lab
+cd "$HOME/Workspace"
+git clone https://github.com/unattributed/ai-browser-security-test-suite.git
+git clone https://github.com/unattributed/ollama-webui.git
 ```
 
-The helper captures the local redirect path, HTTP status sequence, final URL, final page HTML, model-bound context artifact, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and lab report. It refuses non-loopback redirect locations and is intended only for local synthetic testing against the `ollama-webui` target.
-
-## Guided iframe/frame-tree lab
-
-The toolkit includes an implemented local-only Guided Lab Mode slice for browser-observed iframe/frame-tree evidence.
-
-```text
-guided.iframe_frame_tree_evidence
-```
-
-Target scenario:
-
-```text
-browser.iframe_frame_tree
-```
-
-Purpose-built free and open-source helper:
+Create the toolkit environment and install development dependencies:
 
 ```bash
-python tools/run_iframe_frame_tree_lab.py \
-  --base-url http://127.0.0.1:11435 \
-  --variant all \
-  --out-dir /tmp/browser-safe-iframe-frame-tree-lab
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e ".[dev]"
 ```
 
-The helper captures `frame-tree.json`, `frame-url-list.txt`, `top-page-dom-snapshot.html`, child frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient.
-
-
-## Guided storage state boundary lab
-
-The toolkit includes an implemented local-only Guided Lab Mode slice for browser storage-state boundary evidence.
-
-```text
-guided.storage_state_boundary_evidence
-```
-
-Target scenario:
-
-```text
-browser.storage_state_boundary
-```
-
-Purpose-built free and open-source helper:
+Start the weak local target in a separate terminal:
 
 ```bash
-python tools/run_storage_state_boundary_lab.py \
-  --base-url http://127.0.0.1:11435 \
-  --variant all \
-  --out-dir /tmp/browser-safe-storage-state-boundary-lab
+cd "$HOME/Workspace/ollama-webui"
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python "$HOME/Workspace/ollama-webui/scripts/pull_model.py"
 ```
 
-The helper captures `browser-state-before.json`, `browser-state-after.json`, cookie findings, localStorage findings, sessionStorage findings, cache-like state findings, `model-bound-context.txt`, `model-response.json`, `state-boundary-findings.json`, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable report. Browser rendering and browser storage observation are required. Static HTML parsing alone is not sufficient. Protected browser state is synthetic and is preserved as bounded evidence while remaining outside model-bound context.
-
-<!-- storage-state-boundary-evidence-chain-v8.10.2:start -->
-
-### Storage-state-boundary evidence chain
-
-The storage-state-boundary evidence chain is indexed for reviewer navigation in:
-
-```text
-docs/validation/README.md
-```
-
-The index links the v8.9.9 evidence closure document, the v8.10.0 reviewer workflow document, and the v8.10.1 reviewer acceptance gate document. It records the evidence archive name, SHA256, guided lab id, target scenario id, five validated variants, evidence record count of 5, and manifest artifact count of 70.
-
-This is a documentation index for the existing local-only, synthetic-only, authorized-only evidence set. It does not rerun the lab, modify runtime code, modify the target app, or make a production security claim.
-
-<!-- storage-state-boundary-evidence-chain-v8.10.2:end -->
-
-
-## Attack classes covered
-
-| Attack class | Series reference | Current support |
-|---|---:|---|
-| Indirect prompt injection through web pages | Part 09 | safe local case, Ollama Web UI prompt probe |
-| Hostile DOM, hidden text, and metadata manipulation | Part 10 | safe local case, Ollama Web UI prompt probe |
-| Screenshot-based prompt injection and visual deception | Part 11 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
-| DOM versus rendered page mismatch | Part 12 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
-| QR phishing, brand impersonation, and multistage lures | Part 13 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
-| Unicode, homograph, and visual spoofing attacks | Part 14 | safe local case, Ollama Web UI prompt probe |
-| Delayed content, region-gated pages, and evasive phishing | Part 15 | artifact-backed browser case, safe local case, Ollama Web UI prompt probe |
-| AI verdict manipulation and false negative risk | Part 16 | Ollama Web UI prompt probe |
-| False positives, alert fatigue, and trust erosion | Part 17 | safe local case, Ollama Web UI prompt probe |
-| Data handling risks: screenshots, DOM, URLs, and user context | Part 18 | safe local case, upload validation, Project Agent validation |
-| Privacy, retention, redaction, and tenant isolation | Part 19 | safe local case, upload validation, Project Agent validation |
-| Model output handling and constrained verdicts | Part 20 | safe local case, Ollama Web UI prompt probe, Project Agent validation |
-| Fail-open versus fail-closed decisions | Part 21 | safe local case, Ollama Web UI prompt probe, Project Agent validation |
-| Feedback-loop poisoning and exception abuse | Part 22 | Ollama Web UI prompt probe |
-
-Supporting series areas:
-
-| Series reference | Project support |
-|---:|---|
-| Part 23 | secure architecture principles |
-| Part 24 | authorized red-team and due-diligence methodology |
-| Part 25 | Python test harness |
-| Part 26 | evidence collection |
-| Part 27 | SOC usefulness |
-| Part 28 | vendor/customer governance questions |
-| Part 29 | security-team recommendations |
-| Part 30 | vendor/developer recommendations |
-| Part 31 | browser security validation changes |
-| Part 32 | AI as an untrusted classifier |
-
-## Requirements
-
-Tested development environment:
-
-```text
-OS family: Debian-derived Linux
-Distribution: Parrot OS
-Python: 3.13 tested locally
-Browser automation: Playwright Chromium
-```
-
-Base packages for Parrot OS and Debian-family systems:
-
-```bash
-sudo apt update
-sudo apt install -y git python3 python3-venv python3-pip gh findutils coreutils grep gawk curl
-```
-
-Python dependencies are defined in:
-
-```text
-pyproject.toml
-requirements.txt
-```
-
-## Environment workflow
-
-Create or reuse the repository virtual environment:
-
-```bash
-cd ai-browser-security-test-suite
-
-test -d .venv || python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e .
-```
-
-Install development dependencies when you want to run tests:
-
-```bash
-python -m pip install -e ".[dev]"
-```
-
-## Start the supported local target
-
-Start `ollama-webui` in a separate terminal:
-
-```bash
-cd ../ollama-webui
-.venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
-```
-
-Verify the target:
+Verify the target and Ollama backend:
 
 ```bash
 curl -fsS http://127.0.0.1:11435/health
 curl -fsS http://127.0.0.1:11434/api/version
 ```
 
-## Ollama Web UI service preflight
-
-The supported target suite requires `ollama-webui` to be running before validation starts.
-
-Start the target in a separate terminal:
+Run non-live toolkit checks, then run the supported local target suite:
 
 ```bash
-cd ../ollama-webui
-.venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
-```
-
-Then run:
-
-```bash
-cd ai-browser-security-test-suite
-scripts/run_supported_local_target_suite.sh
-```
-
-If the service is not running, the suite exits early and prints these startup instructions.
-
-## Run the supported target suite
-
-From this repository:
-
-```bash
-cd ai-browser-security-test-suite
-
-scripts/run_supported_local_target_suite.sh
-```
-
-Run the full repository verification plus supported local target validation:
-
-```bash
-scripts/test_series_coverage_against_ollama_webui.sh
-```
-
-For local repository checks without the running target:
-
-```bash
+cd "$HOME/Workspace/ai-browser-security-test-suite"
 RUN_OLLAMA_TARGET=0 scripts/test_series_coverage_against_ollama_webui.sh
+scripts/run_supported_local_target_suite.sh
 ```
 
-Optional model override:
+Start the workshop with Lab 00:
 
 ```bash
-OLLAMA_MODEL=gemma4:e2b scripts/run_supported_local_target_suite.sh
+.venv/bin/python tools/run_workshop_lab_00_practical_environment_readiness.py
 ```
 
-## CLI overview
+More setup detail is in [`docs/quickstart.md`](docs/quickstart.md).
 
-```bash
-python -m ai_browser_security_suite --help
-```
+## Workshop labs
 
-Available commands:
+The canonical workshop entry point is [`docs/workshop/README.md`](docs/workshop/README.md).
+
+The student lab track is in [`docs/workshop/labs/`](docs/workshop/labs/), with Labs 00 through 12 covering setup, baseline evidence capture, attack-method exercises, and the capstone evidence package.
+
+Required reproducible proxy baseline: OWASP ZAP and mitmproxy or mitmdump. Optional professional path: Burp Suite may be used by students who already use it or prefer it. Burp Suite is not required, not a completion gate, not a validation gate, and not the only supported proxy workflow.
+
+Examples and method variations are in [`examples/browser-safe-ai-methods/README.md`](examples/browser-safe-ai-methods/README.md). They supplement the lab track and are not a replacement for Labs 00 through 12.
+
+## Evidence outputs
+
+Typical lab and validation runs produce reviewer-grade evidence such as:
+
+- browser source, rendered text, DOM, screenshot, and frame-tree artifacts
+- HTTP and proxy captures where relevant
+- model-bound context and model-response artifacts
+- JSON or JSONL evidence records
+- analyst-readable finding reports
+- `artifact-manifest.json`
+- `SHA256SUMS.txt`
+- evidence archives and `.sha256` sidecars
+
+Evidence schema details are documented in [`docs/evidence-schema-contracts.md`](docs/evidence-schema-contracts.md) and [`docs/schemas/`](docs/schemas/).
+
+## Documentation map
+
+Start here:
+
+- [`docs/README.md`](docs/README.md), documentation index
+- [`docs/quickstart.md`](docs/quickstart.md), setup and first run
+- [`docs/workshop/README.md`](docs/workshop/README.md), workshop entry point
+- [`docs/workshop/labs/`](docs/workshop/labs/), Labs 00 through 12
+- [`docs/workshop/workshop-contract.md`](docs/workshop/workshop-contract.md), audience, goals, non-goals, tooling, and evidence contract
+- [`docs/workshop/tooling-baseline.md`](docs/workshop/tooling-baseline.md), required and optional tools
+- [`docs/workshop/proxy-tooling.md`](docs/workshop/proxy-tooling.md), proxy workflow policy
+- [`docs/workshop/local-proxy-evidence-workflow.md`](docs/workshop/local-proxy-evidence-workflow.md), local proxy evidence process
+- [`docs/workshop/troubleshooting.md`](docs/workshop/troubleshooting.md), common setup and lab issues
+- [`docs/coverage/`](docs/coverage/), research-series coverage map
+- [`docs/target-contracts/`](docs/target-contracts/), supported target contract material
+
+## Repository layout
 
 ```text
-init-scope
-case-list
-lab-build
-lab-serve
-recon
-capture
-report
-ollama-validate
-ollama-upload-validate
-ollama-project-agent-validate
+docs/        Project, workshop, coverage, schema, and target-contract documentation
+examples/    Supplemental browser-safe AI method catalog and playground examples
+payloads/    Synthetic YAML payload and scenario definitions
+reports/     Generated report output location, ignored except for its placeholder
+scripts/     Shell entry points for supported local validation workflows
+src/         Python package source
+tests/       Pytest validation suite
+tools/       Lab runners, evidence generators, validators, and audit utilities
 ```
 
 ## Development checks
 
-```bash
-python -m compileall -q src tools
-python -m pytest
-python tools/audit_series_coverage.py \
-  --payload payloads/ollama_webui_safe_prompts.yaml \
-  --out-dir /tmp/ai-browser-coverage
-```
-
-
-
-## CI gates
-
-The toolkit includes a GitHub Actions workflow that runs the repository's core integrity checks on pull requests and pushes to `main`:
-
-```text
-.github/workflows/security-ci.yml
-```
-
-The CI gate runs compile checks, pytest, schema validation, target-contract snapshot validation, guided lab manifest validation, the default coverage audit, and the target-contract coverage audit. This does not claim full browser-AI penetration-testing coverage. It prevents regressions and overclaiming while new browser evidence parsers and tests are added.
-
-See:
-
-```text
-docs/ci-gates.md
-```
-
-
-## Guided Lab Mode
-
-Guided Lab Mode defines how the toolkit turns the Browser-Safe AI Systems series into structured, local, repeatable lab exercises.
-
-The guided lab model is documented in:
-
-```text
-docs/guided-lab-mode.md
-docs/guided-lab-template.md
-docs/guided-lab-execution-plan.md
-```
-
-The current lab manifest is:
-
-```text
-payloads/guided_lab_scenarios.yaml
-```
-
-Validate it locally:
+Use the repository virtual environment when running checks:
 
 ```bash
-python tools/validate_guided_labs.py
+cd "$HOME/Workspace/ai-browser-security-test-suite"
+.venv/bin/python -m compileall -q tools src tests scripts
+.venv/bin/python tools/validate_workshop_labs.py
+.venv/bin/python tools/validate_workshop_docs_consistency.py
+.venv/bin/python tools/validate_workshop_lab_commands.py
+.venv/bin/python tools/validate_workshop_practical_labs.py
+.venv/bin/python tools/validate_workshop_proxy_tool_setup.py
+.venv/bin/python tools/validate_blog_series_examples.py
+.venv/bin/python -m pytest
 ```
 
-Guided labs are designed for users on Parrot OS, Kali Linux, or similar penetration-testing Linux distributions. A lab tells the user which open-source tool to open, how to conduct the test, what to observe, how to vary the input safely, what evidence should be produced, and which Browser-Safe AI Systems series parts the lab demonstrates.
-
-Current guided lab implementation status:
-
-| Guided lab id | Target scenario id | Helper status | Evidence maturity | Workshop readiness |
-|---|---|---|---|---|
-| `guided.redirect_chain_evidence` | `browser.redirect_chain` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
-| `guided.dom_render_mismatch` | `browser.dom_render_mismatch` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
-| `guided.iframe_frame_tree_evidence` | `browser.iframe_frame_tree` | implemented | tested helper, workshop integrated, pending full guided evidence closure | workshop lab integrated component |
-| `guided.storage_state_boundary_evidence` | `browser.storage_state_boundary` | implemented | full guided evidence closure and reviewer gate | reviewer-gated lab component |
-
-The implementation status comes from `payloads/guided_lab_scenarios.yaml`. Implementation does not automatically mean workshop-ready. Workshop readiness requires student instructions, provisioning notes, expected artifacts, troubleshooting, and reviewer criteria.
-
-The canonical matrix for current maturity, tooling, model mode, provisioning notes, and next gaps is:
-
-```text
-docs/lab-track-coverage-matrix.md
-```
-
-## Target contract ingestion
-
-The toolkit can ingest the Browser-Safe AI target scenario contract published by the local `ollama-webui` vulnerable app.
-
-The current local snapshot is:
-
-```text
-docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json
-```
-
-Run the coverage audit with the target contract gate enabled:
-
-```bash
-python tools/audit_series_coverage.py \
-  --payload payloads/ollama_webui_safe_prompts.yaml \
-  --target-payload payloads/ollama_webui_file_upload_cases.yaml \
-  --target-payload payloads/ollama_webui_project_agent_cases.yaml \
-  --target-payload payloads/ollama_webui_redirect_chain_cases.yaml \
-  --target-payload payloads/ollama_webui_dom_render_cases.yaml \
-  --target-payload payloads/ollama_webui_iframe_frame_tree_cases.yaml \
-  --target-payload payloads/ollama_webui_storage_state_boundary_cases.yaml \
-  --target-contract docs/target-contracts/ollama-webui-target-scenario-contract-v0.2.json \
-  --out-dir /tmp/ai-browser-target-contract-coverage
-```
-
-This command must stay aligned with the `Run target-contract coverage audit` step in `.github/workflows/security-ci.yml` so local reviewer validation and GitHub Actions evaluate the same target payload families.
-
-When the target contract gate is enabled, the audit fails if an active target scenario is not represented by toolkit payload mappings or if a payload references an unknown scenario id. This keeps toolkit coverage claims aligned with the intentionally vulnerable local target.
-
-## Evidence artifact manifest
-
-Every evidence directory written through the shared evidence writer now includes:
-
-```text
-artifact-manifest.json
-```
-
-The manifest is a deterministic review index for generated evidence artifacts.
-Each entry records:
-
-```text
-path
-artifact_type
-size_bytes
-sha256
-created_utc
-source_tool
-source_test_id
-```
-
-The Markdown report references the manifest, its SHA256 hash, and the number of
-manifested artifacts. Missing files or declared SHA256 mismatches fail before
-new evidence is written, so incomplete evidence does not silently become a
-passing report.
-
-Current scope of this slice:
-
-```text
-proven: shared evidence manifest and SHA256 verification
-planned: OCR parser, QR decoder, iframe tree parser, ARIA tree parser, DOM/render diff engine, and visual diff engine
-```
-
-## Evidence schema contracts
-
-The shared evidence layer now includes explicit runtime and documentation
-contracts for evidence records and artifact manifests.
-
-Contract implementation:
-
-```text
-src/ai_browser_security_suite/evidence_schema.py
-```
-
-Published schema files:
-
-```text
-docs/schemas/evidence-record.schema.json
-docs/schemas/artifact-manifest.schema.json
-```
-
-The runtime validator checks required fields, rejects unexpected evidence record
-fields, validates ISO-8601 timestamps, validates artifact hash field format, and
-confirms manifest artifact counts match the artifact list. This makes the
-evidence pipeline safer for future OCR, QR, iframe, ARIA, DOM/render, and
-visual-diff slices without claiming those parsers exist yet.
-
-## Ollama Web UI validation through the CLI
-
-```bash
-cd ai-browser-security-test-suite
-source .venv/bin/activate
-
-python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_safe_prompts.yaml   --out reports/ollama-webui-validation   --i-have-authorization
-```
-
-Optional model override:
-
-```bash
-python -m ai_browser_security_suite ollama-validate   --base-url http://127.0.0.1:11435/   --model gemma4:e2b   --cases payloads/ollama_webui_safe_prompts.yaml   --out reports/ollama-webui-validation   --i-have-authorization
-```
-
-Generated local evidence:
-
-```text
-reports/ollama-webui-validation/evidence.jsonl
-reports/ollama-webui-validation/artifact-manifest.json
-reports/ollama-webui-validation/ollama-webui-validation-results.json
-reports/ollama-webui-validation/ollama-webui-validation-report.md
-reports/ollama-webui-validation/target-metadata.json
-reports/ollama-webui-validation/cases/<case-id>/console.log
-reports/ollama-webui-validation/cases/<case-id>/dom.html
-reports/ollama-webui-validation/cases/<case-id>/network-events.json
-reports/ollama-webui-validation/cases/<case-id>/network.har
-reports/ollama-webui-validation/cases/<case-id>/screenshot.png
-reports/ollama-webui-validation/cases/<case-id>/case-result.json
-```
-
-Generated evidence is ignored by Git.
-
-## Ollama Web UI upload analysis validation
-
-The upload validation path exercises the target's uploaded file analysis feature
-directly. It uploads controlled local files into the real UI, intercepts
-`/api/generate`, and saves the exact model-bound prompt for review.
-
-```bash
-python -m ai_browser_security_suite ollama-upload-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_file_upload_cases.yaml   --out reports/ollama-webui-upload-validation   --i-have-authorization
-```
-
-Convenience wrapper:
-
-```bash
-scripts/test_upload_analysis_against_ollama_webui.sh
-```
-
-Generated upload evidence:
-
-```text
-reports/ollama-webui-upload-validation/evidence.jsonl
-reports/ollama-webui-upload-validation/artifact-manifest.json
-reports/ollama-webui-upload-validation/ollama-webui-upload-validation-results.json
-reports/ollama-webui-upload-validation/ollama-webui-upload-validation-report.md
-reports/ollama-webui-upload-validation/target-metadata.json
-reports/ollama-webui-upload-validation/cases/<case-id>/captured-model-prompt.txt
-reports/ollama-webui-upload-validation/cases/<case-id>/generate-requests.json
-reports/ollama-webui-upload-validation/cases/<case-id>/upload-files/<uploaded-file>
-```
-
-## Ollama Web UI Project Agent validation
-
-The Project Agent validation path exercises the updated target's local project
-context surface directly. It creates a synthetic project under the local report
-directory, calls the Project Agent APIs, verifies the model type selector,
-confirms `Cloud` is not exposed as a pullable model type, checks chat copy
-controls, intercepts `/api/generate`, and saves the exact model-bound prompt.
-
-```bash
-python -m ai_browser_security_suite ollama-project-agent-validate   --base-url http://127.0.0.1:11435/   --cases payloads/ollama_webui_project_agent_cases.yaml   --out reports/ollama-webui-project-agent-validation   --i-have-authorization
-```
-
-Generated Project Agent evidence:
-
-```text
-reports/ollama-webui-project-agent-validation/evidence.jsonl
-reports/ollama-webui-project-agent-validation/artifact-manifest.json
-reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-results.json
-reports/ollama-webui-project-agent-validation/ollama-webui-project-agent-validation-report.md
-reports/ollama-webui-project-agent-validation/target-metadata.json
-reports/ollama-webui-project-agent-validation/cases/<case-id>/captured-model-prompt.txt
-reports/ollama-webui-project-agent-validation/cases/<case-id>/project-agent-api-responses.json
-reports/ollama-webui-project-agent-validation/cases/<case-id>/model-controls.json
-reports/ollama-webui-project-agent-validation/cases/<case-id>/synthetic-project/
-```
-
-## Local browser-AI lab
-
-The local generated lab provides playable browser-safe AI examples for evidence
-demonstrations, training, and authorized penetration-test practice.
-
-List cases:
-
-```bash
-cd ai-browser-security-test-suite
-source .venv/bin/activate
-
-python -m ai_browser_security_suite case-list   --cases payloads/safe_browser_ai_cases.yaml
-```
-
-Build local lab pages:
-
-```bash
-python -m ai_browser_security_suite lab-build   --cases payloads/safe_browser_ai_cases.yaml   --out local_lab
-```
-
-Serve the lab:
-
-```bash
-python -m ai_browser_security_suite lab-serve   --directory local_lab   --host 127.0.0.1   --port 8088
-```
-
-Capture evidence:
-
-```bash
-python -m ai_browser_security_suite capture   --url http://127.0.0.1:8088/bai-002-hidden-dom.html   --out reports/example-capture
-```
-
-The lab includes controlled examples for visible prompt injection, hidden DOM,
-CSS-hidden text, SVG metadata, accessibility mismatch, DOM/render mismatch,
-visual overlays, QR handoff, delayed mutation, Unicode spoofing, synthetic DLP,
-seeded login, inert file-sharing lure, metadata contradiction, fail-open
-pressure, exception abuse, oversized DOM stress, calendar promptware, fake IdP
-login, document-share lures, QR MFA reset, fake browser updates, OAuth consent
-lures, helpdesk support-bundle collection, and invoice payment-change deception.
-
-Guide:
-
-```text
-docs/playable-browser-safe-ai-examples.md
-docs/real-world-browser-ai-attack-scenarios.md
-```
-
-Uploadable playground files for local `ollama-webui` practice:
-
-```text
-examples/ollama-webui-playground/
-```
-
-## Authorized client scope files
-
-The default public workflow is local `ollama-webui` testing.
-
-Client-provided FQDNs, IP addresses, ports, paths, and test credentials are supported only for explicit authorized engagements. Those workflows must use a scope file and explicit authorization.
-
-Create a local-first scope template:
-
-```bash
-python -m ai_browser_security_suite init-scope   --out examples/client-scope.local.yaml
-```
-
-Run passive reconnaissance only:
-
-```bash
-python -m ai_browser_security_suite recon   --scope examples/scope.example.yaml   --out reports/example-recon   --passive-only
-```
-
-Active checks require the explicit authorization flag:
-
-```bash
-python -m ai_browser_security_suite recon   --scope examples/client-scope.local.yaml   --out reports/client-recon   --i-have-authorization
-```
-
-## Documentation
-
-Current documentation:
-
-```text
-docs/artifact-backed-browser-cases.md
-docs/authorized-black-box-testing.md
-docs/coverage-audit.md
-docs/coverage/browser-safe-ai-series-coverage.md
-docs/ci-github-actions.md
-docs/ollama-webui-local-target.md
-docs/ollama-webui-service-preflight.md
-docs/ollama-webui-upload-analysis-testing-review.md
-docs/ollama-webui-project-agent-testing-review.md
-docs/playable-browser-safe-ai-examples.md
-docs/quickstart.md
-docs/real-world-browser-ai-attack-scenarios.md
-docs/supported-target-policy.md
-docs/tooling-map-to-series.md
-```
-
-## Repository structure
-
-```text
-ai-browser-security-test-suite/
-├── docs/
-├── examples/
-│   └── ollama-webui-playground/
-├── payloads/
-├── reports/
-├── scripts/
-├── src/
-│   └── ai_browser_security_suite/
-│       ├── recon/
-│       └── targets/
-├── pyproject.toml
-├── requirements.txt
-└── README.md
-```
-
-Generated directories and evidence are intentionally ignored:
-
-```text
-local_lab/
-reports/*
-```
-
-The placeholder file remains tracked:
-
-```text
-reports/.gitkeep
-```
-
-## Technical depth demonstrated
-
-This repository demonstrates:
-
-```text
-local vulnerable target design
-safe synthetic marker strategy
-Playwright browser automation
-DOM and rendered-page evidence capture
-HAR and console-log collection
-Ollama-backed browser-AI validation
-coverage auditing against the research series
-artifact-backed tests for visual deception, DOM/render mismatch, QR handoff, and delayed DOM mutation
-uploaded-file analysis tests that capture exact model-bound prompts
-Project Agent tests that capture local project context and allowlisted tool output boundaries
-JSONL evidence suitable for later SIEM or SOC enrichment
-artifact manifests with SHA256 hashes for reproducibility review
-Markdown reports suitable for human review
-explicit safety boundaries to reduce misuse
-```
-
-## Professional use cases
-
-This suite can help teams:
-
-```text
-demonstrate indirect prompt injection risks safely
-compare DOM evidence with rendered browser evidence
-validate whether local browser-AI workflows repeat unsafe synthetic markers
-test a reproducible browser-based LLM app
-document evidence for SOC and product-security review
-prototype mitigations against a controlled local target
-build repeatable due-diligence demonstrations for browser-based AI ecosystems
-```
-
-## GitHub workflow
-
-Use pull requests for changes to protected branches.
-
-Recommended development pattern:
-
-```bash
-git switch main
-git pull --ff-only origin main
-git switch -c work/<short-purpose-name>
-
-git status --short
-git add <files>
-git commit -m "<concise lower-case commit message>"
-git push -u origin work/<short-purpose-name>
-
-gh pr create   --base main   --head work/<short-purpose-name>   --title "<professional title>"   --body "<validation summary>"
-```
-
-Do not force-push protected branches.
+For CI and validation detail, see [`docs/ci-gates.md`](docs/ci-gates.md), [`docs/ci-github-actions.md`](docs/ci-github-actions.md), and [`tests/README.md`](tests/README.md).
 
 ## License
 
-GNU Affero General Public License v3.0 or later.
-
-See:
-
-```text
-LICENSE
-```
-
-## Disclaimer
-
-These tools are intended for authorized security testing and research purposes only.
-
-Users are responsible for complying with all applicable laws, organizational rules, and written authorization requirements before testing any system.
-
-The author assumes no liability for misuse.
-
-
-## Guided lab tooling policy
-
-All guided lab tooling must be free and open source. Labs may use tools available from Parrot OS, Kali Linux, Debian-derived repositories, upstream project source, or project-managed Python code.
-
-If a suitable free and open source tool is not available for a lab, this project provides a purpose-built Python tool for that lab. Guided labs must not require commercial-only, paid-only, proprietary-only, trialware, or closed-source tooling.
-
-### Guided DOM/render mismatch lab
-
-The toolkit includes an implemented local-only Guided Lab Mode exercise for DOM versus browser-rendered content mismatch.
-
-```text
-tools/run_dom_render_lab.py
-payloads/ollama_webui_dom_render_cases.yaml
-src/ai_browser_security_suite/dom_render.py
-```
-
-The lab maps to `guided.dom_render_mismatch` and target scenario `browser.dom_render_mismatch`. It captures raw DOM state, browser-rendered visible text, computed style findings, screenshot evidence, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
-
-Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.
-
-### Guided iframe/frame-tree lab
-
-The toolkit includes an implemented local-only Guided Lab Mode exercise for iframe and nested browsing context evidence.
-
-```text
-tools/run_iframe_frame_tree_lab.py
-payloads/ollama_webui_iframe_frame_tree_cases.yaml
-src/ai_browser_security_suite/iframe_frame_tree.py
-```
-
-The lab maps to `guided.iframe_frame_tree_evidence` and target scenario `browser.iframe_frame_tree`. It captures browser-observed frame relationships, frame URLs, top-page DOM, child-frame DOM snapshots, sandbox findings, srcdoc findings, cross-frame rendered text, model-bound context, model-response placeholder evidence, `evidence.jsonl`, `artifact-manifest.json`, and an analyst-readable `report.md`.
-
-Browser rendering and frame-tree observation are required. Static HTML parsing alone is not sufficient for this lab. The intended live capture path uses Playwright. Tests use deterministic purpose-built Python renderers so CI remains reproducible without requiring external targets.
-
-<!-- slice-2.36-proxy-tooling-policy-note:start -->
-
-## Slice 2.36 proxy tooling policy alignment
-
-The required workshop path uses free and open source tooling. OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg, grep, ss, nmap, and sha256sum remain the required evidence baseline. Burp Suite Community Edition and Burp Suite Professional are optional professional workflows only. Burp is optional and never mandatory for course completion, and any Burp workflow must produce evidence equivalent to the FOSS path.
-
-See `docs/workshop/proxy-tooling.md` for the repository-wide policy.
-
-<!-- slice-2.36-proxy-tooling-policy-note:end -->
+This project is licensed under AGPL-3.0-or-later. See [`pyproject.toml`](pyproject.toml) for the package license declaration.
