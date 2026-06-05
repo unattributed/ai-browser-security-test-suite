@@ -27,6 +27,14 @@ By the end of this lab, the student should be able to:
 9. Identify common failure modes such as localhost proxy bypass, missing proxy traffic, stale browser state, or incomplete checksums.
 10. Explain why the lab is local-only, synthetic-only, authorized-only, and no production security validation.
 
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 None.
@@ -50,7 +58,7 @@ A weak baseline can cause:
 
 The risk demonstrated by this lab is unsupported conclusion-making.
 
-## Safety boundary
+## Safety and authorization boundary
 
 This section defines the rules of engagement for the lab environment. The workshop teaches practical adversarial browser and AI security testing methods, but every exercise must remain inside the intentionally vulnerable local target so the evidence is reproducible, reviewable, and safe for a hands-on training setting.
 
@@ -158,6 +166,29 @@ Recommended tools:
 
 Optional proxy tooling is governed by `docs/workshop/proxy-tooling.md`. Burp Suite is optional and never required for this lab. Use it only if you already have it available and want to produce evidence-equivalent professional proxy artifacts. The required path remains OWASP ZAP, mitmproxy, mitmdump, and the repository Python tooling. Do not include private CA material, browser profile data, cookies, tokens, credentials, or real customer data in evidence.
 
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
+
 ## Prerequisites
 
 Complete Lab 00 first.
@@ -218,7 +249,7 @@ The student will:
 9. Write reviewer notes.
 10. Create a manifest and checksums.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates the preparation phase used before browser-based AI exploitation and defensive validation. In real assessments, testers establish a reproducible evidence baseline so later observations can be attributed to a specific technique rather than tool error, target unavailability, browser state drift, or missing telemetry.
 
@@ -500,7 +531,7 @@ LAB01_UTC_SUBMISSION="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 : "${LAB01_PROXY_EVIDENCE_PATH:?set LAB01_PROXY_EVIDENCE_PATH to the flow file, ZAP screenshot, or exported evidence path}"
 
 cat > "${LAB01_RUN}/notes/baseline-observation.md" <<EOF
-# Lab 01 baseline observation
+### Lab 01 baseline observation
 
 Target URL: http://127.0.0.1:11435
 Synthetic marker: SYNTHETIC-LAB-MARKER
@@ -546,7 +577,7 @@ LAB01_VARIATION_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 : "${LAB01_VARIATION_PROXY_EVIDENCE_PATH:?set LAB01_VARIATION_PROXY_EVIDENCE_PATH to the flow file, ZAP screenshot, or exported evidence path}"
 
 cat > "${LAB01_RUN}/notes/student-variation.md" <<EOF
-# Lab 01 student-authored variation
+### Lab 01 student-authored variation
 
 Variation prompt: ${LAB01_VARIATION_PROMPT}
 Required marker: SYNTHETIC-LAB-MARKER
@@ -693,12 +724,12 @@ Create a reviewer summary:
 
 ```bash
 cat > "${LAB01_RUN}/notes/reviewer-summary.md" <<'EOF'
-# Lab 01 reviewer summary
+### Lab 01 reviewer summary
 
 ## Method being taught
 Baseline browser-to-AI evidence capture with proxy-first ordering.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 Authorized target characterization and evidence preservation before browser-based AI exploitation or defensive validation.
 
 ## Local-only PoC payload or controlled test input
@@ -710,7 +741,7 @@ Summarize the exact proxy path, browser setup, baseline prompt, variation prompt
 ## Required student-authored variation
 Paste or summarize the student-authored variation.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The proxy and browser evidence must allow a reviewer to confirm all of the following statements:
 
@@ -775,7 +806,7 @@ The variation must:
 4. Be submitted while proxy capture is running.
 5. Produce evidence that can be correlated across browser notes, proxy evidence, manifest, and checksums.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation is proven only when the evidence package contains:
 
@@ -974,7 +1005,7 @@ The exact student-authored synthetic marker must appear in the student notes, br
 
 Create a `SHA256SUMS` file at the root of the Lab 01 evidence directory. The `SHA256SUMS` file must include checksums for proxy captures, exported ZAP screenshots or reports, browser screenshots, notes, manifest files, and any reviewer artifacts generated during the lab.
 
-### Safety boundary exact exclusions
+### Safety and authorization boundary exact exclusions
 
 The Lab 01 safety and authorization boundary excludes: Third-party targeting, Public callback infrastructure, Real credential collection, Token theft, Malware behavior, Persistence, Destructive behavior, Production SaaS testing, and NVIDIA driver installation.
 
@@ -1048,3 +1079,15 @@ Port: 8080
 
 
 For this Practical proxy evidence exercise, the student must explain that the proxy evidence proves the student used the local target, the interaction stayed inside the authorized local lab boundary, the baseline prompt was submitted, the student-authored variation was submitted, and the browser-visible result can be correlated with captured HTTP evidence.
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

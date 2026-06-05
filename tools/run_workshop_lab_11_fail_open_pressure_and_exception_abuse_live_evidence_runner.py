@@ -423,7 +423,7 @@ def build_manifest(out_dir: Path, metadata: dict[str, Any]) -> dict[str, Any]:
     for path in sorted(out_dir.rglob("*")):
         if not path.is_file():
             continue
-        if path.name in {"manifest.json", "checksums.sha256"}:
+        if path.name in {"artifact-manifest.json", "SHA256SUMS.txt"}:
             continue
         rel = str(path.relative_to(out_dir))
         files.append({"path": rel, "sha256": sha256_file(path), "size_bytes": path.stat().st_size})
@@ -435,10 +435,10 @@ def build_manifest(out_dir: Path, metadata: dict[str, Any]) -> dict[str, Any]:
         "metadata": metadata,
         "files": files,
     }
-    write_json(out_dir / "manifest.json", manifest)
+    write_json(out_dir / "artifact-manifest.json", manifest)
     checksum_lines = [f"{entry['sha256']}  {entry['path']}" for entry in files]
-    checksum_lines.append(f"{sha256_file(out_dir / 'manifest.json')}  manifest.json")
-    write_text(out_dir / "checksums.sha256", "\n".join(checksum_lines) + "\n")
+    checksum_lines.append(f"{sha256_file(out_dir / 'artifact-manifest.json')}  artifact-manifest.json")
+    write_text(out_dir / "SHA256SUMS.txt", "\n".join(checksum_lines) + "\n")
     return manifest
 
 
@@ -522,8 +522,8 @@ def run(args: argparse.Namespace) -> int:
                 "browser-observed/exception-workflow-observation.json",
                 "browser-observed/playwright-unavailable.json, when Playwright is not importable",
                 "marker-provenance/marker-provenance-validation.json",
-                "manifest.json",
-                "checksums.sha256",
+                "artifact-manifest.json",
+                "SHA256SUMS.txt",
             ],
             "policy_artifact_note": "These artifacts record evidence and reviewer context only. They do not establish a production policy claim.",
             "safety_boundary": {
@@ -550,8 +550,8 @@ def run(args: argparse.Namespace) -> int:
         })
         archive, sha_path = make_archive(out_dir)
         print("Lab 11 live evidence runner completed successfully.")
-        print(f"manifest: {out_dir / 'manifest.json'}")
-        print(f"checksums: {out_dir / 'checksums.sha256'}")
+        print(f"manifest: {out_dir / 'artifact-manifest.json'}")
+        print(f"checksums: {out_dir / 'SHA256SUMS.txt'}")
         print(f"evidence archive: {archive}")
         print(f"evidence checksum: {sha_path}")
         print(f"files captured: {len(manifest['files'])}")

@@ -1,6 +1,6 @@
 # Browser-Safe AI Systems Workshop Labs
 
-This directory contains student-facing workshop labs for safe, local browser-based AI security validation.
+This directory is the canonical student entry point for the Browser-Safe AI Systems workshop. The workshop teaches evidence-first validation of browser-based AI workflows against a deliberately weak local `ollama-webui` training target.
 
 The workshop treats a browser-based AI workflow as a pipeline:
 
@@ -8,19 +8,27 @@ The workshop treats a browser-based AI workflow as a pipeline:
 browser artifact -> captured evidence -> model input -> model response -> policy decision -> analyst review
 ```
 
-The labs use only local targets, synthetic markers, and free and open-source tooling. They are designed for Parrot OS and Kali users who need repeatable evidence, not uncontrolled demonstrations.
+The labs use only local targets, synthetic markers, and free and open-source tooling. They are designed for senior practitioners who need repeatable evidence, not uncontrolled demonstrations.
 
-## Workshop architecture references
+## Workshop contract
 
-The workshop provisioning and runtime model is documented in:
+Read `docs/workshop/workshop-contract.md` before starting the labs. It defines the audience, goals, non-goals, safety boundary, required and optional tooling, artifact contract, student completion standard, reviewer completion standard, and the relationship between course materials.
+
+The material relationship is:
 
 ```text
-docs/workshop/provisioning-model.md
-docs/workshop/tooling-baseline.md
-docs/workshop/model-runtime-modes.md
+Labs are the course path.
+Examples are the method library.
+Blog posts are the theory and context.
+Runners are the evidence automation.
+Validators are the consistency proof.
 ```
 
-The workshop uses a VM or bare-metal workstation as the primary student environment, local services where useful, and a native Python fallback for core labs. GPU acceleration is optional. A specific Ollama model is not the security claim, the evidence path is.
+## Safety boundary
+
+Do not use these labs against third-party systems, production SaaS tenants, real users, real credentials, real customer data, public callback infrastructure, malware, persistence, token theft, destructive behavior, or production policy systems.
+
+The intended target is the deliberately weak local `ollama-webui` lab application running on loopback, normally `http://127.0.0.1:11435`. The weak target must remain intentionally weak for teaching. Workshop evidence is local-only, synthetic-only, authorized-only, and makes no production security validation claim.
 
 ## Lab track
 
@@ -42,7 +50,66 @@ The table below is the canonical student-facing workshop lab index. The required
 | Lab 11 | Fail-Open Pressure and Exception Abuse | Target-backed live evidence runner |
 | Lab 12 | Capstone Attack Chain Evidence Package | Target-backed capstone live evidence runner |
 
-Runner references for student-ready lab execution are maintained in the lab files and workshop status sections below. Current student-facing runner anchors include:
+## Required tooling
+
+The required path uses FOSS and standard system tools:
+
+```text
+Python 3
+Python venv and first-party repo tooling
+Playwright
+Chromium
+OWASP ZAP
+mitmproxy
+mitmdump
+curl
+jq
+rg or grep
+ss
+nmap
+sha256sum
+tar and gzip
+browser developer tools
+```
+
+See `docs/workshop/tooling-baseline.md`, `docs/workshop/proxy-tooling.md`, `docs/workshop/local-proxy-evidence-workflow.md`, and `docs/workshop/practical-adversarial-lab-standard.md` for the full tooling policy.
+
+## Optional tooling
+
+Burp Suite Community Edition or Burp Suite Professional may be used only as optional professional comparison tooling by students who already have it. Burp is not required, not exclusive, and not a validation gate. The FOSS path remains the required evidence path for every lab.
+
+Optional QR, image, OCR, packet, and diagnostic tooling is lab-specific and must stay local-only and synthetic-only. An optional Burp Suite manual proxy path may be used only for professional comparison when the student already has Burp available.
+
+## How to start
+
+1. Prepare the toolkit repository and the separate weak target repository:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+```
+
+2. Start or verify the weak target from the weak target repo:
+
+```bash
+cd $HOME/Workspace/ollama-webui
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
+curl -fsS http://127.0.0.1:11435/health | jq .
+```
+
+3. Return to the toolkit repo and run Lab 00:
+
+```bash
+cd $HOME/Workspace/ai-browser-security-test-suite
+.venv/bin/python tools/run_workshop_lab_00_practical_environment_readiness.py
+```
+
+The Lab 00 practical environment readiness runner records whether the workstation is ready for Lab 01 and writes `artifact-manifest.json`, `SHA256SUMS.txt`, and `student-readiness-finding-report.md`.
+
+## Evidence automation
+
+Student-ready runner anchors:
 
 ```text
 tools/run_workshop_lab_00_preflight.py
@@ -61,11 +128,17 @@ tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_r
 tools/run_workshop_lab_12_capstone_live_evidence.py
 ```
 
-The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, and makes no production security validation claim.
+Unless a lab names a fixture-specific file, the canonical reviewer artifact contract is `artifact-manifest.json`, `SHA256SUMS.txt`, an evidence archive `.tar.gz`, and an archive `.sha256` sidecar.
 
-## Closure and reviewer materials
+## Verify completion
 
-The complete initial lab track is supported by these closure and reviewer documents:
+A completed student lab package must include the base method, a student-authored synthetic variation, browser evidence, HTTP or proxy evidence where relevant, model-bound context evidence, deterministic policy or reviewer decision evidence, `artifact-manifest.json`, `SHA256SUMS.txt`, an evidence archive `.tar.gz`, and an archive `.sha256` sidecar.
+
+The lab track uses `SYNTHETIC-LAB-MARKER` and other local synthetic markers for provenance review. It remains local-only, synthetic-only, authorized-only, does not claim production security validation, and makes no production security validation claim.
+
+## Instructor and reviewer material
+
+Use these supporting materials for facilitation, review, release readiness, and closure:
 
 ```text
 docs/workshop/lab-track-closure-audit.md
@@ -75,120 +148,14 @@ docs/workshop/reviewer-grading-rubric.md
 docs/workshop/offline-release-bundle.md
 docs/workshop/release-rehearsal-and-timing.md
 docs/workshop/release-candidate-acceptance-gate.md
+docs/workshop/provisioning-model.md
+docs/workshop/model-runtime-modes.md
+docs/workshop/student-course-synopsis.md
 docs/workshop/practical-adversarial-lab-standard.md
 docs/workshop/local-proxy-evidence-workflow.md
 docs/workshop/proxy-tool-setup-and-live-local-evidence.md
 ```
 
-These documents do not claim production security validation. They reconcile the current lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide a release-candidate acceptance gate for final reviewer readiness decisions. They also define the practical adversarial lab standard and local proxy evidence workflow used to keep future lab creation hands-on, local-only, synthetic-only, and reviewer-grade. The release-candidate acceptance gate does not claim production security validation.
+Student-facing course synopsis: `docs/workshop/student-course-synopsis.md`.
 
-## Safety boundary
-
-Do not use these labs against third-party systems, production SaaS tenants, real users, or real credentials.
-
-The intended target is the deliberately weak local `ollama-webui` lab application running on localhost.
-
-## Live Proxy Evidence
-
-The verified local proxy tool setup and live local evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md` and governed by `docs/workshop/proxy-tooling.md`. The workflow keeps ZAP and mitmproxy evidence local-only, synthetic-only, authorized-only, and does not claim production security validation.
-## Lab 07 Live Evidence Runner Status
-
-| Lab | Guide | Runner | Safety boundary |
-| --- | --- | --- | --- |
-| Lab 07 | `docs/workshop/labs/07-delayed-content-and-state-transition-risk.md` | `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps delayed-content evidence local-only, synthetic-only, authorized-only, with no production security validation. |
-
-
-Lab 07 delayed content and state transition risk is covered by `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` using `SYNTHETIC-LAB-MARKER` fixtures and no production security validation.
-
-## Lab 08 Live Evidence Runner Status
-
-| Lab | Guide | Status | Runner | Safety boundary |
-| --- | --- | --- | --- | --- |
-| Lab 08 | QR Handoff and Off-Browser Transition Risk | End-to-end live evidence runner | `docs/workshop/labs/08-qr-handoff-and-off-browser-transition-risk.md`, `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER` and keeps QR handoff evidence local-only, synthetic-only, authorized-only, with no production QR decoder claim and no production security validation. |
-
-Lab 08 QR handoff and off-browser transition risk is covered by `tools/run_workshop_lab_08_qr_handoff_live_evidence.py` using local-only decoded destination provenance, QR-style visual artifact evidence, browser source, DOM, visible text, QR handoff observation, screenshot evidence, direct and proxied local HTTP responses, marker provenance review, model-bound context review, and no production security validation.
-
-
-## Lab 10 Live Evidence Runner Status
-
-| Lab | Status | Guide | Runner | Safety boundary |
-| --- | --- | --- | --- | --- |
-| Lab 10 | End-to-end live evidence runner | `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md` | `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER`, Playwright model-response capture integration, a deterministic target-backed policy gate artifact, local synthetic fixtures, and no production policy engine, production enforcement engine, or production security validation claim. |
-
-Lab 10 model verdict manipulation and policy simulator is covered by `tools/run_workshop_lab_10_model_verdict_policy_live_evidence.py`. The runner captures local model-response fixtures through Playwright, preserves direct and proxied loopback HTTP evidence, records target-contract readiness for the intentionally weak local `ollama-webui` target, and writes a deterministic target-backed policy gate review. Model response is evidence, not policy.
-
-## Lab 11 Live Evidence Runner
-
-Lab 11 fail-open pressure and exception abuse is supported by a local-only, synthetic-only, target-backed live evidence runner. Use `tools/run_workshop_lab_11_fail_open_pressure_and_exception_abuse_live_evidence_runner.py` after confirming the intentionally weak target is running on a loopback URL.
-
-## Lab 12 Target-Backed Capstone Live Evidence Runner
-
-Lab 12 now has a target-backed Lab 12 capstone live evidence runner at `tools/run_workshop_lab_12_capstone_live_evidence.py`.
-
-Lab 12 already has a deterministic capstone package. The live local wrapper verifies the intentionally weak `ollama-webui` target, captures target contract and browser evidence, generates the capstone package, confirms Labs 01 through 11 source coverage, and writes reviewer-grade archive evidence.
-
-The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and does not claim production security validation.
-
-## Lab 12 Target-Backed Runner Artifact Contract
-
-`tools/run_workshop_lab_12_capstone_live_evidence.py` is the target-backed Lab 12 capstone live evidence runner.
-
-It verifies the intentionally weak local `ollama-webui` target, records target-contract readiness, generates the deterministic capstone package, captures browser source, DOM, visible text, and screenshot evidence under the target-root browser evidence directory, preserves `SYNTHETIC-LAB-MARKER`, writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, writes `lab12-live-evidence-summary.json`, and creates a reviewer archive.
-
-The runner is local-only, synthetic-only, authorized-only, does not harden the weak target, and makes no production security validation claim.
-
-## Lab 12 Evidence Contract Terms
-
-This section gives reviewers the exact Lab 12 target-backed evidence contract without requiring inference from prose.
-
-Required release-gate phrases:
-
-```text
-tools/run_workshop_lab_12_capstone_live_evidence.py
-Lab 12 target-backed capstone live evidence runner
-target-backed
-target-contract readiness
-browser source, DOM, visible text, and screenshot evidence
-artifact-manifest.json
-SHA256SUMS.txt
-SYNTHETIC-LAB-MARKER
-intentionally weak target must remain vulnerable
-no production security validation
-```
-
-The Lab 12 target-backed capstone live evidence runner is local-only, synthetic-only, authorized-only, and does not harden the intentionally weak local `ollama-webui` target. Model output and generated capstone artifacts are evidence for review, not production policy authority.
-
-<!-- slice-2.21:start -->
-## Student-facing course synopsis
-
-The student-facing workshop synopsis is maintained at:
-
-```text
-docs/workshop/student-course-synopsis.md
-```
-
-That synopsis explains the course audience, expected local environment, required evidence workflow, per-lab tools, evidence outputs, and student interactive actions for Labs 00 through 12.
-
-The required proxy evidence path remains free and open source through OWASP ZAP, mitmproxy, and mitmdump. Students who already have Burp Suite Community or a licensed Burp Suite edition may use Burp as an optional Burp Suite manual proxy path for local comparison, but Burp is not a required evidence gate.
-<!-- slice-2.21:end -->
-
-
-<!-- slice-2.22:start -->
-## Lab 00 Practical Environment Readiness Runner
-
-Lab 00 now has a practical environment readiness runner at `tools/run_workshop_lab_00_practical_environment_readiness.py`.
-
-The runner verifies the student workstation or prepared VM, toolkit repository, local `ollama-webui` target, model mode, browser evidence path, free and open-source proxy readiness, optional Burp Suite manual proxy path, packet tooling, QR and media tooling, Lab 01 through Lab 12 runner availability, `artifact-manifest.json`, `SHA256SUMS.txt`, and `student-readiness-finding-report.md`.
-
-The Lab 00 practical environment readiness runner produces evidence under `$HOME/browser-safe-ai-workshop-development-evidence/` and declares `ready for Lab 01: yes` or `ready for Lab 01: no` with blocking readiness items and planned remediation.
-<!-- slice-2.22:end -->
-
-<!-- slice-2.36-proxy-tooling-policy-note:start -->
-
-## Proxy Tooling Policy Alignment
-
-The required workshop path uses free and open source tooling. OWASP ZAP, mitmproxy, mitmdump, Playwright, Chromium, browser developer tools, curl, jq, rg, grep, ss, nmap, and sha256sum remain the required evidence baseline. Burp Suite Community Edition and Burp Suite Professional are optional professional workflows only. Burp is optional and never mandatory for course completion, and any Burp workflow must produce evidence equivalent to the FOSS path.
-
-See `docs/workshop/proxy-tooling.md` for the repository-wide policy.
-
-<!-- slice-2.36-proxy-tooling-policy-note:end -->
+These documents reconcile the lab-track state, support instructor facilitation, define reviewer expectations for local synthetic evidence packages, and provide acceptance gates for final reviewer readiness decisions.

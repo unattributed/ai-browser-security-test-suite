@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document records the Slice 2.2 setup and live evidence standard for practical proxy labs in the Browser-Safe AI Systems workshop.
+This document records the setup and live evidence standard for practical proxy labs in the Browser-Safe AI Systems workshop.
 
 The goal is to make local proxy evidence reproducible without turning student workstations into uncontrolled package-upgrade targets. The workflow is designed for local-only, synthetic-only, authorized-only evidence against the deliberately weak `ollama-webui` target on `127.0.0.1:11435`.
 
@@ -10,7 +10,7 @@ This workflow does not claim production security validation.
 
 ## Tooling decision
 
-Slice 2.2 keeps the required practical proxy evidence lane limited to tools that are free, open source, locally runnable, usable without an account, and credible to experienced security practitioners.
+The required practical proxy evidence lane is limited to tools that are free, open source, locally runnable, usable without an account, and credible to experienced security practitioners.
 
 Required practical proxy tools:
 
@@ -31,11 +31,11 @@ tcpdump
 tshark
 ```
 
-Burp Suite Community and Postman remain optional manual comparison tools only. They are not required evidence gates because the required evidence path must remain free, open source, local, and reproducible without accounts.
+Burp Suite Community Edition or Burp Suite Professional may be used only as optional professional comparison tooling. Burp is not a required evidence gate because the required evidence path must remain free, open source, local, and reproducible without accounts.
 
-## Verified Slice 2.2 workstation state
+## Verified workstation state
 
-The Slice 2.2 local workstation validation verified this state:
+The local workstation validation verified this state:
 
 ```text
 OWASP ZAP: 2.17.0, available through /usr/local/bin/zap.sh
@@ -55,7 +55,7 @@ The run also recorded that the NVIDIA driver state was unchanged. Core workshop 
 
 ## No-APT installation boundary
 
-The Slice 2.2 workstation had pending kernel package configuration in APT simulation. Because kernel image or header configuration can affect NVIDIA driver state, the project must not use APT as part of this slice's proxy tool setup on this workstation.
+The validation workstation had pending kernel package configuration in APT simulation. Because kernel image or header configuration can affect NVIDIA driver state, the project must not use APT as part of proxy tool setup on this workstation.
 
 The verified setup path is:
 
@@ -103,16 +103,16 @@ mitmweb --version
 After the tools are installed and `ollama` is reachable on `127.0.0.1:11434`, run:
 
 ```bash
-.venv/bin/python tools/run_workshop_live_proxy_evidence.py   --repo-root $HOME/Workspace/ai-browser-security-test-suite   --target-root $HOME/Workspace/ollama-webui   --out-dir "$HOME/browser-safe-ai-workshop-development-evidence/slice-2.2-workshop-proxy-tool-install-and-live-local-evidence/live-proxy-evidence-$(date -u +%Y%m%d-%H%M%S)"   --base-url http://127.0.0.1:11435   --ollama-url http://127.0.0.1:11434
+.venv/bin/python tools/run_workshop_live_proxy_evidence.py   --repo-root $HOME/Workspace/ai-browser-security-test-suite   --target-root $HOME/Workspace/ollama-webui   --out-dir "$HOME/browser-safe-ai-workshop-development-evidence/workshop-proxy-tool-install-and-live-local-evidence/live-proxy-evidence-$(date -u +%Y%m%d-%H%M%S)"   --base-url http://127.0.0.1:11435   --ollama-url http://127.0.0.1:11434
 ```
 
 The helper starts the local weak target, verifies loopback binding, captures direct local HTTP responses, captures the same local workflow through `mitmdump`, generates Lab 01, Lab 02, and Lab 06 proxy evidence packages, writes SHA256 manifests, removes mitmproxy generated CA private material from the archive set, stops the target, and writes an evidence archive.
 
-Slice 2.5 adds `tools/run_workshop_lab_02_live_evidence.py` for a Lab 02-specific end-to-end run. That runner captures the visible text, hidden DOM, and metadata fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+`tools/run_workshop_lab_02_live_evidence.py` provides the Lab 02-specific end-to-end run. That runner captures the visible text, hidden DOM, and metadata fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
 
 ## Required live evidence proof
 
-A successful Slice 2.2 evidence run must show:
+A successful live proxy evidence run must show:
 
 ```text
 ollama-webui started on 127.0.0.1:11435
@@ -170,7 +170,7 @@ no production security validation claim
 
 ## Acceptance criteria
 
-Slice 2.2 is acceptable when:
+The live proxy workflow is acceptable when:
 
 ```text
 proxy tool readiness moved from needs-tools to ready
@@ -183,20 +183,20 @@ no NVIDIA, CUDA, DKMS, linux-image, or linux-headers change was made
 mitmproxy CA private material was not retained in the final evidence archive
 release-candidate acceptance gate includes this document
 ```
-## Slice 2.6 Lab 03 hidden DOM end-to-end evidence SOP
+## Lab 03 hidden DOM end-to-end evidence SOP
 
-Slice 2.6 adds `tools/run_workshop_lab_03_hidden_dom_live_evidence.py` for a Lab 03-specific end-to-end run. That runner captures display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, computed style, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+`tools/run_workshop_lab_03_hidden_dom_live_evidence.py` provides the Lab 03-specific end-to-end run. That runner captures display-none, visibility-hidden, opacity-zero, offscreen, zero-size, and low-contrast fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, computed style, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
 
 The standard operating procedure for live lab verification is to check `http://127.0.0.1:11435/health` first, start the local `$HOME/Workspace/ollama-webui/scripts/pull_model.py` weak target only when that check fails, verify loopback-only exposure, record startup evidence, and stop the weak target only if the runner started it. This keeps the intentionally weak target available for the lab without installing packages or hardening the weak target behavior.
 
-## Slice 2.7 Lab 04 DOM/render mismatch end-to-end evidence SOP
+## Lab 04 DOM/render mismatch end-to-end evidence SOP
 
-Slice 2.7 adds `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` for a Lab 04-specific end-to-end run. That runner captures DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, DOM/render mismatch observation, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+`tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` provides the Lab 04-specific end-to-end run. That runner captures DOM text, inert template, noscript fallback, shadow DOM, CSS generated content, and collapsed duplicate fixture variants through direct HTTP, proxied HTTP, browser source, DOM, visible text, DOM/render mismatch observation, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
 
 The standard operating procedure for live lab verification is to check `http://127.0.0.1:11435/health` first, start the local `$HOME/Workspace/ollama-webui/scripts/pull_model.py` weak target only when that check fails, verify loopback-only exposure, record startup evidence, and stop the weak target only if the runner started it. This keeps the intentionally weak target available for the lab without installing packages and without hardening the weak target behavior. The intentionally weak target must remain vulnerable because the vulnerability is essential for the workshop.
 
-## Slice 2.9 Lab 06 iframe frame-tree end-to-end evidence SOP
+## Lab 06 iframe frame-tree end-to-end evidence SOP
 
-Slice 2.9 adds `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` for a Lab 06-specific end-to-end run. That runner captures same-origin iframe, sandboxed iframe, srcdoc hidden context, and nested frame-chain variants through the existing iframe helper, direct HTTP, proxied HTTP, browser source, DOM, visible text, frame-tree, frame URL list, child-frame DOM snapshots, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
+`tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` provides the Lab 06-specific end-to-end run. That runner captures same-origin iframe, sandboxed iframe, srcdoc hidden context, and nested frame-chain variants through the existing iframe helper, direct HTTP, proxied HTTP, browser source, DOM, visible text, frame-tree, frame URL list, child-frame DOM snapshots, screenshots, ZAP passive status, marker provenance, and model-bound context review artifacts. It writes `artifact-manifest.json`, writes `SHA256SUMS.txt`, removes generated mitmproxy CA private material, and creates a `.tar.gz` evidence archive without making a production security validation claim.
 
 The standard operating procedure for live lab verification is to check `http://127.0.0.1:11435/health` first, start the local `$HOME/Workspace/ollama-webui/scripts/pull_model.py` weak target only when that check fails, verify loopback-only exposure, record startup evidence, and stop the weak target only if the runner started it. This keeps the intentionally weak target available for the lab without installing packages and without hardening the weak target behavior. The intentionally weak target must remain vulnerable because the vulnerability is essential for the workshop.

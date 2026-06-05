@@ -25,6 +25,18 @@ By the end of this lab, the student should be able to:
 7. Interpret the result as a defender or reviewer without making unsupported production claims.
 8. Write a reportable finding that includes scope, evidence, impact, reproduction steps, and remediation guidance.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic hidden DOM and low-visibility browser content.
@@ -50,7 +62,7 @@ A vulnerable browser-AI path may:
 5. Fail to distinguish visible text, hidden text, offscreen text, attributes, and metadata.
 6. Produce a report that cannot prove what a user or browser actually saw.
 
-## Safety boundary
+## Safety and authorization boundary
 
 This lab must remain local, authorized, synthetic, and scoped to the intentionally vulnerable workshop target.
 
@@ -116,6 +128,29 @@ Optional tools:
 
 Do not install, reinstall, upgrade, or modify NVIDIA drivers. Do not add snap-based setup instructions.
 
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
+
 ## Method being taught
 
 The method being taught is hidden DOM content inspection and rendered-text mismatch evidence.
@@ -129,7 +164,7 @@ The method has four parts:
 3. Interact with the local weak target and preserve browser, HTTP, target, proxy, manifest, and checksum evidence.
 4. Compare rendered evidence, source evidence, DOM evidence, computed style evidence, screenshot evidence, and model-bound context evidence to decide whether untrusted content influenced the workflow.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates a real browser-based AI testing tactic used during authorized assessments: placing controlled content in a web page representation that may be processed differently by a human viewer, a browser extraction path, a DOM parser, a screenshot workflow, or a model-bound context builder.
 
@@ -326,7 +361,7 @@ Required variation properties:
 4. The student must predict which evidence streams should contain the marker before running the test.
 5. The student must compare the prediction with actual evidence after the run.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation is proven only when the evidence package lets a reviewer answer these questions:
 
@@ -472,7 +507,7 @@ The policy should not be delegated to hidden page content or to a model response
 Use this template for the final report:
 
 ```markdown
-# Finding: Lab 03 browser content provenance mismatch in local AI review workflow
+### Finding: Lab 03 browser content provenance mismatch in local AI review workflow
 
 ## Scope
 
@@ -589,3 +624,15 @@ Students must explain which evidence source proves that the `SYNTHETIC-LAB-MARKE
 Practical proxy evidence exercise coverage for Lab 03 is provided by the hidden DOM end-to-end live evidence runner and must be reviewed alongside `docs/workshop/local-proxy-evidence-workflow.md` and `docs/workshop/proxy-tooling.md`.
 
 This cross-reference keeps Lab 03 aligned with the practical adversarial lab standard: direct HTTP capture, proxied HTTP capture, browser source, parsed DOM, visible text, screenshot, marker provenance, model-bound context review, manifest, checksums, and reviewer archive output are required before the lab can be treated as closed for workshop release-candidate purposes.
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

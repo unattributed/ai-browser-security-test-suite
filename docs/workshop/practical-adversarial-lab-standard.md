@@ -30,7 +30,7 @@ safety boundary
 cleanup or reset notes
 ```
 
-A lab that only asks students to read a document or run a validator is not sufficient for DEF CON-level workshop delivery unless the lab is explicitly a setup, readiness, or release-gate exercise.
+A lab that only asks students to read a document or run a validator is not sufficient for senior practitioner workshop delivery unless the lab is explicitly a setup, readiness, or release-gate exercise.
 
 ## Required evidence pattern
 
@@ -90,7 +90,7 @@ broad community-template scans without local guardrails
 GraphQL-specific tools unless the local target is proven to expose GraphQL
 ```
 
-Burp Suite Community and Postman may be mentioned only as optional manual comparison tools. They must not be required gates for this project because the required lab toolchain must remain free, open source, local, and reproducible without accounts.
+Burp Suite Community or Professional may be mentioned only as optional professional comparison tooling. Burp must not be a required gate for this project because the required lab toolchain must remain free, open source, local, and reproducible without accounts.
 
 ## Safe adversarial fixture rule
 
@@ -141,10 +141,10 @@ student records exact replay commands
 student records tool versions or missing-tool status
 student records artifact hashes
 student states that passive proxy evidence is not production security validation
-student states that broad active scanning is out of scope unless a later local-only slice explicitly allows it
+student states that broad active scanning is out of scope unless a later local-only exercise explicitly allows it
 ```
 
-OWASP ZAP active scans, nuclei templates, ffuf fuzzing, RESTler fuzzing, and other active techniques require a separate explicit slice with local-only scope, bounded payloads, and dedicated fail-closed guardrails.
+OWASP ZAP active scans, nuclei templates, ffuf fuzzing, RESTler fuzzing, and other active techniques require a separate explicit exercise with local-only scope, bounded payloads, and dedicated fail-closed guardrails.
 
 ## Student deliverable standard
 
@@ -197,7 +197,7 @@ local-proxy-evidence-workflow.md exists
 workshop_proxy_evidence_cases.yaml exists
 required practical tools are recorded
 closed-source and account-required tools are not required
-labs 01, 02, and 06 reference practical proxy evidence for the first integration slice
+labs 01, 02, and 06 reference practical proxy evidence for the first integration pass
 release-candidate gate inputs include this standard
 ```
 

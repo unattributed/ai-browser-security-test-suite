@@ -25,6 +25,22 @@ By the end of this lab, the student should be able to:
 - State what the package proves and what it does not prove.
 - Preserve checksums for reviewer validation.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Completion criteria
+
+The lab is complete when the base method, student-authored variation, required artifacts, `artifact-manifest.json`, `SHA256SUMS.txt`, evidence archive `.tar.gz`, archive `.sha256` sidecar, and finding notes are present and reviewable.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic capstone chain across the Browser-Safe AI evidence pipeline.
@@ -54,7 +70,7 @@ A weak assessment may:
 
 A defensible assessment preserves artifacts, hashes them, records model mode and limitations, maps findings to evidence, and keeps deterministic policy outside model output.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -137,6 +153,29 @@ Optional professional comparison tooling:
 - OWASP ZAP
 - mitmproxy
 - local OCR tooling for visual evidence comparison
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -597,7 +636,7 @@ Lab 12 teaches a practical, evidence-first method for validating a browser-based
 
 The method is deliberately professional rather than checklist-driven. A passing result requires the student to explain what each artifact proves, which artifact is only interpretation, which evidence surfaces disagree or are incomplete, and why the intentionally weak local target remains suitable only for training.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates the real-world TTP of using browser-visible content, hidden or transformed page state, proxy-observed traffic, and model-facing context to influence or confuse AI-assisted browser workflows. In a production assessment, the same method helps a red teamer, detection engineer, incident responder, product security reviewer, or vendor-risk reviewer decide whether an AI browser control was bypassed, merely summarized poorly, or only exposed a training-target weakness.
 
@@ -652,7 +691,7 @@ A valid variation changes at least two of these local fields:
 
 The final package must show where the variation appears and how the reviewer can verify that it was student-authored.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation is proven only when the evidence package contains artifacts that let a reviewer trace the synthetic input through the workflow. Minimum evidence for Lab 12 is:
 
@@ -729,3 +768,15 @@ Conduct this lab only against the local intentionally weak workshop target or lo
 Lab 12 closes only when the evidence package, manifest, checksums, targeted validation, workshop validators, release gate, full pytest, and canonical live target-backed validation when applicable all pass and the closure report explains what the artifacts prove and what they do not prove.
 
 <!-- slice-2.35-lab-12-practical-supplement:end -->
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

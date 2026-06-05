@@ -12,7 +12,7 @@ In a separate terminal:
 
 ```bash
 cd ../ollama-webui
-.venv/bin/python scripts/pull_model.py
+.venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Expected output includes:

@@ -14,6 +14,18 @@ Students must do not claim production security validation from this lab. The res
 
 By the end of this lab, the student should be able to generate local indirect prompt injection fixtures, create a student-authored variation, capture browser evidence, compare direct local responses with proxied responses, preserve model-bound context review evidence, produce `artifact-manifest.json` and `SHA256SUMS.txt`, and explain why page-authored instructions are untrusted evidence rather than policy.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic indirect prompt injection through browser content. The attack vector is page-authored instruction text placed in visible text, hidden DOM content, metadata, ARIA text, alt text, or attributes that may be ingested by a browser-connected AI workflow.
@@ -22,7 +34,7 @@ Safe synthetic indirect prompt injection through browser content. The attack vec
 
 The risk is that untrusted browser content can influence model-bound context, reviewer language, severity, exception handling, or policy decisions when provenance is not preserved and model output is treated as authority. A defensible workflow must record where the instruction came from, whether it was visible, whether it entered model-bound context, and which deterministic reviewer decision applied.
 
-## Safety boundary
+## Safety and authorization boundary
 
 This lab stays inside the workshop operating boundary: local-only, synthetic-only, authorized-only, against `ollama-webui` on loopback. Do not use real credentials, real tokens, real cookies, real customer data, public callback endpoints, third-party targets, production SaaS tenants, malware behavior, persistence, destructive behavior, or production hardening of the weak target. Do not install, reinstall, upgrade, or modify NVIDIA drivers.
 
@@ -41,6 +53,29 @@ The prepared VirtualBox VM uses the same convention because its `$HOME` expands 
 ## Tools used
 
 The lab uses Python, the Lab 02 fixture generator, the Lab 02 live evidence runner, a local browser, browser DevTools, `curl`, `jq`, `rg` or `grep`, `ss`, `nmap`, `sha256sum`, `mitmdump` or `mitmproxy`, and OWASP ZAP for passive local HTTP history review when available.
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Lab title and purpose
 
@@ -414,7 +449,7 @@ The student will:
 7. Prove whether the variation appeared in evidence and whether the reviewer decision remained deterministic.
 8. Report the finding with artifact paths, limitations, and remediation guidance.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 The real-world TTP being emulated is indirect prompt injection through untrusted browser content.
 
@@ -722,7 +757,7 @@ Minimum review template:
 
 ```bash
 cat > "${LAB02_RUN}/browser-evidence/browser-fixture-review.md" <<'LAB02_BROWSER_REVIEW'
-# Lab 02 Browser Fixture Review
+### Lab 02 Browser Fixture Review
 
 Required scope:
 
@@ -776,7 +811,7 @@ Record the review:
 
 ```bash
 cat > "${LAB02_RUN}/proxy-evidence/zap-passive/zap-passive-review-notes.md" <<'LAB02_ZAP_REVIEW'
-# OWASP ZAP Passive Local HTTP History Review
+### OWASP ZAP Passive Local HTTP History Review
 
 Required scope:
 
@@ -822,7 +857,7 @@ Create the comparison review:
 
 ```bash
 cat > "${LAB02_RUN}/comparisons/direct-vs-proxied-review.md" <<'LAB02_DIRECT_PROXY_REVIEW'
-# Direct Versus Proxied Response Review
+### Direct Versus Proxied Response Review
 
 Questions:
 
@@ -847,7 +882,7 @@ rg -n "SYNTHETIC-LAB-MARKER|LAB02-STUDENT-VARIATION|model-bound|model_bound|dete
   || true
 
 cat > "${LAB02_RUN}/comparisons/marker-provenance-review.md" <<'LAB02_MARKER_REVIEW'
-# SYNTHETIC-LAB-MARKER Provenance Review
+### SYNTHETIC-LAB-MARKER Provenance Review
 
 Required reviewer conclusions:
 
@@ -875,7 +910,7 @@ Create the model-bound context review:
 
 ```bash
 cat > "${LAB02_RUN}/comparisons/model-bound-context-review.md" <<'LAB02_MODEL_CONTEXT_REVIEW'
-# Model-Bound Context Review
+### Model-Bound Context Review
 
 Questions:
 
@@ -916,7 +951,7 @@ Run:
 
 ```bash
 cat > "${LAB02_RUN}/analyst-review-notes.md" <<'LAB02_REVIEW'
-# Lab 02 Analyst Review Notes
+### Lab 02 Analyst Review Notes
 
 1. Which artifacts prove the target and fixture server were loopback-only?
 2. Which artifacts prove the fixture content was synthetic-only?
@@ -998,7 +1033,7 @@ The variation must:
 
 The variation should test whether the workflow still records provenance when the wording changes. It should not attempt credential collection, token theft, persistence, destructive behavior, malware behavior, or production SaaS testing.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation worked when the student can point to artifacts proving all of the following:
 
@@ -1209,7 +1244,7 @@ The important finding is not simply that the model saw text. The important findi
 Use this template after completing the lab:
 
 ```markdown
-# Finding: Browser page content can influence model-bound context without sufficient provenance
+### Finding: Browser page content can influence model-bound context without sufficient provenance
 
 ## Summary
 
@@ -1383,3 +1418,15 @@ student did not retain mitmproxy CA private material in the final evidence archi
 Partial credit may be appropriate when a required tool is missing but the student records the missing-tool status honestly and completes all non-proxy evidence paths. Missing required proxy tooling is still a workstation readiness failure for this lab.
 
 Fail the submission if the student fabricates evidence, targets anything outside loopback, uses real credentials or real customer data, runs broad active scanning, omits model-bound context comparison, omits proxy comparison, omits marker provenance, omits the student-authored variation, or makes an unsupported production claim.
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

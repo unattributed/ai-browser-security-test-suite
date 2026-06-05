@@ -33,6 +33,18 @@ DOC_PATHS = [
 ]
 
 LAB_DOCS = sorted(Path("docs/workshop/labs").glob("*.md"))
+EXAMPLES_README = Path("examples/browser-safe-ai-methods/README.md")
+WORKSHOP_CONTRACT = Path("docs/workshop/workshop-contract.md")
+STUDENT_FACING_DOCS = [
+    Path("docs/lab-track-coverage-matrix.md"),
+    Path("docs/workshop/README.md"),
+    Path("docs/workshop/practical-adversarial-lab-standard.md"),
+    Path("docs/workshop/local-proxy-evidence-workflow.md"),
+    Path("docs/workshop/proxy-tool-setup-and-live-local-evidence.md"),
+    Path("docs/workshop/tooling-baseline.md"),
+    Path("docs/workshop/proxy-tooling.md"),
+    EXAMPLES_README,
+] + LAB_DOCS
 
 STALE_VERIFIED_LAB_PHRASES = [
     "future target-backed",
@@ -59,9 +71,10 @@ STUDENT_DOC_CONTAMINATION_PHRASES = [
 ]
 
 MODEL_EXAMPLE_RE = re.compile(r"OLLAMA_MODEL=deepseek-r1(?!:7b)|--model deepseek-r1(?!:7b)")
-TARGET_START_RE = re.compile(r"(?<![/.\w-])python scripts/pull_model\.py")
+TARGET_START_RE = re.compile(r"(?<![/.\w-])(?:python|python3|\.venv/bin/python) scripts/pull_model\.py")
 STANDALONE_PYTEST_RE = re.compile(r"^pytest$", re.MULTILINE)
 HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+CONFERENCE_RE = re.compile(r"\b(?:DEF CON|Defcon|Black Hat|BSides)\b")
 
 
 def read(path: Path) -> str:
@@ -116,6 +129,59 @@ def validate() -> list[str]:
     for required in ["FOSS Tool Audit", "gemma4:e2b", "407 passed", "Lab 00 through Lab 12"]:
         if required not in report:
             errors.append(f"student-lab-verification-report must include {required!r}")
+
+    readme = read(Path("docs/workshop/README.md"))
+    if str(WORKSHOP_CONTRACT) not in readme:
+        errors.append("docs/workshop/README.md must link to docs/workshop/workshop-contract.md")
+    for lab_num in range(13):
+        lab_label = f"Lab {lab_num:02d}"
+        if lab_label not in readme:
+            errors.append(f"docs/workshop/README.md must include {lab_label} in the canonical lab track")
+
+    contract = read(WORKSHOP_CONTRACT)
+    for required in [
+        "## Audience",
+        "## Goals",
+        "## Non-Goals",
+        "## Safety and Authorization Boundary",
+        "## Required Tooling",
+        "## Optional Tooling",
+        "## Artifact Contract",
+        "## Student Completion Standard",
+        "## Reviewer Completion Standard",
+        "Labs are the course path. Examples are the method library. Blog posts are the theory and context. Runners are the evidence automation. Validators are the consistency proof.",
+        "artifact-manifest.json",
+        "SHA256SUMS.txt",
+    ]:
+        if required not in contract:
+            errors.append(f"{WORKSHOP_CONTRACT} missing workshop contract term: {required!r}")
+
+    examples = read(EXAMPLES_README)
+    for required in [
+        "extended method catalog",
+        "not the primary course sequence",
+        "not a one-to-one duplicate of Labs 00 through 12",
+        "canonical student course path remains `docs/workshop/labs/00` through `docs/workshop/labs/12`",
+        "reusable method variations, payload patterns, evidence expectations, and instructor expansion material",
+    ]:
+        if required not in examples:
+            errors.append(f"{EXAMPLES_README} missing supplemental catalog positioning: {required!r}")
+
+    for rel_path in STUDENT_FACING_DOCS:
+        path = REPO_ROOT / rel_path
+        if not path.exists():
+            errors.append(f"missing student-facing path: {rel_path}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        if "Postman" in text:
+            errors.append(f"{rel_path} must not mention Postman in student-facing workflow material")
+        if CONFERENCE_RE.search(text):
+            errors.append(f"{rel_path} contains conference-specific public workshop wording")
+        if "scripts/pull_model.py" in text and "$HOME/Workspace/ollama-webui/scripts/pull_model.py" not in text and "ollama-webui/scripts/pull_model.py" not in text:
+            errors.append(f"{rel_path} must make pull_model.py references explicit to the weak target repo")
+        for forbidden in ["Burp is required", "Burp Suite is required", "required Burp"]:
+            if forbidden in text:
+                errors.append(f"{rel_path} contains non-optional Burp wording: {forbidden!r}")
 
     return errors
 

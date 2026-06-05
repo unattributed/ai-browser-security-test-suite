@@ -26,6 +26,22 @@ By the end of this lab, the student should be able to:
 - Validate artifact manifests and SHA256 evidence records.
 - Write analyst notes that preserve frame provenance and local-only scope.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Completion criteria
+
+The lab is complete when the base method, student-authored variation, required artifacts, `artifact-manifest.json`, `SHA256SUMS.txt`, evidence archive `.tar.gz`, archive `.sha256` sidecar, and finding notes are present and reviewable.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic iframe and frame-tree source confusion.
@@ -53,7 +69,7 @@ A vulnerable browser-AI path may:
 - Let a model response stand in for browser-observed evidence.
 - Produce a report that cannot prove which frame supplied which content.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -125,6 +141,29 @@ Recommended:
 
 - Lab 01 evidence review pattern
 - Lab 04 DOM/render provenance review pattern
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -505,7 +544,7 @@ This lab remains local-only, synthetic-only, and authorized-only. It does not te
 
 <!-- slice-2.29-lab06-instructional-alignment-start -->
 
-# Lab 06 Practical Courseware Supplement
+### Lab 06 Practical Courseware Supplement
 
 This supplement makes Lab 06 usable as practical student courseware. Lab 06 teaches iframe and frame-tree source confusion as an evidence-first browser security method. Students must prove which frame supplied which content before accepting model-bound context, analyst notes, or a report as security evidence.
 
@@ -515,7 +554,7 @@ Lab 06 teaches iframe and frame-tree provenance validation. The practical method
 
 The core lesson is that static top-page HTML is not sufficient when a browser-based AI workflow, analyst workflow, or control consumes a page with nested browsing contexts. A defensible review must preserve frame ancestry and source attribution so top-page content, same-origin child-frame content, sandboxed frame content, `srcdoc` content, and nested frame-chain content are not flattened into one undifferentiated page-level evidence class.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates browser-content source confusion where nested frames, sandboxed frames, `srcdoc` frames, or frame chains cause a reviewer, browser assistant, security workflow, or model-bound context builder to lose source attribution. In a real authorized assessment, that failure can make child-frame content appear as if it came from the trusted top page, hide sandbox context, omit frame URLs, or produce a report that cannot prove which frame supplied a claim.
 
@@ -623,7 +662,7 @@ LAB06_VARIATION_FRAME_PROVENANCE_SAFE_MARKER_YOURINITIALS_20260602
 
 The variation must be small, reviewable, harmless, and local. It must not introduce external iframe URLs, credential flows, token collection, public callbacks, malware behavior, persistence, destructive behavior, production SaaS testing, or target hardening.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation is proven only when the student can show all of the following:
 
@@ -668,3 +707,15 @@ Defender recommendation: Require frame-aware browser evidence collection and rev
 Conduct this lab only against local synthetic fixtures and the intentionally vulnerable local `ollama-webui` workshop target. Do not harden the target. The intentionally weak target must remain vulnerable so the training evidence remains valid. Do not use real credentials, real customer data, third-party sites, production tenants, external iframe URLs, public callback infrastructure, malware behavior, persistence, destructive behavior, or unauthorized systems. Keep proxy listeners on loopback. Keep evidence inside the lab run directory. Do not install, reinstall, upgrade, or modify NVIDIA drivers. This lab is a training and validation exercise with no production security validation claim.
 
 <!-- slice-2.29-lab06-instructional-alignment-end -->
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

@@ -24,6 +24,18 @@ By the end of this lab, the student should be able to:
 - Write analyst notes that distinguish what the browser rendered from what extraction logic captured.
 - Explain why a model response cannot resolve evidence provenance by itself.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic DOM/render mismatch.
@@ -50,7 +62,7 @@ A vulnerable browser-AI path may:
 - Fail to distinguish collapsed duplicate content from visible content.
 - Produce a report that cannot prove the representation used by the model.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -119,6 +131,29 @@ Recommended:
 
 - Lab 01 evidence review pattern
 - Lab 03 hidden content provenance review pattern
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -374,7 +409,7 @@ Use the shared proxy workflow and repository-wide proxy tooling policy when prox
 
 <!-- slice-2.27-lab-04-practical-method-alignment:start -->
 
-# Lab 04 student-facing practical method alignment
+### Lab 04 student-facing practical method alignment
 
 This section gives students the practical Lab 04 method, evidence workflow, student-authored variation, and completion criteria without relying on instructor-only notes.
 
@@ -441,7 +476,7 @@ If the weak target is not reachable and your instructor has authorized you to st
 ```bash
 cd $HOME/Workspace/ollama-webui
 source .venv/bin/activate
-OLLAMA_HOST=http://127.0.0.1:11434 python3 scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 python3 $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Keep the terminal open while you complete the lab. Record the terminal output or save it into your evidence folder.
@@ -491,19 +526,19 @@ Start ZAP before the browser interaction, launch or configure a browser to proxy
 - `tests/test_workshop_lab_04_dom_render_mismatch_fixtures.py`
 - `tests/test_workshop_lab_04_dom_render_mismatch_live_evidence_runner.py`
 
-## 1. Method being taught
+## Method being taught
 
 You are learning how to conduct `DOM rendered page mismatch validation` as an evidence-first browser security test. The method is not complete until you can show what the target served, what the browser rendered, what the runner captured, and why those artifacts support the conclusion.
 
 For this lab, treat model output as commentary only. The security conclusion must come from artifacts that another reviewer can inspect.
 
-## 2. Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates browser-content deception where source, DOM, accessibility-facing content, or rendered pixels present different meanings to an automated reviewer or AI assistant.
 
 A realistic attacker abuses differences between what a browser-based AI system, automation layer, analyst, or reviewer sees through different evidence surfaces. In a real assessment, this can cause summarization errors, false trust, missed warnings, or incorrect control verdicts. In this lab, all content is harmless, local, and synthetic.
 
-## 3. Local-only PoC payload or controlled test input
+## Local-only PoC payload or controlled test input
 
 Use synthetic Lab 04 markers only. A safe baseline marker pair is:
 
@@ -514,7 +549,7 @@ LAB04_BASELINE_SOURCE_SAFE_MARKER_20260602
 
 Your local-only controlled input is a local page or target route that uses harmless synthetic markers to create a difference between source-visible text and rendered-visible text. Never use real credentials, customer data, third-party domains, production SaaS tenants, or public callback infrastructure.
 
-## 4. Step-by-step execution
+## Step-by-step execution
 
 1. Create a Lab 04 evidence folder outside the repository.
 2. Verify the toolkit virtual environment Python.
@@ -528,7 +563,7 @@ Your local-only controlled input is a local page or target route that uses harml
 10. Create or update the manifest so every artifact has a purpose and checksum.
 11. Write reviewer notes that explain what changed, what evidence proves it, and what security finding follows.
 
-## 5. Required student-authored variation
+## Required student-authored variation
 
 Create your own variation of the Lab 04 controlled input. The variation must be small, local, harmless, and reviewable. Use a marker pair like this:
 
@@ -539,7 +574,7 @@ LAB04_VARIATION_SOURCE_SAFE_MARKER_YOURINITIALS_20260602
 
 Your variation should create a new synthetic marker pair and a small local variation that changes where the mismatch appears, such as visible copy, hidden copy, CSS treatment, or DOM placement, without using real secrets or external systems. Record exactly what you changed and why the change still stays within the lab rules of engagement.
 
-## 6. Evidence that proves the variation worked
+## Evidence to collect
 
 Your evidence set must prove the variation with artifacts, not claims. Preserve:
 
@@ -554,7 +589,7 @@ Your evidence set must prove the variation with artifacts, not claims. Preserve:
 
 The evidence goal is HTML source, DOM snapshot, screenshot, visible text extraction, optional proxy flow, manifest entry, checksum, and reviewer notes that point to the exact marker difference.
 
-## 7. Expected failure modes
+## Expected failure modes
 
 Common failure modes include:
 
@@ -568,7 +603,7 @@ Common failure modes include:
 
 When a failure occurs, do not overwrite the failed evidence. Save it, describe the failure, correct the workflow, and rerun the lab so the final evidence is reviewable.
 
-## 8. Defender interpretation
+## Defender interpretation
 
 A defender should read the Lab 04 evidence as a control validation result. The finding is meaningful when the artifacts show that a browser-based AI workflow or analyst workflow could observe inconsistent content across evidence surfaces. The defender should ask:
 
@@ -577,12 +612,12 @@ A defender should read the Lab 04 evidence as a control validation result. The f
 - Would a browser assistant, summarizer, reviewer, or control make a different decision because of the mismatch?
 - What capture order, logging, or cross-check would have exposed the mismatch earlier?
 
-## 9. Reportable finding
+## Reportable finding
 
 Use this template for your final Lab 04 finding:
 
 ```markdown
-# Lab 04 finding: <short title>
+### Lab 04 finding: <short title>
 
 ## Scope
 Local workshop target at http://127.0.0.1:11435. Synthetic Lab 04 markers only.
@@ -606,7 +641,7 @@ Recommend evidence cross-checks, capture ordering, reviewer workflow improvement
 State that the test was local, authorized, synthetic, and conducted against an intentionally weak training target.
 ```
 
-## 10. Safety and authorization boundary
+## Safety and authorization boundary
 
 This lab is local, authorized, synthetic, and scoped to the intentionally vulnerable workshop target. Do not test third-party systems, production AI products, customer data, real credentials, public callback infrastructure, persistence, malware behavior, destructive behavior, or unauthorized environments. Do not modify NVIDIA drivers. Do not harden the weak target during the lab.
 
@@ -640,3 +675,55 @@ If a command fails, save the command output in your evidence folder. Verify the 
 Lab 04 is complete when your evidence proves the baseline method and your student-authored variation, your manifest and checksums are present, your reportable finding is reviewer-readable, and any canonical live target-backed runner has passed when available.
 
 <!-- slice-2.27-lab-04-practical-method-alignment:end -->
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.
+
+## 1. Method being taught
+
+See the canonical Method being taught section. The method is evidence-first browser-AI validation using local synthetic artifacts, student-authored variation, manifest, SHA256, and reportable finding.
+
+## 2. Real-world TTP being emulated
+
+See the canonical real-world behavior section. The TTP is safe local emulation of browser-based AI evidence confusion, model-bound context risk, review triage pressure, and artifact-backed validation.
+
+## 3. Local-only PoC payload or controlled test input
+
+Use only the local synthetic payloads and controlled fixture inputs described above. Preserve SYNTHETIC-LAB-MARKER and avoid real credentials, real customer data, public callbacks, or third-party systems.
+
+## 4. Step-by-step execution
+
+Follow the canonical execution workflow above: prepare the evidence directory, run the local target or fixture, capture browser and HTTP evidence, create the student-authored variation, build the manifest, verify SHA256 hashes, and archive reviewer evidence.
+
+## 5. Required student-authored variation
+
+Create a local-only student-authored variation with a unique synthetic marker. The variation must change the payload, fixture, timing, presentation, or browser interaction and produce reviewable evidence.
+
+## 6. Evidence that proves the variation worked
+
+Collect direct HTTP, proxied HTTP where available, browser screenshot, DOM or source, visible text, model-bound context, Synthetic marker provenance, marker provenance, artifact-manifest.json, SHA256SUMS.txt, archive, and archive checksum evidence.
+
+## 7. Expected failure modes
+
+Expected failure modes include missing target, missing Playwright or Chromium, missing proxy tooling, empty captures, missing synthetic markers, incomplete manifest, checksum mismatch, or unsupported production claims.
+
+## 8. Defender interpretation
+
+Treat model output as an observation, not a security decision. Defender interpretation must come from artifact comparison, provenance, deterministic policy or reviewer analysis, and stated limits of proof.
+
+## 9. Reportable finding
+
+A reportable finding identifies the local synthetic condition, affected browser-AI evidence surface, supporting artifacts, defensive interpretation, and limitations without claiming production validation.
+
+## 10. Safety and authorization boundary
+
+Use only local, authorized, synthetic targets. Do not harden the weak target, install packages from the lab, change NVIDIA drivers, use real data, contact third parties, or claim production security validation.

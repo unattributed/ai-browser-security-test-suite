@@ -5,9 +5,9 @@ Demonstrate that a browser-AI helper with a project-agent command endpoint can c
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-20-model-output-handling-why-ai-verdicts-must-be-constrained.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-21-fail-open-versus-fail-closed-security-decisions.md`
+- Blog source: `browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context`
+- Blog source: `browser-safe-ai-systems-20-model-output-handling-why-ai-verdicts-must-be-constrained`
+- Blog source: `browser-safe-ai-systems-21-fail-open-versus-fail-closed-security-decisions`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context.html
 
 ## Workshop lab
@@ -26,7 +26,7 @@ Start or confirm the weak target before using the variations:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:

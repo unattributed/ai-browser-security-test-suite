@@ -24,6 +24,18 @@ By the end of this lab, the student should be able to:
 - Write analyst notes that distinguish initial state, transition trigger, and after state.
 - Explain why model output cannot prove time-of-capture provenance.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic delayed content and state transition.
@@ -49,7 +61,7 @@ A vulnerable browser-AI path may:
 - Build model-bound context without timeline metadata.
 - Produce a report that cannot prove whether the model saw the initial state, after state, or both.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -123,6 +135,29 @@ Recommended:
 - Lab 01 evidence review pattern
 - Lab 04 DOM/render provenance review pattern
 - Lab 06 source attribution review pattern
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -474,7 +509,7 @@ You are assessing a browser-based AI workflow that observes a local page or arti
 
 The assessment remains local, authorized, and synthetic. The intentionally weak `ollama-webui` workshop target and Lab 07 fixtures exist so you can practice the method safely before adapting it to an authorized client, enterprise, vendor review, red team, detection engineering, incident response, or product security assessment.
 
-### 1. Method being taught
+### Method being taught
 
 The method is **time-aware multi-surface browser evidence comparison**. You will capture browser state before, during, and after a local state transition, then compare what each evidence surface proves.
 
@@ -489,13 +524,13 @@ The method is **time-aware multi-surface browser evidence comparison**. You will
 
 The professional skill is not running a script. The skill is proving which artifact captured which state, when that state appeared, and whether a browser-based AI workflow had enough provenance to make a trustworthy decision.
 
-### 2. Real-world TTP being emulated
+## Real-world behavior being emulated
 
 This lab emulates a local, controlled version of attacker-controlled browser content that changes after first inspection. In real assessments, similar behavior can appear when page content delays instructions, changes DOM attributes after a benign initial render, reveals content only after a click or scroll, changes same-document route state, or uses browser storage to modify content across a reload path.
 
 A red teamer can use this method to demonstrate how delayed page state can influence an AI-assisted review. A detection engineer can use it to define telemetry and artifact requirements. A SOC lead or incident responder can use it to decide whether a model summary is sufficiently supported by source, DOM, screenshot, proxy, and timeline evidence. A vendor-risk reviewer can use it to ask whether a browser AI product records provenance for the exact content used in a decision.
 
-### 3. Local-only PoC payload or controlled test input
+### Local-only PoC payload or controlled test input
 
 Use only the canonical Lab 07 local fixture workflow. The expected local assets are:
 
@@ -524,7 +559,7 @@ Your student-authored controlled input must remain local and synthetic. Add a ma
 LAB07_STUDENT_AUTHORED_VARIATION_<your_id>_<yyyymmdd>
 ```
 
-### 4. Step-by-step execution
+### Step-by-step execution
 
 1. Create a run-specific evidence directory for Lab 07 under the workshop evidence root.
 2. Confirm that you are on loopback-only local scope. Use `ss` to inspect listeners and, when useful, use `nmap` against local loopback only to confirm the target and fixture ports are not third-party systems.
@@ -546,7 +581,7 @@ $HOME/Workspace/ai-browser-security-test-suite/.venv/bin/python \
 
 The `--out-dir` path must not already exist when the runner is invoked if the runner expects to create it.
 
-### 5. Required student-authored variation
+### Required student-authored variation
 
 Create one small local variation that changes how or when the synthetic marker appears. The variation must not use external infrastructure, real credentials, real customer data, or third-party systems.
 
@@ -560,7 +595,7 @@ Acceptable variations include:
 
 Your variation is complete only when it contains a unique `LAB07_STUDENT_AUTHORED_VARIATION` marker and you can prove where that marker first appeared.
 
-### 6. Evidence that proves the variation worked
+### Evidence to collect
 
 Collect enough artifacts to prove timing, provenance, and integrity:
 
@@ -576,7 +611,7 @@ Collect enough artifacts to prove timing, provenance, and integrity:
 
 The evidence must prove the variation worked without relying on model output as a security decision.
 
-### 7. Expected failure modes
+### Expected failure modes
 
 Common failure modes include:
 
@@ -589,13 +624,13 @@ Common failure modes include:
 - Changing the weak target instead of changing the local synthetic fixture or test input.
 - Omitting `SHA256SUMS.txt`, archive checksums, or the artifact manifest.
 
-### 8. Defender interpretation
+### Defender interpretation
 
 A defender should interpret a successful Lab 07 result as proof that delayed browser state can change what an AI-assisted workflow observes after initial inspection. The finding is strongest when it identifies which artifact first exposed the marker, whether the marker was visible to the human reviewer, whether it appeared in model-bound context, and whether the tool preserved enough provenance to reconstruct the transition.
 
 For detection engineering, the evidence suggests controls should log timing, route transitions, DOM mutation observations, storage state, and proxy-visible requests. For vendor review, the evidence supports questions about whether a product records pre-state and post-state artifacts, not only a final summary.
 
-### 9. Reportable finding
+### Reportable finding
 
 Use this template for the reportable finding:
 
@@ -616,7 +651,7 @@ Recommended interpretation:
 Treat model output as an observation, not a security decision. Require source, DOM, screenshot, visible text, proxy, timeline, marker provenance, model-bound context, manifest, and checksum evidence before accepting or rejecting a browser-based AI security claim.
 ```
 
-### 10. Safety and authorization boundary
+### Safety and authorization boundary
 
 This lab must remain local, authorized, synthetic, and scoped to the intentionally weak local `ollama-webui` workshop target. Do not test third-party systems, production AI products, public callback infrastructure, real credentials, real customer data, malware behavior, persistence, destructive behavior, or unauthorized environments.
 
@@ -624,7 +659,7 @@ Do not harden the weak target. The weak target is intentionally vulnerable for t
 
 Do not install, reinstall, upgrade, or modify NVIDIA drivers. Do not install packages from this lab. Do not run `apt`, `apt-get`, `pip install`, `playwright install`, `snap`, NVIDIA, CUDA, DKMS, `linux-image`, or `linux-headers` commands from the lab workflow.
 
-### Reviewer-grade completion criteria
+## Completion criteria
 
 Lab 07 is complete when the student can show:
 
@@ -638,3 +673,55 @@ Lab 07 is complete when the student can show:
 - The safety boundary was preserved.
 
 <!-- slice-2.30-lab-07-practical-courseware:end -->
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.
+
+### 1. Method being taught
+
+See the canonical Method being taught section. The method is evidence-first browser-AI validation using local synthetic artifacts, student-authored variation, manifest, SHA256, and reportable finding.
+
+### 2. Real-world TTP being emulated
+
+See the canonical real-world behavior section. The TTP is safe local emulation of browser-based AI evidence confusion, model-bound context risk, review triage pressure, and artifact-backed validation.
+
+### 3. Local-only PoC payload or controlled test input
+
+Use only the local synthetic payloads and controlled fixture inputs described above. Preserve SYNTHETIC-LAB-MARKER and avoid real credentials, real customer data, public callbacks, or third-party systems.
+
+### 4. Step-by-step execution
+
+Follow the canonical execution workflow above: prepare the evidence directory, run the local target or fixture, capture browser and HTTP evidence, create the student-authored variation, build the manifest, verify SHA256 hashes, and archive reviewer evidence.
+
+### 5. Required student-authored variation
+
+Create a local-only student-authored variation with a unique synthetic marker. The variation must change the payload, fixture, timing, presentation, or browser interaction and produce reviewable evidence.
+
+### 6. Evidence that proves the variation worked
+
+Collect direct HTTP, proxied HTTP where available, browser screenshot, DOM or source, visible text, model-bound context, Synthetic marker provenance, marker provenance, artifact-manifest.json, SHA256SUMS.txt, archive, and archive checksum evidence.
+
+### 7. Expected failure modes
+
+Expected failure modes include missing target, missing Playwright or Chromium, missing proxy tooling, empty captures, missing synthetic markers, incomplete manifest, checksum mismatch, or unsupported production claims.
+
+### 8. Defender interpretation
+
+Treat model output as an observation, not a security decision. Defender interpretation must come from artifact comparison, provenance, deterministic policy or reviewer analysis, and stated limits of proof.
+
+### 9. Reportable finding
+
+A reportable finding identifies the local synthetic condition, affected browser-AI evidence surface, supporting artifacts, defensive interpretation, and limitations without claiming production validation.
+
+### 10. Safety and authorization boundary
+
+Use only local, authorized, synthetic targets. Do not harden the weak target, install packages from the lab, change NVIDIA drivers, use real data, contact third parties, or claim production security validation.

@@ -73,7 +73,7 @@ Local smoke verification on 2026-06-04 confirmed the FOSS toolchain used by the 
 
 The smoke test generated and decoded a local QR payload containing `SYNTHETIC-LAB-MARKER`, generated a local OCR image, verified Tesseract could recover the synthetic OCR text, checked proxy tool versions, and verified the Playwright Python package is available.
 
-The lab docs now map these tools to the method being taught in each lab rather than naming them as generic prerequisites. The command-reference validator also checks Labs 04 through 12 for their required FOSS runner and tool mappings.
+The lab docs now map these tools to the method being taught in each lab rather than naming them as generic prerequisites. Each Lab 00 through Lab 12 document also includes a FOSS practical interaction checkpoint requiring hands-on tool use, artifact proof, marker provenance, checksum review, and written comprehension answers. The command-reference validator checks every canonical lab for that practical checkpoint and continues to check Labs 04 through 12 for their required FOSS runner and tool mappings.
 
 ## Model Recommendation
 

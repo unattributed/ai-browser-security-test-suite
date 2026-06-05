@@ -5,9 +5,9 @@ Place attacker-controlled instructions inside page content that a browser-AI ass
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-06-the-core-risk-untrusted-web-content-entering-an-ai-context.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-35-building-safe-synthetic-browser-ai-attack-cases.md`
+- Blog source: `browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages`
+- Blog source: `browser-safe-ai-systems-06-the-core-risk-untrusted-web-content-entering-an-ai-context`
+- Blog source: `browser-safe-ai-systems-35-building-safe-synthetic-browser-ai-attack-cases`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages.html
 
 ## Workshop lab
@@ -24,7 +24,7 @@ Start or confirm the weak target before using the variations:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:

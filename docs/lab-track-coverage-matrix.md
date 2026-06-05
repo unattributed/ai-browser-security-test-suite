@@ -186,7 +186,7 @@ Initial practical proxy integration targets:
 | Lab 02 | Synthetic indirect prompt marker capture through browser evidence, proxy evidence, request replay, and model-bound context comparison. |
 | Lab 06 | iframe and frame-source provenance capture through browser frame-tree evidence and HTTP proxy evidence. |
 
-Required practical proxy and API evidence tools must remain free, open source, locally runnable, usable without an account, and bounded to loopback targets. Burp Suite Community and Postman may be optional manual comparison tools, but they are not required dependencies and not evidence gates.
+Required practical proxy and API evidence tools must remain free, open source, locally runnable, usable without an account, and bounded to loopback targets. Burp Suite may be optional professional comparison tooling, but it is not a required dependency and not an evidence gate.
 
 ## Slice 2.2 proxy tool install and live local evidence
 

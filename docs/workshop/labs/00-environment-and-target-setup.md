@@ -25,6 +25,46 @@ By the end of this lab, the student should be able to:
 - Preserve evidence under a predictable directory with hashes and a manifest.
 - Explain why environment verification is a security requirement, not administrative cleanup.
 
+## Method being taught
+
+Verify that the student workstation, toolkit repository, weak target repository, browser automation, proxy tooling, and evidence directory are ready for the local workshop path.
+
+## Real-world behavior being emulated
+
+Environment and Target Setup emulates a browser-AI review weakness in a safe local classroom setting. The lab uses synthetic content only and does not reproduce a real target, real credential, or production tenant.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Step-by-step execution
+
+Follow the detailed commands in the execution section below. Preserve command output and generated artifacts in the lab evidence directory.
+
+## Evidence to collect
+
+Collect the lab-specific browser, HTTP or proxy, model-bound context, policy or reviewer, manifest, checksum, archive, and student-variation evidence named in the detailed instructions below.
+
+## Required student-authored variation
+
+Record at least one local readiness observation from the student workstation, such as an unavailable optional tool or a confirmed loopback-only target check, and include it in the readiness notes.
+
+## Expected failure modes
+
+Common failure modes include a stopped weak target, missing browser automation, missing FOSS proxy tooling, empty proxy captures, reused evidence directories, missing synthetic markers, incomplete manifests, or checksum mismatches.
+
+## Defender interpretation
+
+Treat model output as evidence, not policy. The defender conclusion must come from artifact comparison, provenance review, deterministic policy or reviewer reasoning, and the stated limitation of proof.
+
+## Reportable finding
+
+A reportable finding names the local synthetic condition, the affected browser-AI evidence surface, the artifacts proving it, the safety boundary, and the defensive interpretation without claiming production validation.
+
+## Completion criteria
+
+The lab is complete when the base method, student-authored variation, required artifacts, `artifact-manifest.json`, `SHA256SUMS.txt`, evidence archive `.tar.gz`, archive `.sha256` sidecar, and finding notes are present and reviewable.
+
 ## Attack vector
 
 None.
@@ -46,7 +86,7 @@ A weak setup can create false findings. For example:
 
 The risk demonstrated by this lab is not exploitation. The risk is uncontrolled testing. Red teams, penetration testers, detection engineers, and product security reviewers need a deterministic baseline before they can trust later attack-vector evidence.
 
-## Safety boundary
+## Safety and authorization boundary
 
 This lab must remain local and synthetic.
 
@@ -131,6 +171,29 @@ Optional tools:
 - `gh`, for opening a pull request after instructor review
 - `ss` or `lsof`, for local port diagnostics
 - `tmux`, for running the target and test suite in separate panes
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -287,7 +350,7 @@ Start the target:
 ```bash
 cd $HOME/Workspace/ollama-webui
 
-OLLAMA_HOST="http://127.0.0.1:11434" .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST="http://127.0.0.1:11434" .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Leave that terminal running.
@@ -363,7 +426,9 @@ cat "$EVIDENCE_DIR/manifest.json" | jq .
 cat "$EVIDENCE_DIR/SHA256SUMS"
 ```
 
-The `SHA256SUMS` file intentionally uses bare filenames. The checksum file is scoped to one evidence directory, so verify it from inside that directory:
+The older Lab 00 preflight runner writes legacy setup aliases, `manifest.json` and `SHA256SUMS`, for backward compatibility. The Lab 00 practical readiness runner and final student completion package use the canonical workshop names, `artifact-manifest.json` and `SHA256SUMS.txt`.
+
+The preflight `SHA256SUMS` file intentionally uses bare filenames. The checksum file is scoped to one evidence directory, so verify it from inside that directory:
 
 ```bash
 cd "$EVIDENCE_DIR"

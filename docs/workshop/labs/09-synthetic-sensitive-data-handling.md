@@ -18,7 +18,7 @@ The method has five parts:
 4. Review the model-bound context or model-facing summary without treating model output as a security decision.
 5. Write a finding that distinguishes proven exposure from assumptions, speculation, or model-generated claims.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 The lab emulates a realistic browser-based AI exposure workflow where sensitive-looking material is present in content that a browser-based assistant, local agent, analyst tool, or review workflow might ingest or summarize. In the real world, adversaries and negligent workflows can place secrets, customer data, regulated data, internal notes, or credential-like strings in pages, tickets, chat transcripts, dashboards, exported reports, or hidden browser state.
 
@@ -43,7 +43,7 @@ Record the exact local route, fixture, form field, or helper workflow used to su
 
 ## Step-by-step execution
 
-1. Confirm the toolkit repository is on the slice branch and that the intentionally weak local target is available only on loopback.
+1. Confirm the toolkit repository is on the workshop branch and that the intentionally weak local target is available only on loopback.
 2. Start the weak workshop target only if it is not already running. Do not harden the target and do not expose it to the Internet.
 3. Open the canonical Lab 09 local fixture or route in the browser.
 4. Submit, load, or render the controlled Lab 09 input using the target workflow discovered in the repository.
@@ -69,7 +69,7 @@ The variation must include:
 
 The variation proves understanding only if the marker appears in at least one collected artifact and the student can explain why it appears there.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The final evidence set must include enough artifacts for a reviewer to verify the claim without rerunning the lab. Include these artifacts when applicable to the confirmed Lab 09 workflow:
 
@@ -81,7 +81,7 @@ The final evidence set must include enough artifacts for a reviewer to verify th
 6. Relevant browser state, transition, or storage evidence.
 7. Synthetic marker provenance review mapping each marker to each artifact.
 8. Model-bound context review showing what the model could see or summarize.
-9. `manifest.json` or equivalent artifact manifest.
+9. `artifact-manifest.json`.
 10. `SHA256SUMS.txt` covering all evidence artifacts.
 11. Reviewer archive and archive checksum.
 
@@ -145,7 +145,7 @@ This lab must remain local, authorized, synthetic, and scoped to the intentional
 
 Model output is not a security decision. The report must be based on collected artifacts, manifests, checksums, and reviewer-verifiable evidence.
 
-## Reviewer-grade completion criteria
+## Completion criteria
 
 Lab 09 is complete only when the student can provide:
 
@@ -165,7 +165,7 @@ Lab 09 is complete only when the student can provide:
 
 The following notes provide additional student-facing method detail. The practical lab above is the authoritative student execution path.
 
-# Lab 09: Synthetic Sensitive-Data Handling
+### Lab 09: Synthetic Sensitive-Data Handling
 
 ## Estimated time
 
@@ -191,6 +191,18 @@ By the end of this lab, the student should be able to:
 - Verify that model-bound context does not contain raw seeded values.
 - Identify false positives by using a negative-control fixture.
 - Explain why this lab is not proof of production DLP, tenant isolation, or real secret protection.
+
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
 
 ## Attack vector
 
@@ -221,7 +233,7 @@ A vulnerable workflow may:
 - Fail to distinguish a true seeded-value hit from a negative control.
 - Produce a report that cannot prove which artifacts contained the raw values.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -297,6 +309,29 @@ Optional synthetic-only enrichment:
 
 - `gitleaks` or `trufflehog` against seeded synthetic fixtures only
 - local DLP-style scanner built specifically for this lab
+
+## FOSS practical interaction checkpoint
+
+Before claiming completion, the student must demonstrate hands-on use of the free and open-source path named in `## Tools used`. The checkpoint is part of the lab, not optional reading.
+
+Perform and record these actions in the lab evidence directory:
+
+1. Run the lab's canonical Python runner or documented shell commands from `$TOOLKIT_REPO` against the local loopback target or generated local fixtures.
+2. Interact with at least one browser-observed evidence surface using Playwright, Chromium, or browser DevTools when the lab includes browser evidence.
+3. Use `curl` and `jq` for direct local replay or JSON artifact inspection when HTTP or JSON evidence is present.
+4. Use `rg` or `grep` to prove synthetic marker provenance across payloads, browser artifacts, model-bound context, and reports.
+5. Use mitmdump, mitmproxy, or OWASP ZAP only for loopback proxy evidence when the lab workflow calls for proxy review; record missing-tool status instead of fabricating flows.
+6. Use `sha256sum` and, where the lab packages an archive, `tar` to make the evidence reviewer-verifiable.
+
+Demonstrate comprehension by writing a short note that answers:
+
+1. Which FOSS tool did you personally operate in this lab, and what action did you perform with it?
+2. Which artifact proves the lab goal was exercised rather than only described?
+3. Which artifact proves the result stayed local-only, synthetic-only, and authorized-only?
+4. Which evidence surface would be misleading if reviewed alone?
+5. What would make this lab incomplete or fail closed?
+
+A screenshot or model response alone is not sufficient. Completion requires tool interaction, artifact review, marker provenance, checksums, and a written explanation of what the evidence proves and what it does not prove.
 
 ## Prerequisites
 
@@ -634,3 +669,15 @@ no production security validation claim
 ```
 
 This runner does not prove production DLP, production secret detection, tenant isolation, real credential protection, real customer-data protection, or production browser-AI security. It teaches evidence handling boundaries using seeded local synthetic markers and preserves the intentionally weak target behavior needed for the workshop.
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

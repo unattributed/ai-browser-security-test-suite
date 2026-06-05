@@ -23,7 +23,7 @@ This workflow is local-only, synthetic-only, and authorized-only. It does not te
 | sha256sum | Evidence integrity. |
 | rg or grep | Marker and artifact searches. |
 
-Burp Suite Community and Postman are not part of the required workflow. They may be used only as optional manual comparison tools and must not be required for a passing student submission.
+Burp Suite Community Edition or Burp Suite Professional may be used only as optional professional comparison tooling. Burp is not part of the required workflow and must not be required for a passing student submission.
 
 ## Safety boundary
 
@@ -75,15 +75,15 @@ curl-replay-command.txt
 nmap-loopback-command.txt
 tcpdump-loopback-command.txt
 proxy-evidence-report.md
-proxy-artifact-manifest.json
+artifact-manifest.json
 SHA256SUMS.txt
 ```
 
 When a tool is unavailable on a student system, the evidence should record the missing tool explicitly. Missing optional packet capture tooling is not a failure. Missing required proxy tooling during a proxy lab is a readiness failure, not a reason to fabricate evidence.
 
-## Initial Slice 2.1 lab mapping
+## Initial lab mapping
 
-Slice 2.1 integrates the practical proxy workflow into three high-value labs first:
+The practical proxy workflow is integrated into three high-value labs first:
 
 | Lab | Practical proxy objective |
 |---|---|
@@ -91,13 +91,13 @@ Slice 2.1 integrates the practical proxy workflow into three high-value labs fir
 | Lab 02 | Observe how a synthetic indirect prompt marker can appear in browser content and request or response evidence. |
 | Lab 06 | Preserve iframe and frame-source provenance through browser evidence and HTTP capture. |
 
-Later slices should extend the same workflow into Labs 09, 10, 11, and 12.
+Later courseware updates should extend the same workflow into Labs 09, 10, 11, and 12.
 
 ## Active testing boundary
 
-Slice 2.1 is a passive and evidence-capture slice. It does not authorize broad active scanning.
+The workshop proxy path is passive and evidence-capture focused. It does not authorize broad active scanning.
 
-Out of scope unless a later local-only slice explicitly adds guardrails:
+Out of scope unless a later local-only exercise explicitly adds guardrails:
 
 ```text
 ZAP active scan
@@ -138,26 +138,26 @@ reviewer questions are present
 failure conditions are explicit
 ```
 
-## Slice 2.2 live local evidence workflow
+## Live local evidence workflow
 
 The verified setup and live evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`.
 
 A live run should start `ollama-webui` on `127.0.0.1:11435`, verify loopback-only binding, replay local routes directly, replay the same routes through `mitmdump`, generate Lab 01, Lab 02, and Lab 06 proxy evidence packages, remove generated mitmproxy CA private material before final archiving, and stop the weak target after capture.
 
-## Slice 2.5 Lab 02 end-to-end live evidence runner
+## Lab 02 end-to-end live evidence runner
 
-Slice 2.5 adds `tools/run_workshop_lab_02_live_evidence.py` as the Lab 02 one-command evidence runner. The runner automates the local fixture server, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, and screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
+`tools/run_workshop_lab_02_live_evidence.py` is the Lab 02 one-command evidence runner. The runner automates the local fixture server, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, and screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
 
 The runner keeps the Lab 02 scope local-only, synthetic-only, and authorized-only. It fails closed on non-loopback targets, missing required artifacts, missing `SYNTHETIC-LAB-MARKER` in required synthetic evidence paths, and retained mitmproxy CA private material. It does not prove production security validation.
 
-## Slice 2.7 Lab 04 DOM/render mismatch end-to-end live evidence runner
+## Lab 04 DOM/render mismatch end-to-end live evidence runner
 
-Slice 2.7 adds `tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` as the Lab 04 one-command evidence runner. The runner automates local synthetic DOM/render mismatch fixtures, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, DOM/render mismatch observation, screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
+`tools/run_workshop_lab_04_dom_render_mismatch_live_evidence.py` is the Lab 04 one-command evidence runner. The runner automates local synthetic DOM/render mismatch fixtures, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, DOM/render mismatch observation, screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
 
 The runner keeps the Lab 04 scope local-only, synthetic-only, and authorized-only. It fails closed on non-loopback targets, missing required artifacts, missing `SYNTHETIC-LAB-MARKER` in required synthetic evidence paths, and retained mitmproxy CA private material. It does not prove production security validation. It also preserves the training model that the local `ollama-webui` target is intentionally weak by design and must remain vulnerable for the workshop.
 
-## Slice 2.9 Lab 06 iframe frame-tree end-to-end live evidence runner
+## Lab 06 iframe frame-tree end-to-end live evidence runner
 
-Slice 2.9 adds `tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` as the Lab 06 one-command evidence runner. The runner automates the existing iframe frame-tree helper, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, browser frame tree, frame URL list, child-frame DOM snapshots, screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
+`tools/run_workshop_lab_06_iframe_frame_tree_live_evidence.py` is the Lab 06 one-command evidence runner. The runner automates the existing iframe frame-tree helper, direct `curl` capture, `mitmdump` proxied capture, Playwright browser source, DOM, visible text, browser frame tree, frame URL list, child-frame DOM snapshots, screenshot evidence, OWASP ZAP passive status or unavailable-tool exception, marker provenance review, model-bound context review, `artifact-manifest.json`, `SHA256SUMS.txt`, and the final `.tar.gz` archive.
 
 The runner keeps the Lab 06 scope local-only, synthetic-only, and authorized-only. It fails closed on non-loopback targets, missing required artifacts, missing frame provenance evidence, and retained mitmproxy CA private material. It does not prove production security validation. It also preserves the training model that the local `ollama-webui` target is intentionally weak by design and must remain vulnerable for the workshop.

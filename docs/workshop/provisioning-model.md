@@ -36,7 +36,7 @@ The correct center of gravity is a known workstation environment with repeatable
 
 | Path | Status | Use |
 |---|---|---|
-| VM workstation | preferred | Best for DEF CON classroom reliability when distributed ahead of time. |
+| VM workstation | preferred | Best for live classroom reliability when distributed ahead of time. |
 | Bare-metal Parrot or Kali | supported | Best for students already using a penetration-testing Linux workstation. |
 | Debian-family workstation | supported | Good fallback when tools are installed explicitly. |
 | Docker Compose services | recommended later | Good for repeatable target, fixture, proxy, and evidence services. |
