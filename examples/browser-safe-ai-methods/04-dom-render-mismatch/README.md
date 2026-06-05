@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: target-hidden-instruction](variation-01-target-hidden-instruction.md)
 - [Variation 2: target-rendered-contradiction](variation-02-target-rendered-contradiction.md)

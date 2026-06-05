@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: benign-security-terms](variation-01-benign-security-terms.md)
 - [Variation 2: safe-qr-training](variation-02-safe-qr-training.md)

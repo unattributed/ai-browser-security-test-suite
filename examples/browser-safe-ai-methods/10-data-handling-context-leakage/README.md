@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: seeded-api-key](variation-01-seeded-api-key.md)
 - [Variation 2: url-query-leak](variation-02-url-query-leak.md)

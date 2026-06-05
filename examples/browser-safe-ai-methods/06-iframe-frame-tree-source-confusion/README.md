@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: sandboxed-child-frame](variation-01-sandboxed-child-frame.md)
 - [Variation 2: srcdoc-hidden-context](variation-02-srcdoc-hidden-context.md)

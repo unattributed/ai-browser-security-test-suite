@@ -36,7 +36,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: roe-to-test-case](variation-01-roe-to-test-case.md)
 - [Variation 2: variant-matrix-design](variation-02-variant-matrix-design.md)

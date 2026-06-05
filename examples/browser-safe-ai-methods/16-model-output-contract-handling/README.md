@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: json-schema-drift](variation-01-json-schema-drift.md)
 - [Variation 2: verdict-evidence-split](variation-02-verdict-evidence-split.md)

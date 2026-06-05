@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: mixed-script-label](variation-01-mixed-script-label.md)
 - [Variation 2: punycode-review](variation-02-punycode-review.md)

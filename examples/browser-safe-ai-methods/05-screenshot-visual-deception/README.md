@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: ocr-visible-command](variation-01-ocr-visible-command.md)
 - [Variation 2: canvas-only-marker](variation-02-canvas-only-marker.md)

@@ -166,8 +166,6 @@ The verified local setup and live evidence workflow are documented in `docs/work
 The current proxy tool setup verified OWASP ZAP 2.17.0 and mitmproxy 12.2.3 through standalone tool paths without using APT during repository validation. The workflow explicitly avoids NVIDIA, CUDA, DKMS, linux-image, and linux-headers changes. Core workshop correctness must not depend on GPU driver modification.
 
 Automation must use `zap.sh -cmd -version` for ZAP version checks so the GUI is not launched during validation.
-
-<!-- slice-2.21:start -->
 ## Slice 2.21 full-course student readiness tools
 
 Lab 00 must verify the full workshop tool baseline, not only the narrow Lab 00 preflight tools. The readiness gate should confirm that students can complete Labs 01 through 12 with the open-source primary path and can optionally use Burp Suite as a manual comparison proxy when they already have access to it.
@@ -234,10 +232,6 @@ Tesseract OCR
 ```
 
 Lab 00 should generate readiness evidence for these tools where present and record unavailable optional tools without blocking unrelated labs.
-<!-- slice-2.21:end -->
-
-
-<!-- slice-2.22:start -->
 ## Slice 2.22 Lab 00 practical environment readiness runner tooling contract
 
 The Lab 00 practical environment readiness runner is maintained at:
@@ -249,4 +243,3 @@ tools/run_workshop_lab_00_practical_environment_readiness.py
 The runner records the full-course tooling baseline without installing tools. It verifies Python 3.9 or newer, `python3 -m venv`, `python3 -m pip`, git, curl, jq, rg or grep, sha256sum, tar, gzip, nmap, ss, Playwright Chromium browser evidence when available, OWASP ZAP, mitmproxy, mitmdump, optional Burp Suite manual proxy path, tcpdump, tshark, qrencode, zbarimg or zbar-tools, ImageMagick, Pillow, and Tesseract OCR.
 
 The required proxy evidence path remains free and open source. Burp Suite remains optional and is not a required evidence gate. The runner writes `artifact-manifest.json`, `SHA256SUMS.txt`, and a `student-readiness-finding-report.md` that declares `ready for Lab 01: yes` or `ready for Lab 01: no`.
-<!-- slice-2.22:end -->

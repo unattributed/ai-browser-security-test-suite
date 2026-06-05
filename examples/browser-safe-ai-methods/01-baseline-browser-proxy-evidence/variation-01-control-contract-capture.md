@@ -31,7 +31,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Payload
 The payload is also stored next to this file as `variation-01-control-contract-capture.payload.txt` so it can be replayed without copying from Markdown.
 
@@ -80,7 +79,6 @@ jq -n --arg model "$OLLAMA_MODEL" --rawfile prompt payload.txt \
       --data-binary @- \
   | tee model-stream.ndjson
 ```
-
 
 ## Evidence to collect
 - Direct target response or model stream from `http://127.0.0.1:11435`.

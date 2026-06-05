@@ -33,7 +33,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/project/defaults" | jq .
 ```
 
-
 ## Payload
 The payload is also stored next to this file as `variation-02-localhost-generation-compute.payload.txt` so it can be replayed without copying from Markdown.
 

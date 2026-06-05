@@ -35,7 +35,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: dom-qr-verdict-chain](variation-01-dom-qr-verdict-chain.md)
 - [Variation 2: frame-storage-redaction-chain](variation-02-frame-storage-redaction-chain.md)

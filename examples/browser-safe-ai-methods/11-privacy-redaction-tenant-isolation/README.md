@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: tenant-a-to-b-contamination](variation-01-tenant-a-to-b-contamination.md)
 - [Variation 2: retention-metadata-check](variation-02-retention-metadata-check.md)

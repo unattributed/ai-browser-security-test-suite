@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: missing-screenshot](variation-01-missing-screenshot.md)
 - [Variation 2: target-unavailable](variation-02-target-unavailable.md)

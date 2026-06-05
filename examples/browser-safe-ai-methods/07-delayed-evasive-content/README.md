@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: timed-mutation](variation-01-timed-mutation.md)
 - [Variation 2: click-reveal](variation-02-click-reveal.md)

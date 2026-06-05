@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: exception-reason-injection](variation-01-exception-reason-injection.md)
 - [Variation 2: feedback-label-poisoning](variation-02-feedback-label-poisoning.md)

@@ -35,7 +35,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: search-result-instruction](variation-01-search-result-instruction.md)
 - [Variation 2: read-file-boundary](variation-02-read-file-boundary.md)

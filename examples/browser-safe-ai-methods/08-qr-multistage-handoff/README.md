@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: local-qr-destination](variation-01-local-qr-destination.md)
 - [Variation 2: qr-label-mismatch](variation-02-qr-label-mismatch.md)

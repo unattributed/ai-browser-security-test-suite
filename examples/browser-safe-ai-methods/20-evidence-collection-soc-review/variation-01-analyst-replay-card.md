@@ -31,7 +31,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Payload
 The payload is also stored next to this file as `variation-01-analyst-replay-card.payload.txt` so it can be replayed without copying from Markdown.
 
@@ -82,7 +81,6 @@ jq -n --arg model "$OLLAMA_MODEL" --rawfile prompt payload.txt \
       --data-binary @- \
   | tee model-stream.ndjson
 ```
-
 
 Route probes for payload-referenced target paths:
 

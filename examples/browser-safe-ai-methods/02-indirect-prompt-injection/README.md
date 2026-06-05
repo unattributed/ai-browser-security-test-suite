@@ -35,7 +35,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: visible-instruction-collision](variation-01-visible-instruction-collision.md)
 - [Variation 2: comment-field-injection](variation-02-comment-field-injection.md)

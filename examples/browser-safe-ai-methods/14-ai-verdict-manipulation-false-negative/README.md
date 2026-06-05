@@ -34,7 +34,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: authority-pressure](variation-01-authority-pressure.md)
 - [Variation 2: benign-rationale-padding](variation-02-benign-rationale-padding.md)

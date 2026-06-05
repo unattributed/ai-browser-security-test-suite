@@ -35,7 +35,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: analyst-replay-card](variation-01-analyst-replay-card.md)
 - [Variation 2: evidence-gap-triage](variation-02-evidence-gap-triage.md)

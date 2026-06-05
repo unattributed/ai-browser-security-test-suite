@@ -35,7 +35,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: control-contract-capture](variation-01-control-contract-capture.md)
 - [Variation 2: negative-marker-sweep](variation-02-negative-marker-sweep.md)

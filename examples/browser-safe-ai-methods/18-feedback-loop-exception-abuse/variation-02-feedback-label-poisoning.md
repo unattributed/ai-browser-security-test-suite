@@ -30,7 +30,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Payload
 The payload is also stored next to this file as `variation-02-feedback-label-poisoning.payload.txt` so it can be replayed without copying from Markdown.
 

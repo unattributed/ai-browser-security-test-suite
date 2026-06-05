@@ -36,7 +36,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
 ## Variations
 - [Variation 1: cookie-boundary](variation-01-cookie-boundary.md)
 - [Variation 2: local-storage-boundary](variation-02-local-storage-boundary.md)
