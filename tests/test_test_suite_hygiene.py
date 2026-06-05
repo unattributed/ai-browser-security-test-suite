@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 import re
-import tomllib
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TESTS_DIR = REPO_ROOT / "tests"
@@ -25,9 +24,38 @@ PYTEST_SKIP_OR_XFAIL_PATTERNS = [
     re.compile(r"\bpytest\.xfail\s*\("),
 ]
 
+PYTEST_TESTPATHS_RE = re.compile(r"(?m)^\s*testpaths\s*=\s*\[(?P<items>[^\]]*)\]\s*$")
+SECTION_RE = re.compile(r"^\s*\[(?P<section>[^\]]+)\]\s*$")
+
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def pytest_ini_options_section(text: str) -> str:
+    in_section = False
+    lines: list[str] = []
+    for raw_line in text.splitlines():
+        section_match = SECTION_RE.match(raw_line)
+        if section_match:
+            section_name = section_match.group("section")
+            if section_name == "tool.pytest.ini_options":
+                in_section = True
+                continue
+            if in_section:
+                break
+        elif in_section:
+            lines.append(raw_line)
+    return "\n".join(lines)
+
+
+def pytest_testpaths_from_pyproject(text: str) -> list[str]:
+    pytest_section = pytest_ini_options_section(text)
+    match = PYTEST_TESTPATHS_RE.search(pytest_section)
+    if not match:
+        return []
+    items = match.group("items")
+    return re.findall(r'"([^"]+)"', items) + re.findall(r"'([^']+)'", items)
 
 
 def test_test_suite_documentation_and_audit_exist() -> None:
@@ -36,8 +64,23 @@ def test_test_suite_documentation_and_audit_exist() -> None:
 
 
 def test_pytest_collects_tests_directory_only() -> None:
-    config = tomllib.loads(read_text(REPO_ROOT / "pyproject.toml"))
-    assert config["tool"]["pytest"]["ini_options"]["testpaths"] == ["tests"]
+    config_text = read_text(REPO_ROOT / "pyproject.toml")
+    assert pytest_testpaths_from_pyproject(config_text) == ["tests"]
+
+
+def test_pytest_testpaths_parser_reads_only_the_pytest_section() -> None:
+    text = """
+[project]
+name = "example"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+
+[tool.other]
+testpaths = ["wrong"]
+"""
+    assert pytest_testpaths_from_pyproject(text) == ["tests"]
 
 
 def test_no_skip_or_xfail_markers_are_present_without_documented_policy() -> None:
