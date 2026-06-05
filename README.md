@@ -317,7 +317,7 @@ Start `ollama-webui` in a separate terminal:
 
 ```bash
 cd ../ollama-webui
-.venv/bin/python scripts/pull_model.py
+.venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Verify the target:
@@ -335,7 +335,7 @@ Start the target in a separate terminal:
 
 ```bash
 cd ../ollama-webui
-.venv/bin/python scripts/pull_model.py
+.venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Then run:

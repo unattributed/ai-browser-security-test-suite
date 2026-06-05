@@ -32,7 +32,7 @@ Start ollama-webui in a separate terminal:
 
   cd ${OLLAMA_WEBUI_DIR}
   source .venv/bin/activate
-  python scripts/pull_model.py
+  python ${OLLAMA_WEBUI_DIR}/scripts/pull_model.py
 
 Then verify:
 

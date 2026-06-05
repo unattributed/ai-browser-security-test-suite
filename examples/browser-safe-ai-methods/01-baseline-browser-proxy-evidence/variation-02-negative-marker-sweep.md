@@ -2,9 +2,9 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-24-red-team-testing-methodology-for-ai-browser-controls.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-27-soc-usefulness-turning-ai-decisions-into-actionable-evidence.md`
+- Blog source: `browser-safe-ai-systems-24-red-team-testing-methodology-for-ai-browser-controls`
+- Blog source: `browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified`
+- Blog source: `browser-safe-ai-systems-27-soc-usefulness-turning-ai-decisions-into-actionable-evidence`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-24-red-team-testing-methodology-for-ai-browser-controls.html
 
 ## Workshop lab
@@ -20,7 +20,7 @@ Establish a clean control capture before adversarial pressure: direct HTTP, prox
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -95,4 +95,4 @@ The weak target should accept the payload and produce a live local result. A vul
 Preserve raw evidence before interpretation. If the model refuses, summarizes safely, or changes the marker, record that as model behavior and still evaluate whether the browser collection and policy path handled the method correctly. Do not upgrade model prose into a security decision.
 
 ## Reporting notes
-Finding template: `Baseline Browser and Proxy Evidence Capture` variation `negative-marker-sweep` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-24-red-team-testing-methodology-for-ai-browser-controls.md`; lab reference `docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/01-baseline-browser-proxy-evidence-02-negative-marker-sweep`.
+Finding template: `Baseline Browser and Proxy Evidence Capture` variation `negative-marker-sweep` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-24-red-team-testing-methodology-for-ai-browser-controls`; lab reference `docs/workshop/labs/01-baseline-browser-ai-evidence-capture.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/01-baseline-browser-proxy-evidence-02-negative-marker-sweep`.

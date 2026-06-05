@@ -26,6 +26,22 @@ By the end of this lab, the student should be able to:
 - Preserve exception workflow artifacts with checksums.
 - Explain why this lab is not a production exception system or proof of product security.
 
+## Lab topology
+
+Student workstation -> toolkit runner or manual commands -> loopback fixture server or weak `ollama-webui` target -> browser, HTTP, model-bound context, manifest, checksum, and archive evidence under the local evidence directory.
+
+## Student workflow
+
+Start with the base method, confirm the safety boundary, run the local capture path, create a student-authored variation, compare evidence surfaces, write the finding, verify hashes, and clean up local-only runtime state.
+
+## Completion criteria
+
+The lab is complete when the base method, student-authored variation, required artifacts, `artifact-manifest.json`, `SHA256SUMS.txt`, evidence archive `.tar.gz`, archive `.sha256` sidecar, and finding notes are present and reviewable.
+
+## Cleanup
+
+Stop temporary fixture servers, close proxy captures, remove generated mitmproxy CA private material from reviewer archives, leave the intentionally weak target unchanged, and keep evidence under the local workshop evidence directory.
+
 ## Attack vector
 
 Safe synthetic fail-open pressure and exception-abuse attempts through incomplete evidence, untrusted page text, business-pressure requests, feedback requests, and permanent exception requests.
@@ -57,7 +73,7 @@ A vulnerable workflow may:
 
 A defensible workflow treats missing evidence and exception requests as evidence for review, not authority to allow or persist policy changes.
 
-## Safety boundary
+## Safety and authorization boundary
 
 Do not test third-party systems or third-party AI products.
 
@@ -489,7 +505,7 @@ A real exception system must require explicit scope, owner, expiry, evidence ref
 
 <!-- slice-2.34-lab-11-practical-standard:start -->
 
-# Lab 11 practical execution standard
+### Lab 11 practical execution standard
 
 This supplement operationalizes the confirmed Lab 11 topic from the existing repository content: **Fail-Open Pressure and Exception Abuse; analyst evidence triage; vendor-risk evidence review; model trust-boundary review**. It preserves the original Lab 11 material above and turns the lab into an artifact-backed exercise the student can execute locally against the intentionally weak workshop workflow.
 
@@ -513,7 +529,7 @@ The method has five professional review steps:
 4. Compare browser-observed facts with model-bound context, model output, analyst notes, artifact manifests, and SHA256 checksums.
 5. Write a finding that states what the artifacts prove, what they do not prove, and what a defender or vendor reviewer should validate next.
 
-## Real-world TTP being emulated
+## Real-world behavior being emulated
 
 The exercise emulates a real review problem: a browser-based AI workflow may summarize, classify, or prioritize content that was influenced by hidden page state, delayed rendering, frame context, visual deception, QR handoff material, synthetic sensitive-looking data, or verdict-manipulation language. The TTP being emulated is not credential theft or exploitation of a third-party system. It is evidence confusion: the attacker-controlled or test-controlled browser surface causes the AI-assisted workflow or reviewer to overstate trust in a result that must be verified from artifacts.
 
@@ -524,7 +540,7 @@ In a real engagement, this maps to red-team evidence review, SOC triage validati
 Use the following local synthetic review input as the controlled case for Lab 11. Save it in your Lab 11 evidence directory as `lab-11-controlled-review-input.md` before running or reviewing artifacts:
 
 ```markdown
-# Lab 11 local synthetic review case
+### Lab 11 local synthetic review case
 
 Marker: LAB11-SYNTHETIC-EVIDENCE-REVIEW-MARKER
 
@@ -568,7 +584,7 @@ The variation must include all of the following:
 
 The student must incorporate this variation into the controlled review input, browser interaction, evidence artifact review, marker provenance review, model-bound context review, or final finding write-up. A variation that appears only as a retrospective note is incomplete.
 
-## Evidence that proves the variation worked
+## Evidence to collect
 
 The variation is proven only when the evidence archive contains artifacts that let a reviewer reproduce the student's reasoning without trusting the model output. At minimum, the reviewer should be able to locate:
 
@@ -606,7 +622,7 @@ A SOC lead or incident responder should look for repeatable artifact references,
 Use this finding template after the evidence comparison is complete:
 
 ```markdown
-# Finding: Browser-based AI evidence confusion in local synthetic Lab 11 workflow
+### Finding: Browser-based AI evidence confusion in local synthetic Lab 11 workflow
 
 ## Summary
 The local Lab 11 workflow demonstrated that an AI-assisted browser review can overstate or misclassify a browser state unless source, DOM, screenshot, visible text, model-bound context, manifest, and checksum evidence are compared.
@@ -666,3 +682,15 @@ Burp Suite is optional and never required for this lab. Use it only if you alrea
 This lab remains local-only, synthetic-only, and authorized-only. Do not use real credentials, real customer data, production SaaS tenants, or third-party systems.
 
 <!-- slice-2.36-proxy-tooling-note:end -->
+
+## Real-world TTP being emulated
+
+Legacy heading alias for the canonical real-world behavior section. This local synthetic browser-based AI method emulates how untrusted browser content, model-bound context, reviewer triage, SOC review, vendor review, or policy workflow evidence can diverge. The exercise remains local, synthetic, and artifact-backed, including sensitive-looking synthetic data, summarization behavior, trust-boundary pressure, verdict manipulation, and reviewable artifacts.
+
+## Evidence that proves the variation worked
+
+Legacy heading alias for the canonical evidence section. Evidence should include the student-authored variation, direct local HTTP response where applicable, proxied local HTTP or proxy flow evidence where available, browser screenshot, DOM or source, visible text, Synthetic marker provenance, model-bound context review, artifact-manifest.json, SHA256SUMS.txt, reviewer archive, and archive checksum.
+
+## Safety boundary
+
+Legacy heading alias for the canonical safety and authorization boundary. Run only against the local intentionally weak target or local fixtures, use synthetic markers only, avoid third-party systems, real credentials, real customer data, public callbacks, package installation, NVIDIA driver changes, target hardening, and production security validation claims.

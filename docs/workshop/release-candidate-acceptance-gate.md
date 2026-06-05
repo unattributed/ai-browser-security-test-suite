@@ -329,7 +329,7 @@ docs/workshop/local-proxy-evidence-workflow.md exists
 payloads/workshop_proxy_evidence_cases.yaml exists
 tools/validate_workshop_practical_labs.py passes
 required proxy and API evidence tools remain free, open source, locally runnable, and usable without accounts
-Burp Suite Community and Postman are not required evidence gates
+Burp Suite is optional professional comparison tooling only and is not a required evidence gate
 proxy exercises remain loopback-only, synthetic-only, and authorized-only
 ```
 

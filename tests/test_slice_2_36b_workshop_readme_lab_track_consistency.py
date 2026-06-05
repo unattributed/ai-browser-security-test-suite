@@ -47,7 +47,7 @@ def readme_text() -> str:
 def lab_track_section() -> str:
     text = readme_text()
     start = text.index("## Lab track")
-    end = text.index("## Closure and reviewer materials", start)
+    end = text.index("## Required tooling", start)
     return text[start:end]
 
 
@@ -99,7 +99,7 @@ def test_lab_track_status_language_is_current_and_not_stale() -> None:
     assert "equivalent professional proxy workflow" in section
 
 
-def test_lab_track_preserves_existing_legacy_readme_anchor_phrases() -> None:
+def test_lab_track_preserves_runner_anchor_phrases_and_contract_link() -> None:
     text = readme_text()
     required_exact_rows = [
         "| Lab 06 | iframe and Frame-Tree Source Confusion | End-to-end live evidence runner |",
@@ -114,17 +114,13 @@ def test_lab_track_preserves_existing_legacy_readme_anchor_phrases() -> None:
 
     assert "SYNTHETIC-LAB-MARKER" in text
     assert "no production security validation" in text
+    assert "docs/workshop/workshop-contract.md" in text
+    assert "Labs are the course path." in text
+    assert "Examples are the method library." in text
 
 
-def test_lab07_status_table_has_matching_columns() -> None:
+def test_readme_no_longer_contains_per_lab_status_tables() -> None:
     text = readme_text()
-    start = text.index("## Lab 07 Live Evidence Runner Status")
-    end = text.index("## Lab 08 Live Evidence Runner Status", start)
-    section = text[start:end]
-    rows = [line.strip() for line in section.splitlines() if line.strip().startswith("|")]
-    assert rows, "missing Lab 07 status table"
-    header_columns = len(rows[0].strip("|").split("|"))
-    assert header_columns == 4
-    for row in rows[1:]:
-        assert len(row.strip("|").split("|")) == header_columns, f"malformed Lab 07 status row: {row}"
-    assert "| Lab 07 | `docs/workshop/labs/07-delayed-content-and-state-transition-risk.md` | `tools/run_workshop_lab_07_delayed_content_state_transition_live_evidence.py` | Uses `SYNTHETIC-LAB-MARKER`" in section
+    assert "## Lab 07 Live Evidence Runner Status" not in text
+    assert "## Lab 08 Live Evidence Runner Status" not in text
+    assert "## Lab 12 Target-Backed Runner Artifact Contract" not in text

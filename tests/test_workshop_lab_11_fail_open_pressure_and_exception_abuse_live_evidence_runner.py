@@ -61,9 +61,10 @@ class Lab11RunnerTests(unittest.TestCase):
             self.runner.write_text(root / "evidence" / "sample.txt", "sample evidence")
             manifest = self.runner.build_manifest(root, {"status": "unit-test"})
             self.assertEqual(manifest["lab_id"], "lab-11")
-            self.assertTrue((root / "manifest.json").exists())
-            self.assertTrue((root / "checksums.sha256").exists())
-            checksum_text = (root / "checksums.sha256").read_text(encoding="utf-8")
+            self.assertTrue((root / "artifact-manifest.json").exists())
+            self.assertTrue((root / "SHA256SUMS.txt").exists())
+            checksum_text = (root / "SHA256SUMS.txt").read_text(encoding="utf-8")
+            self.assertIn("artifact-manifest.json", checksum_text)
             self.assertIn("evidence/sample.txt", checksum_text)
 
 

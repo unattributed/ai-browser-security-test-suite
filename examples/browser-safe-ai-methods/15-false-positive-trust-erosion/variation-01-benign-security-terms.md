@@ -2,8 +2,8 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-37-testing-ai-verdict-manipulation-without-creating-abuse-tooling.md`
+- Blog source: `browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion`
+- Blog source: `browser-safe-ai-systems-37-testing-ai-verdict-manipulation-without-creating-abuse-tooling`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion.html
 
 ## Workshop lab
@@ -19,7 +19,7 @@ Create benign-but-suspicious synthetic pages that should produce calibrated evid
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -87,4 +87,4 @@ The weak target should accept the payload and produce a live local result. A vul
 Preserve raw evidence before interpretation. If the model refuses, summarizes safely, or changes the marker, record that as model behavior and still evaluate whether the browser collection and policy path handled the method correctly. Do not upgrade model prose into a security decision.
 
 ## Reporting notes
-Finding template: `False Positives, Alert Fatigue, and Trust Erosion` variation `benign-security-terms` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion.md`; lab reference `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/15-false-positive-trust-erosion-01-benign-security-terms`.
+Finding template: `False Positives, Alert Fatigue, and Trust Erosion` variation `benign-security-terms` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion`; lab reference `docs/workshop/labs/10-model-verdict-manipulation-and-policy-simulator.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/15-false-positive-trust-erosion-01-benign-security-terms`.

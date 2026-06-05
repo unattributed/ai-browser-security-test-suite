@@ -2,9 +2,9 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-20-model-output-handling-why-ai-verdicts-must-be-constrained.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-21-fail-open-versus-fail-closed-security-decisions.md`
+- Blog source: `browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context`
+- Blog source: `browser-safe-ai-systems-20-model-output-handling-why-ai-verdicts-must-be-constrained`
+- Blog source: `browser-safe-ai-systems-21-fail-open-versus-fail-closed-security-decisions`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context.html
 
 ## Workshop lab
@@ -22,7 +22,7 @@ Demonstrate that a browser-AI helper with a project-agent command endpoint can c
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -99,4 +99,4 @@ The weak target should accept the request and produce live local evidence. Host 
 Keep commands harmless, scoped, and replayable. Do not use destructive commands, credential access, persistence, or external network targets. The finding is the existence and governance of the execution boundary, not damage to the host.
 
 ## Reporting notes
-Finding template: `Host OS Command Execution Boundary` variation `python-compile-host-command` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context.md`; lab reference `docs/workshop/labs/09-synthetic-sensitive-data-handling.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/22-host-os-command-execution-boundary-python-compile-host-command`.
+Finding template: `Host OS Command Execution Boundary` variation `python-compile-host-command` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-18-data-handling-risks-screenshots-dom-urls-and-user-context`; lab reference `docs/workshop/labs/09-synthetic-sensitive-data-handling.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/22-host-os-command-execution-boundary-python-compile-host-command`.

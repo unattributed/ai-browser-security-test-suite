@@ -7,15 +7,22 @@ from pathlib import Path
 import sys
 
 REQUIRED_SECTIONS = [
-    "## Estimated time",
     "## Purpose",
     "## Learning objectives",
-    "## Attack vector",
-    "## Risk and impact",
-    "## Safety boundary",
+    "## Method being taught",
+    "## Real-world behavior being emulated",
+    "## Safety and authorization boundary",
     "## Tools used",
-    "## Expected result",
-    "## Failure conditions",
+    "## Lab topology",
+    "## Student workflow",
+    "## Step-by-step execution",
+    "## Evidence to collect",
+    "## Required student-authored variation",
+    "## Expected failure modes",
+    "## Defender interpretation",
+    "## Reportable finding",
+    "## Completion criteria",
+    "## Cleanup",
 ]
 
 LAB_DIR = Path("docs/workshop/labs")
@@ -38,9 +45,14 @@ def validate_lab(path: Path) -> list[str]:
     errors: list[str] = []
     if not text.startswith("# Lab "):
         errors.append(f"{path}: first line must start with '# Lab '")
+    h1_count = sum(1 for line in text.splitlines() if line.startswith("# "))
+    if h1_count != 1:
+        errors.append(f"{path}: expected exactly one H1 heading, found {h1_count}")
     for section in REQUIRED_SECTIONS:
         if section not in text:
             errors.append(f"{path}: missing section {section!r}")
+    if "artifact-manifest.json" not in text or "SHA256SUMS.txt" not in text:
+        errors.append(f"{path}: missing canonical artifact-manifest.json and SHA256SUMS.txt terms")
     if "Evidence" not in text and "evidence" not in text:
         errors.append(f"{path}: lab should mention evidence expectations")
     if path.name == "00-environment-and-target-setup.md":

@@ -13,7 +13,7 @@ The weak target was started with:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 The target listened on `http://127.0.0.1:11435` and proxied model requests to local Ollama at `http://127.0.0.1:11434`.

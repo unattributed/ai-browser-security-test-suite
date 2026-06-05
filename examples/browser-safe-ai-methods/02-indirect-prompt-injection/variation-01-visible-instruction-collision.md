@@ -2,9 +2,9 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-06-the-core-risk-untrusted-web-content-entering-an-ai-context.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-35-building-safe-synthetic-browser-ai-attack-cases.md`
+- Blog source: `browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages`
+- Blog source: `browser-safe-ai-systems-06-the-core-risk-untrusted-web-content-entering-an-ai-context`
+- Blog source: `browser-safe-ai-systems-35-building-safe-synthetic-browser-ai-attack-cases`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages.html
 
 ## Workshop lab
@@ -20,7 +20,7 @@ Place attacker-controlled instructions inside page content that a browser-AI ass
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -88,4 +88,4 @@ The weak target should accept the payload and produce a live local result. A vul
 Preserve raw evidence before interpretation. If the model refuses, summarizes safely, or changes the marker, record that as model behavior and still evaluate whether the browser collection and policy path handled the method correctly. Do not upgrade model prose into a security decision.
 
 ## Reporting notes
-Finding template: `Indirect Prompt Injection Through Browser Content` variation `visible-instruction-collision` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages.md`; lab reference `docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/02-indirect-prompt-injection-01-visible-instruction-collision`.
+Finding template: `Indirect Prompt Injection Through Browser Content` variation `visible-instruction-collision` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-09-indirect-prompt-injection-through-web-pages`; lab reference `docs/workshop/labs/02-indirect-prompt-injection-through-browser-content.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/02-indirect-prompt-injection-01-visible-instruction-collision`.

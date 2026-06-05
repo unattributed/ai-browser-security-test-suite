@@ -2,9 +2,9 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-27-soc-usefulness-turning-ai-decisions-into-actionable-evidence.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-38-analyst-evidence-review-and-soc-usefulness.md`
+- Blog source: `browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified`
+- Blog source: `browser-safe-ai-systems-27-soc-usefulness-turning-ai-decisions-into-actionable-evidence`
+- Blog source: `browser-safe-ai-systems-38-analyst-evidence-review-and-soc-usefulness`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/24/browser-safe-ai-systems-38-analyst-evidence-review-and-soc-usefulness.html
 
 ## Workshop lab
@@ -20,7 +20,7 @@ Turn AI-browser findings into artifacts a SOC analyst can replay, hash, triage, 
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -97,4 +97,4 @@ The weak target should accept the payload and produce a live local result. A vul
 Preserve raw evidence before interpretation. If the model refuses, summarizes safely, or changes the marker, record that as model behavior and still evaluate whether the browser collection and policy path handled the method correctly. Do not upgrade model prose into a security decision.
 
 ## Reporting notes
-Finding template: `Evidence Collection and SOC Usefulness` variation `decision-audit-trail` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified.md`; lab reference `docs/workshop/labs/12-capstone-attack-chain-evidence-package.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/20-evidence-collection-soc-review-03-decision-audit-trail`.
+Finding template: `Evidence Collection and SOC Usefulness` variation `decision-audit-trail` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-26-evidence-collection-what-must-be-logged-and-verified`; lab reference `docs/workshop/labs/12-capstone-attack-chain-evidence-package.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/20-evidence-collection-soc-review-03-decision-audit-trail`.

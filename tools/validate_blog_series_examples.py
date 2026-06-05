@@ -62,7 +62,7 @@ def validate():
             text=doc.read_text(encoding='utf-8')
             for sec in SECTIONS:
                 if sec not in text: errors.append(f'{doc.relative_to(ROOT)} missing {sec}')
-            for term in ['SYNTHETIC-LAB-MARKER','http://127.0.0.1:11435','/home/foo/Workspace/unattributed.github.io/_posts','docs/workshop/labs/','$HOME/Workspace/ollama-webui']:
+            for term in ['SYNTHETIC-LAB-MARKER','http://127.0.0.1:11435','Blog source:','docs/workshop/labs/','$HOME/Workspace/ollama-webui']:
                 if term not in text: errors.append(f'{doc.relative_to(ROOT)} missing {term}')
             pf=method/doc.name.replace('.md','.payload.txt')
             if not pf.exists(): errors.append(f'{doc.relative_to(ROOT)} missing paired payload {pf.name}')

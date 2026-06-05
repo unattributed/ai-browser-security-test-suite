@@ -1,12 +1,16 @@
 # Browser-Safe AI Method Examples
 
-These examples map the Browser-Safe AI Systems blog series into senior-level, local-only DEF CON workshop payloads for the deliberately weak `ollama-webui` target. Each method folder contains three replayable variations with payload files, weak-target commands, expected evidence, and lab/blog references.
+This directory is an extended method catalog that supports the Browser-Safe AI Systems workshop. It is not the primary course sequence and is not a one-to-one duplicate of Labs 00 through 12.
+
+The canonical student course path remains `docs/workshop/labs/00` through `docs/workshop/labs/12`. The examples directory provides reusable method variations, payload patterns, evidence expectations, and instructor expansion material. Each method folder contains three replayable variations with payload files, weak-target commands, expected evidence, and lab/blog references for the deliberately weak local `ollama-webui` target.
+
+All payloads are synthetic, local-only, and marked with `SYNTHETIC-LAB-MARKER`. They are designed to teach browser-AI security testing methods, not to target real services.
 
 Start the weak target before executing any payload:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -17,8 +21,6 @@ curl -fsS "$TARGET_URL/health" | jq .
 curl -fsS "$TARGET_URL/api/browser-safe/target-contract" | jq .
 ```
 
-
-All payloads are synthetic, local-only, and marked with `SYNTHETIC-LAB-MARKER`. They are designed to teach browser-AI security testing methods, not to target real services.
 
 | Method folder | Method | Blog coverage | Workshop lab |
 | --- | --- | --- | --- |

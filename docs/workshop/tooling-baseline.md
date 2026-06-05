@@ -64,7 +64,7 @@ These tools are required when a lab includes a practical proxy, HTTP, or API evi
 | nmap | required for local exposure proof | Loopback service inventory and port evidence. |
 | tcpdump or tshark | optional advanced packet evidence | Packet-level proof for advanced students and instructor demonstrations. |
 
-The first practical integration targets Labs 01, 02, and 06. Later slices should extend the same workflow into Labs 09, 10, 11, and 12.
+The first practical integration targets Labs 01, 02, and 06. Later courseware updates should extend the same workflow into Labs 09, 10, 11, and 12.
 
 ## Recommended professional tools
 
@@ -91,7 +91,6 @@ The first practical integration targets Labs 01, 02, and 06. Later slices should
 | Tool | Status | Notes |
 |---|---|---|
 | Burp Suite Community | optional manual comparison only | Free manual tool familiar to many professionals, but not open source, so it is not a required project dependency or evidence gate. |
-| Postman | optional manual comparison only | Free tier exists, but it is not open source and can introduce account or cloud workflow assumptions, so it is not a required project dependency or evidence gate. |
 | Semgrep | optional later | Useful for reviewing local fixture and helper code. |
 | gitleaks or trufflehog | optional later | Useful only against seeded synthetic secret fixtures. |
 
@@ -155,7 +154,7 @@ practical proxy labs require OWASP ZAP and mitmproxy or mitmdump
 curl, jq, nmap, rg or grep, and sha256sum are part of the practical evidence path
 optional tools are clearly marked optional
 free and open-source project dependencies remain required for evidence gates
-Burp Suite Community and Postman are documented as optional and not open source
+Burp Suite Community is documented as optional professional comparison tooling only
 active scanning and fuzzing tools remain future explicit-scope work
 tools map to evidence artifacts, not tool popularity
 ```
@@ -164,7 +163,7 @@ tools map to evidence artifacts, not tool popularity
 
 The verified local setup and live evidence workflow are documented in `docs/workshop/proxy-tool-setup-and-live-local-evidence.md`.
 
-Slice 2.2 verified OWASP ZAP 2.17.0 and mitmproxy 12.2.3 through standalone tool paths without using APT during repository validation. The workflow explicitly avoids NVIDIA, CUDA, DKMS, linux-image, and linux-headers changes. Core workshop correctness must not depend on GPU driver modification.
+The current proxy tool setup verified OWASP ZAP 2.17.0 and mitmproxy 12.2.3 through standalone tool paths without using APT during repository validation. The workflow explicitly avoids NVIDIA, CUDA, DKMS, linux-image, and linux-headers changes. Core workshop correctness must not depend on GPU driver modification.
 
 Automation must use `zap.sh -cmd -version` for ZAP version checks so the GUI is not launched during validation.
 

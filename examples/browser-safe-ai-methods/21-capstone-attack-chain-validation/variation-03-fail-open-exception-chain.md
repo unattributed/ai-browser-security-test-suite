@@ -2,9 +2,9 @@
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-31-how-this-research-changes-browser-security-validation.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-32-conclusion-treat-ai-as-an-untrusted-classifier-inside-a-controlled-security-pipeline.md`
+- Blog source: `browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation`
+- Blog source: `browser-safe-ai-systems-31-how-this-research-changes-browser-security-validation`
+- Blog source: `browser-safe-ai-systems-32-conclusion-treat-ai-as-an-untrusted-classifier-inside-a-controlled-security-pipeline`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/24/browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation.html
 
 ## Workshop lab
@@ -20,7 +20,7 @@ Combine multiple method classes into a single controlled local chain and prove t
 ## Start weak ollama-webui
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
@@ -88,4 +88,4 @@ The weak target should accept the payload and produce a live local result. A vul
 Preserve raw evidence before interpretation. If the model refuses, summarizes safely, or changes the marker, record that as model behavior and still evaluate whether the browser collection and policy path handled the method correctly. Do not upgrade model prose into a security decision.
 
 ## Reporting notes
-Finding template: `Capstone Attack-Chain Validation` variation `fail-open-exception-chain` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation.md`; lab reference `docs/workshop/labs/12-capstone-attack-chain-evidence-package.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/21-capstone-attack-chain-validation-03-fail-open-exception-chain`.
+Finding template: `Capstone Attack-Chain Validation` variation `fail-open-exception-chain` against local weak `ollama-webui` at `http://127.0.0.1:11435`; marker `SYNTHETIC-LAB-MARKER`; blog source `browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation`; lab reference `docs/workshop/labs/12-capstone-attack-chain-evidence-package.md`; evidence bundle path `$HOME/browser-safe-ai-workshop/examples/21-capstone-attack-chain-validation-03-fail-open-exception-chain`.

@@ -5,9 +5,9 @@ Combine multiple method classes into a single controlled local chain and prove t
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-31-how-this-research-changes-browser-security-validation.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-32-conclusion-treat-ai-as-an-untrusted-classifier-inside-a-controlled-security-pipeline.md`
+- Blog source: `browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation`
+- Blog source: `browser-safe-ai-systems-31-how-this-research-changes-browser-security-validation`
+- Blog source: `browser-safe-ai-systems-32-conclusion-treat-ai-as-an-untrusted-classifier-inside-a-controlled-security-pipeline`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/24/browser-safe-ai-systems-40-capstone-lab-end-to-end-browser-ai-control-validation.html
 
 ## Workshop lab
@@ -24,7 +24,7 @@ Start or confirm the weak target before using the variations:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:

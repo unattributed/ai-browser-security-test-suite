@@ -5,8 +5,8 @@ Create benign-but-suspicious synthetic pages that should produce calibrated evid
 
 ## Blog reference
 - Series index: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-00-series-index.html
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-09-browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion.md`
-- Local source: `/home/foo/Workspace/unattributed.github.io/_posts/2026-05-24-browser-safe-ai-systems-37-testing-ai-verdict-manipulation-without-creating-abuse-tooling.md`
+- Blog source: `browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion`
+- Blog source: `browser-safe-ai-systems-37-testing-ai-verdict-manipulation-without-creating-abuse-tooling`
 - Public method page: https://unattributed.blog/ai-security/browser-security/security-operations/red-team/2026/05/09/browser-safe-ai-systems-17-false-positives-alert-fatigue-and-trust-erosion.html
 
 ## Workshop lab
@@ -23,7 +23,7 @@ Start or confirm the weak target before using the variations:
 
 ```bash
 cd $HOME/Workspace/ollama-webui
-OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python scripts/pull_model.py
+OLLAMA_HOST=http://127.0.0.1:11434 .venv/bin/python $HOME/Workspace/ollama-webui/scripts/pull_model.py
 ```
 
 Confirm it is available:
