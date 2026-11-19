@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
 import sys
+import tarfile
 from pathlib import Path
 
 
@@ -63,6 +65,45 @@ def test_rehearsal_package_writes_manifest_report_and_checksums(tmp_path: Path) 
     assert "release-rehearsal-plan.json" in checksum_text
     assert "release-rehearsal-artifact-manifest.json" in checksum_text
     assert "  /" not in checksum_text
+
+
+def test_regular_tar_extraction_rejects_path_traversal(tmp_path: Path) -> None:
+    module = load_module()
+    archive_path = tmp_path / "unsafe.tar"
+    with tarfile.open(archive_path, "w") as archive:
+        member = tarfile.TarInfo("../outside.txt")
+        payload = b"must not escape"
+        member.size = len(payload)
+        archive.addfile(member, io.BytesIO(payload))
+
+    with tarfile.open(archive_path, "r") as archive:
+        try:
+            module.extract_regular_tar_archive(archive, tmp_path / "extract")
+        except ValueError as exc:
+            assert "unsafe archive member path" in str(exc)
+        else:
+            raise AssertionError("path-traversing archive member was accepted")
+
+    assert not (tmp_path / "outside.txt").exists()
+
+
+def test_regular_tar_extraction_preserves_regular_files(tmp_path: Path) -> None:
+    module = load_module()
+    archive_path = tmp_path / "safe.tar"
+    with tarfile.open(archive_path, "w") as archive:
+        member = tarfile.TarInfo("bundle/VERIFY_BUNDLE.sh")
+        payload = b"#!/usr/bin/env bash\nexit 0\n"
+        member.size = len(payload)
+        member.mode = 0o755
+        archive.addfile(member, io.BytesIO(payload))
+
+    extract_dir = tmp_path / "extract"
+    with tarfile.open(archive_path, "r") as archive:
+        module.extract_regular_tar_archive(archive, extract_dir)
+
+    extracted = extract_dir / "bundle" / "VERIFY_BUNDLE.sh"
+    assert extracted.read_bytes() == payload
+    assert extracted.stat().st_mode & 0o777 == 0o755
 
 
 def test_release_rehearsal_documentation_preserves_release_terms() -> None:
