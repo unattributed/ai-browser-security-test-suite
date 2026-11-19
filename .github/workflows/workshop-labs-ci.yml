@@ -16,6 +16,9 @@ on:
       - "tools/run_workshop_lab_00_preflight.py"
       - ".github/workflows/workshop-labs-ci.yml"
 
+permissions:
+  contents: read
+
 jobs:
   validate-workshop-labs:
     runs-on: ubuntu-latest

@@ -20,6 +20,7 @@ def resolve_fqdn(fqdn: str) -> list[str]:
 
 def probe_tls(fqdn: str, port: int) -> dict[str, str]:
     context = ssl.create_default_context()
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
     with socket.create_connection((fqdn, port), timeout=10) as raw_socket:
         with context.wrap_socket(raw_socket, server_hostname=fqdn) as tls_socket:
             certificate = tls_socket.getpeercert()

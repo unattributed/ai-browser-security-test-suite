@@ -15,6 +15,7 @@ import hashlib
 import json
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -104,6 +105,35 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def extract_regular_tar_archive(archive: tarfile.TarFile, destination: Path) -> None:
+    """Extract only bounded regular files and directories from a tar archive."""
+    destination.mkdir(parents=True, exist_ok=True)
+    destination_root = destination.resolve()
+
+    for member in archive.getmembers():
+        member_path = Path(member.name)
+        if member_path.is_absolute() or ".." in member_path.parts:
+            raise ValueError(f"unsafe archive member path: {member.name}")
+
+        target = (destination_root / member_path).resolve()
+        if target != destination_root and destination_root not in target.parents:
+            raise ValueError(f"archive member escapes extraction root: {member.name}")
+
+        if member.isdir():
+            target.mkdir(parents=True, exist_ok=True)
+            continue
+        if not member.isfile():
+            raise ValueError(f"unsupported archive member type: {member.name}")
+
+        source = archive.extractfile(member)
+        if source is None:
+            raise ValueError(f"archive member has no file payload: {member.name}")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with source, target.open("wb") as destination_handle:
+            shutil.copyfileobj(source, destination_handle)
+        target.chmod(member.mode & 0o777)
 
 
 def write_json(path: Path, data: Any) -> None:
@@ -269,7 +299,7 @@ def run_release_rehearsal(repo_root: Path, out_dir: Path, python_bin: Path, bund
     )
 
     with tarfile.open(archive_path, "r:gz") as archive:
-        archive.extractall(extract_dir)
+        extract_regular_tar_archive(archive, extract_dir)
 
     extracted_root = extract_dir / f"{bundle_stem}-{stamp}"
     if not extracted_root.is_dir():
